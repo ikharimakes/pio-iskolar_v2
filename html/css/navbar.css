@@ -1,0 +1,255 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Lexend');
+
+* {
+    margin: 0;
+    padding:0;
+    box-sizing: border-box;
+    font-family: 'Poppins', 'Lexend';
+}
+
+/* SIDEBAR */
+.sidebar {
+    font-family: 'Poppins';
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 260px;
+    padding: 10px 14px;
+    background: #2F3787;
+    overflow: hidden;
+}
+
+.sidebar .sideHeader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+}
+.sidebar .headerLogo {
+    align-items: center;
+}
+.sidebar .headerLogo img {
+    width: 100px;
+    display: block;
+    margin: 0 auto;
+}
+.sideHeader .headerText {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.sidebar .headerText h1 {
+    text-align: center;
+    font-size: 30px;
+    font-weight: 600;
+    color: white;
+}
+.sidebar .navBar {
+    height: calc(100% - 300px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: 20px;
+}
+.sidebar .bottom-content {
+    bottom: 30px;
+    width: 100%;
+}
+.sidebar li {
+    height: 30px;
+    margin-top: 10px;
+    list-style: none;
+    display: flex;
+    align-items: center;
+}
+.sidebar li a {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    border-radius: 20px;
+    transition: 0.4s;
+}
+.sidebar li a:hover {
+    background: #091161;
+}
+.sidebar li.active a {
+    background: #091161;
+}
+.sidebar li .text {
+    color: #fff;
+    transition: 0.2s;
+    font-size: 15px;
+    margin-left: 20px;
+}
+.sidebar li .icon {
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    font-size: 18px;
+    color: rgb(255, 255, 255);
+    transition: 0.2s;
+} 
+
+
+/*TOP BAR*/
+.main {
+    display: grid;
+    grid-template-rows: 70px 10% 70% 10%;
+    grid-template-columns: 25% 25% 25% 25%;
+    position: absolute;
+    width: calc(100% - 260px);
+    left: 260px;
+    min-height: 100%;
+    background-color: #fff;
+    transition: 0.5s;
+    padding: 20px 20px 20px 40px;
+}
+.main1 {
+    display: grid;
+    grid-template-rows: 70px 13% 67% 10%;
+    grid-template-columns: 25% 25% 25% 25%;
+    position: absolute;
+    width: calc(100% - 260px);
+    left: 260px;
+    min-height: 100%;
+    background-color: #fff;
+    transition: 0.5s;
+    padding: 20px 20px 20px 40px;
+}
+.main2 {
+    display: grid;
+    grid-template-rows: 70px 10% 30% 65%;
+    grid-template-columns: 25% 25% 25% 25%;
+    position: absolute;
+    width: calc(100% - 260px);
+    left: 260px;
+    min-height: 100%;
+    background-color: #fff;
+    transition: 0.5s;
+    padding: 20px 20px 20px 40px;
+}
+.main3 {
+    display: grid;
+    grid-template-rows: 70px 10% 10% 60% 10%;
+    grid-template-columns: 25% 25% 25% 25%;
+    position: absolute;
+    width: calc(100% - 260px);
+    left: 260px;
+    min-height: 100%;
+    background-color: #fff;
+    transition: 0.5s;
+    padding: 20px 20px 20px 40px;
+}
+.topBar {
+    grid-row: 1 / 2;
+    grid-column: 1 / 5;
+    display: flex;
+    float: right;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.headerName {
+    display: flex;
+    flex-grow: 1;
+}
+.headerName h1 {
+    font-family: 'Lexend';
+    font-size: 30px;
+    font-weight: 300;
+}
+
+.headerBack {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border: transparent;
+    background-color: transparent;
+}
+.headerBack ion-icon {
+    color: #000;
+    font-size: 20px;
+}
+.headerBack h1 {
+    font-size: 20px;
+    font-weight: 400;
+    color: #000;
+    margin-left: 10px;
+}
+.headerBack:active {
+    transform: scale(.9);
+    color: #2f3787;
+}
+
+.headerRight {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    float: right;
+}
+.notif {
+    position: relative;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+.notifs {
+    position: relative;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    margin-right: 20px;
+}
+.notif ion-icon,
+.notifs ion-icon {
+    color: black;
+    font-size: 20px;
+}
+.notif:active,
+.notifs:active {
+    transform: scale(.9);
+    color: #2f3787
+}
+
+.user {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    cursor: pointer;
+    margin-left: 5px;
+    margin-right: 20px;
+}
+.user img {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+.user:active {
+    transform: scale(.9);
+    color: #2f3787
+}
+
+.line {
+    grid-row: 2 / 2;
+    grid-column: 1 / 5;
+    width: 99%;
+    height: 2px;
+    background-color: #9D9D9D;
+}

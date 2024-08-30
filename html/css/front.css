@@ -1,0 +1,422 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap');
+
+* {
+    margin: 0;
+    padding:0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: linear-gradient(to bottom, #376FB7, #2F3787);
+    height: 110vh;
+}
+header {
+    position: absolute;
+    width: 100%;
+    min-height: 100vh;
+    background-color: transparent;
+    transition: 0.5s;
+    padding: 10px;
+}
+.topBar {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    margin-top: 10px;
+}
+.headerLogo {
+    min-width: 50px;
+    display: flex;
+    align-items: center;
+}
+.topBar img {
+    width: 75px;
+}
+header .topBar .headerText {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+.headerText h1 {
+    font-weight: 600;
+    color: white;
+}
+.info h1 {
+    color: #ffffff;
+	text-align: center;
+	margin-top: 20px;
+	font-size: 25px;
+}
+.btnLogIn {
+    width: 150px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: transparent;
+    background-color: transparent;
+    margin-right: 10px;
+    color: #000;
+    text-decoration: none;
+}
+.btnLogIn ion-icon {
+    width: 35px;
+    height: 35px;
+    margin-right: 5px;
+    color: #ffffff;
+}
+.btnLogIn h5 {
+    font-size: 24px;
+    font-weight: 400;
+    margin: 0;
+    color: #ffffff;
+}
+
+/*ANNOUNCEMENT*/
+.cards {
+    padding-top: 80px;
+}
+.card {
+    width: 80%;
+    height: 870px;
+    box-shadow: 0 4px 8px 0
+    rgba(0,0,0,0.2);
+    transition: 0.3s;
+    border: 5px solid #FFEFD8;
+    border-radius: 20px;
+    text-align: center;
+    background: #2F3787;
+}
+.card:hover {
+    box-shadow: 0 8px 16px 0
+    rgba(0,0,0,0.2);
+}
+.text h2 {
+	font-size: 20px;
+    padding-top: 30px;
+}
+.mySlides {
+    display: none;
+}
+.slide-image {
+    flex: 1;
+    margin-right: 40px;
+    overflow: hidden;
+}
+.slide-image img {
+    vertical-align: middle;
+    border-radius: 10px;
+    z-index: 1;
+}
+.slideshow {
+    padding-top: 30px;
+    width: 50%;
+    position: relative;
+    margin: auto;
+}
+.prev, 
+.next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    margin-top: -22px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+}
+.prev {
+    left: 0;
+    border-radius: 3px 0 0 3px;
+}
+.next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+.prev:hover, 
+.next:hover {
+    background-color: rgba(0,0,0,0.8);
+}
+.slideshow .text {
+    color: white;
+    font-size: 16px;
+    padding: 35px 12px;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+}
+.dot {
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: 0.6s ease;
+}
+.active, .dot:hover {
+    background-color: #717171;
+}
+.fade {
+    -webkit-animation-name: fade;
+    -webkit-animation-duration: 1.5s;
+    animation-name: fade;
+    animation-duration: 1.5s;
+}
+
+/*LOG IN & FORGOT PASS*/
+.logIn,
+.forgot,
+.pass {
+    display: none;
+    position: fixed;
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+    padding-top: 60px;
+}
+.logIn-content,
+.forgot-content,
+.pass-content {
+    background-color: #FFEFD8;
+    margin: auto;
+    width: 40%; 
+    height: fit-content;
+    padding: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 15px;
+}
+.infos img {
+    padding-top: 20px;
+    position: relative;
+    margin-left: 300px;
+    width: 120px;
+    height: 100%;
+}
+.infos h1 {
+    text-align: center;
+    font-size: 24px;
+    color: #2F3787;
+    font-weight: 600;
+}
+.inner-content {
+    padding-bottom: 20px;
+    padding-left: 15%;
+    width: 80%;
+}
+.texts {
+    font-size: 18px;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+    display: inline-block;
+}
+.inputPass {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    position: relative;
+}
+.inputs {
+    font-size: 15px;
+    width: 100%;
+    height: 40px;
+    padding-left: 15px;
+    padding-right: 40px;
+    border: 1px solid #000000;
+    border-radius: 15px;
+    letter-spacing: 1px;
+    outline: none;
+    background: #ffffff;
+}
+.inner-content ion-icon {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+}
+.logIn a {
+    padding-left: 450px;
+    text-decoration: none;
+    color: #000;
+}
+.btn {
+    text-align: center;
+    margin-top: 40px;
+}
+.logIn-button {
+    font-size: 20px;
+    color: white;
+    width: 40%;
+    height: 40px;
+    background-color: #2F3787;
+    border: none;
+    cursor: pointer;
+    border-radius: 15px; 
+}
+.logIn-button:hover {
+    background-color: #376FB7;
+}
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 25px;
+    right: 20px;
+}
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+@-webkit-keyframes fade {
+    from {opacity: .4} 
+    to {opacity: 1}
+}
+
+@keyframes fade {
+    from {opacity: .4} 
+    to {opacity: 1}
+}
+
+
+/* On smaller screens, decrease text size */
+@media only screen and (max-width: 300px) {
+    .prev, 
+    .next,
+    .text {
+        font-size: 11px
+    }
+    .dot {
+        height: 10px;
+        width: 10px;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .prev, 
+    .next,
+    .text {
+        font-size: 14px
+    }
+    * {
+        box-sizing: border-box
+    }
+    body {
+        font-family: Verdana, sans-serif; margin:0
+    }
+    .mySlides {
+        display: none
+    }
+    img {
+        vertical-align: middle;
+    }
+    .slideshow-container {
+        max-width: 80%;
+        position: relative;
+        margin: auto;
+    }
+    .prev, .next {
+        cursor: pointer;
+        position: absolute;
+        top: 50%;
+        width: auto;
+        padding: 16px;
+        margin-top: -22px;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+        transition: 0.6s ease;
+        border-radius: 0 3px 3px 0;
+        user-select: none;
+    }
+    .next {
+        right: 0;
+        border-radius: 3px 0 0 3px;
+    }
+    .prev:hover, 
+    .next:hover {
+        background-color: rgba(0,0,0,0.8);
+    }
+    .text {
+        color: #f2f2f2;
+        font-size: 15px;
+        padding: 8px 12px;
+        position: absolute;
+        bottom: 8px;
+        width: 100%;
+        text-align: center;
+    }
+    .dot {
+        cursor: pointer;
+        height: 15px;
+        width: 15px;
+        margin: 0 2px;
+        background-color: #bbb;
+        border-radius: 50%;
+        display: inline-block;
+        transition: background-color 0.6s ease;
+    }
+    .active, 
+    .dot:hover {
+        background-color: #717171;
+    }
+    .fade {
+        -webkit-animation-name: fade;
+        -webkit-animation-duration: .5s;
+        animation-name: fade;
+        animation-duration: .5s;
+    }
+}
+
+@-webkit-keyframes fade {
+    from {opacity: 1} 
+    to {opacity: 1}
+}
+@keyframes fade {
+    from {opacity: 1} 
+    to {opacity: 1}
+}
+
+/* On smaller screens, decrease text size */
+@media only screen and (max-width: 300px) {
+    .prev, 
+    .next,
+    .text {
+        font-size: 8px
+    }
+    .dot{
+        height: 10px;
+        width:
+        10px;
+    }
+}
+   
+@media only screen and (max-width: 500px) {
+    .prev, 
+    .next,
+    .text {
+        font-size: 14px
+    }
+}

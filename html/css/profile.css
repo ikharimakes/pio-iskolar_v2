@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Lexend');
+
+* {
+    margin: 0;
+    padding:0;
+    box-sizing: border-box;
+    font-family: 'Poppins', 'Lexend';
+}
+
+
+/* Main content */
+.info {
+    grid-row: 2 / 5;
+    grid-column: 1 / 5;
+    padding-right: 20px;
+    padding-top: 50px;    
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.profile_name {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.profile_name img {
+    display: flex;
+    width: 300px;
+    height: 300px;
+}
+.profile_name h2 {
+    display: flex;
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    width: 1000px;
+    border: 5px solid #000;
+    border-radius: 30px;
+    margin-left: 20px;
+    margin-top: 50px;
+}
+.profile-info table {
+    font-size: 20px;
+    margin: 50px;
+}
+.profile-info table td {
+    padding: 5px 10px;
+    border-color: #FFF;
+}
+.profile-info table th {
+    padding-top: 5px 10px;
+    text-align: left;
+}
+.profile-info a {
+    color: #000;
+    text-decoration: none;
+}
+
+
+/* CHANGE PASS */
+.passOverlay {
+    display: none;
+    position: fixed;
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+    padding-top: 60px;
+}
+.pass-content {
+    background-color: #f1f1f1;
+    margin: auto;
+    width: 30%; 
+    height: fit-content;
+    padding: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 15px;
+}
+.passOverlay h2 {
+    color: #2F3787;
+    font-family: 'Lexend';
+    padding-top: 30px;
+    font-size: 30px;
+    font-weight: 500;
+    text-align: center;
+}
+.closePass {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 30px;
+    color: #aaa;
+    cursor: pointer;
+}
+.closePass:hover {
+    color: #000;
+}
+.inner-content {
+    padding-bottom: 20px;
+    padding-left: 15%;
+}
+.passText {
+    font-size: 18px;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+    display: inline-block;
+}
+.input {
+    font-size: 15px;
+    width: 80%;
+    height: 40px;
+    padding-left: 15px;
+    border: 1px solid #000000;
+    border-radius: 10px;
+    letter-spacing: 1px;
+    outline: none;
+    background: #ffffff;
+}
+.enter-button-container {
+    text-align: center;
+    margin-top: 15px;
+}
+.enter-button {
+    font-size: 20px;
+    color: white;
+    width: 40%;
+    height: 40px;
+    background-color: #2F3787;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px; 
+}
+.enter-button:hover {
+    background-color: #376FB7;
+}

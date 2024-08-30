@@ -1,0 +1,555 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Lexend');
+
+* {
+    margin: 0;
+    padding:0;
+    box-sizing: border-box;
+    font-family: 'Poppins', 'Lexend';
+}
+
+
+/* REPORTS */
+.info {
+    grid-row: 2 / 3;
+    grid-column: 1 / 5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 35px;
+    padding-right: 20px;
+}
+
+
+/*SEARCH*/
+.search {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+.search label {
+    position: relative;
+    width: 100%;
+}
+.search label input {
+    width: 100%;
+    height: 30px;
+    border-radius: 10px;
+    padding: 5px 20px 5px 35px;
+    font-size: 13px;
+    outline: 0;
+    background-color: #F1F1F1;
+    border: none;
+}
+.search label ion-icon {
+    position: absolute;
+    top: 6px;
+    left: 10px;
+    font-size: 15px;
+}
+
+/* ACTION BUTTONS */
+.actions {
+    display: flex;
+    align-items: center;
+    margin-left: 15px;
+    padding-top: 8px;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 28px;
+    color: #000000;
+}
+
+/*SORT*/
+.sort {
+    display: flex;
+    align-items: center;
+    height: 30px;
+    margin-left: 15px;
+}
+.sort option {
+    font-size: 13px;
+    font-weight: 400;
+}
+#statusSort {
+    padding: 5px;
+    font-size: 13px;
+    border-radius: 10px;
+    cursor: pointer;
+    outline: 0;
+    background-color: #F1F1F1;
+    border: none;
+}
+#statusSort:focus {
+    outline: none;
+}
+
+
+/*BUTTON TO ADD*/
+.info .btnAdd {
+    font-size: 13px;
+    width: 160px;
+    height: 30px;
+    background-color: #2F3787;
+    color: #FFFFFF;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    margin-left: 10px;
+}
+
+
+
+/*TABLE*/
+.tables {
+    grid-row: 3 / 5;
+    grid-column: 1 / 5;
+    padding-top: 10px;
+}
+.tables table {
+    font-size: 15px;
+    padding-top: 20px;
+    width: 99%;
+}
+.tables tr th {
+    border-bottom: 1px solid black;
+    text-align: center;
+}
+.tables tr td {
+    border-bottom: 1px solid black;
+}
+.statusColor {
+    font-weight: 600;
+}
+
+.batch-header,
+.name-header,
+.date-header {
+    display: flex;
+    align-items: center;
+}
+.sort-icons {
+    display: flex;
+    flex-direction: column;
+    margin-left: 5px;
+}
+.sort-icons a {
+    color: #000;
+}
+.sort-icon {
+    line-height: 0;
+}
+
+.wrap {
+    display: inline-flex;
+}
+.wrap .icon {
+    margin: 0, 20px;
+    padding-top: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+}
+.wrap .icon span {
+    height: 30px;
+    width: 30px;
+    display: block;
+    text-align: center;
+    z-index: 2;
+}
+.wrap .icon span ion-icon {
+    font-size: 20px;
+    line-height: 20px;
+    color: #000;
+}
+.wrap .icon .tooltip {
+    position: absolute;
+    top: 0px;
+    background-color: #fff;
+    font-size: 12px;
+    padding: 10px 18px;
+    border-radius: 25px;
+    box-shadow: 0 10px 10px rgba(0,0,0,0.1);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+.wrap .icon:hover .tooltip {
+    top: -45px;
+    opacity: 1;
+    pointer-events: auto;
+}
+.wrap .icon .tooltip:before {
+    position: absolute;
+    content: "";
+    height: 15px;
+    width: 15px;
+    background-color: #fff;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+}
+.wrap .icon:hover span,
+.wrap .icon:hover .tooltip {
+    text-shadow: 0px -1px 0px rgba(0,0,0,0.4);
+}
+.wrap .icon:hover ion-icon {
+    color: #2F3787;
+}
+
+
+/* MODALS */
+.report {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,.4);
+    padding-top: 60px;
+}
+.report-content {
+    background-color: #F1F1F1;
+    margin: auto;
+    width: 25%; 
+    height: fit-content;
+    padding: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 15px;
+}
+.infos h1 {
+    color: #2F3787;
+    font-family: 'Lexend';
+    padding-top: 30px;
+    font-size: 25px;
+    font-weight: 500;
+    text-align: center;
+}
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 25px;
+    right: 20px;
+}
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+.btn {
+    text-align: center;
+    margin-top: 40px;
+}
+.generate-button {
+    font-size: 18px;
+    color: #fff;
+    width: 40%;
+    height: 30px;
+    background-color: #2f3787;
+    border: 0;
+    cursor: pointer;
+    border-radius: 10px;
+}
+.generate-button:hover {
+    background-color: #376FB7;
+}
+.scholar {
+    padding-left: 20px;
+    padding-top: 30px;
+}
+.scholar label{
+    font-size: 18px;
+    font-weight: 500;
+    padding-bottom: 10px;
+}
+.scholar select{
+    width: 95%;
+    font-size: 15px;
+    font-weight: 300;
+    background-color: transparent;
+    border: transparent;
+    border-bottom: 1px solid #000;
+    outline: none;
+}
+.scholar option {
+    font-size: 15px;
+    font-weight: 300;
+    background-color: transparent;
+    color: #000;
+    padding-bottom: 20px;
+}
+.batch {
+    padding-left: 20px;
+}
+.batch h3 {
+    font-size: 18px;
+    font-weight: 500;
+    padding-bottom: 10px;
+}
+.batch label {
+    font-size: 15px;
+    font-weight: 300;
+    background-color: transparent;
+    color: #000;
+    padding-bottom: 20px;
+}
+.hideText input {
+    border: none; 
+    border-bottom: 1px solid; 
+    background-color: transparent;
+    font-size: 15px;
+    font-weight: 300;
+    width: 100px;
+}
+
+/*STATUS*/
+.statusReport {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,.4);
+    padding-top: 60px;
+}
+.statusReport-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f1f1f1;
+    padding: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    border-radius: 10px;
+    max-width: 90%;
+    max-height: 90%;
+    overflow: auto;
+}
+.statusReport h3 {
+    text-align: center;
+}
+.statusReport p {
+    font-family: 'Poppins', sans-serif;
+    text-align: justify;
+    font-weight: 1px;
+}
+.statusReport .table-container {
+    text-align: center;
+}
+.statusReport table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #f1f1f1;
+}
+.statusReport table td {
+    border: 2px solid black;
+}
+.statusReport td {
+    padding: 8px;
+}
+.status-header {
+    text-align: center;
+    font-weight: bold;
+}
+.status-details {
+    flex: 1;
+    border: 1px solid black;
+    outline: none;
+    padding: 3px;
+    background-color: transparent;
+    text-align: center;
+}
+.statusReport .nothing-follows {
+    font-size: 12px;
+    text-align: center;
+}
+.statusReport .button {
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+    align-content: center;
+    background-color: #2F3787; 
+    color: white; 
+    padding: 10px 20px; 
+    border: none; 
+    text-align: center; 
+    text-decoration: none; 
+    display: block; 
+    font-size: 15px; 
+    margin: 0 auto; 
+    cursor: pointer; 
+    border-radius: 8px;
+}
+.statusReport .button:active {
+    transform: translateY(1px);
+}
+.closeEdit {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 30px;
+    color: #aaa;
+    cursor: pointer;
+}
+.closeEdit:hover {
+    color: #000;
+}
+
+/*PROFILE*/
+.profileReport {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,.4);
+    padding-top: 60px;
+}
+.profileReport-content{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #F1F1F1;
+    padding: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    border-radius: 10px;
+    max-width: 90%;
+    max-height: 90%;
+    overflow: auto;
+}
+.profileReport h3 {
+    text-align: center;
+}
+.profileReport p {
+    font-family: 'Poppins', sans-serif;
+    text-align: justify;
+    font-weight: 1px;
+}
+.profileReport .table-container {
+    text-align: center;
+}
+.profileReport table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #F1F1F1;
+}
+.profileReport table {
+    border: 3px solid black;
+}
+.profileReport td {
+    border: 1px solid black;
+}
+.profileReport td {
+    padding: 8px;
+}
+.profile-header {
+    text-align: center;
+    font-weight: bold;
+    border: 3px solid black;
+}
+.profile-profile {
+    flex: 1;
+    outline: none;
+    padding: 3px;
+    width: 130px;
+    background-color: transparent;
+    text-align: right;
+    font-size: 12px;
+    font-weight: bold;
+    border-right: 2px solid black;
+}
+.profile-profile2 {
+    flex: 1;
+    outline: none;
+    padding: 3px;
+    width: 60px;
+    background-color: transparent;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    border-right: 2px solid black;
+}
+.profile-input {
+    border-right: 3px solid black;
+    flex: 1;
+    outline: none;
+    padding: 16px;
+    width: 300px;
+    background-color: transparent;
+}
+.profile-details {
+    flex: 1;
+    border: 1px solid black;
+    outline: none;
+    padding: 3px;
+    background-color: transparent;
+    text-align: center;
+}
+.profileReport .nothing-follows {
+    font-size: 12px;
+    text-align: center;
+}
+.profileReport .button {
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+    align-content: center;
+    background-color: #2F3787; 
+    color: white; 
+    padding: 10px 20px; 
+    border: none; 
+    text-align: center; 
+    text-decoration: none; 
+    display: block; 
+    font-size: 15px; 
+    margin: 0 auto; 
+    cursor: pointer; 
+    border-radius: 8px;
+}
+.profileReport .button:active {
+    transform: translateY(1px);
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}

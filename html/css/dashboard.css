@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Lexend');
+
+* {
+    margin: 0;
+    padding:0;
+    box-sizing: border-box;
+    font-family: 'Poppins', 'Lexend';
+}
+
+
+/* Main content */
+.info {
+    grid-row: 2 / 3;
+    grid-column: 1 / 5;
+    padding-right: 10px;
+    padding-top: 20px;
+}
+
+.welcome-box {
+    display: inline-flex;
+    padding: 70px 0;
+    flex: 1;
+    align-items: center;
+    justify-content: right;
+}
+.welcome-box h1 {
+    background-color: #F1F1F1;
+    font-weight: 400;
+    font-size: 28px;
+    border-radius: 8px;
+    padding: 10px 120px 10px 20px;
+}
+.welcome-box ion-icon {
+    position: absolute;
+    font-size: 120px;
+    color: #2F3787;
+    margin-top: 0;
+    transform: rotate(20deg);
+}
+
+/*CALENDAR*/
+.calendar {
+    width: 35%;
+    height: 99%;
+    border-radius: 10px;
+    float: right;
+}
+.month {
+     color: #000000;
+     background-color: transparent;
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+}
+.date h1{
+    font-size: 20px;
+    font-weight: 600;
+}
+.weekdays, 
+.days {
+     display: flex;
+     justify-content: space-around;
+ }
+ .weekdays {
+    font-size: 15px;
+    font-weight: 500;
+ }
+ .weekdays div,
+ .days div {
+     flex: 1;
+     text-align: center;
+ }
+ .days {
+     display: grid;
+     grid-template-columns: repeat(7, 1fr);
+     gap: 1px;
+ }
+ .days div {
+     padding: 10px;
+     text-align: center;
+     background-color: #fff;
+ }
+ .prev {
+     padding-left: 20px;
+     cursor: pointer;
+ }
+ .next {
+     padding-right: 20px;
+     cursor: pointer;
+ }
+
+ 
+/* Announcement text */
+.announcement {
+    grid-row: 3 / 5;
+    grid-column: 1 / 5;
+    padding: 20px;
+    width: 100%;
+}
+.announcement h1 {
+    padding-bottom: 30px;
+    font-weight: 700;
+    font-size: 24px;
+    color: #2F3787;
+    text-decoration: underline;
+}
+.title {
+    font-weight: 600;
+    font-size: 24px;
+    color: #000000;
+}
+.titleDate {
+    font-weight: 400;
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+.info-box {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    padding: 15px;
+    background-color: #2F3787;
+    border-radius: 8px;
+}
+.info-box img {
+    width: 30%;
+    margin-right: 15px;
+}
+.message{
+    font-size: 15px;
+    font-weight: 400;
+    color: #FFFFFF;
+    text-align: justify;
+    flex: 1;
+    padding: 0 20px;
+}

@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap');
+
+* {
+    margin: 0;
+    padding:0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/*PAGINATION*/
+.pagination {
+    grid-row: 4 / 5;
+    grid-column: 1 / 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fff;
+    padding: 0 20px 0 0;
+    border-radius: 100px;
+    margin-top: 100px;
+}
+.pagination1 {
+    grid-row: 5 / 6;
+    grid-column: 1 / 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fff;
+    padding: 0 20px 0 0;
+    border-radius: 100px;
+    margin-top: 100px;
+}
+.pagination p,
+.pagination1 p {
+    font-size: 12px;
+    margin: 0;
+    padding: 0 20px 0 0;
+}
+.box {
+    display: flex;
+    align-items: center;
+}
+.box ul {
+    display: flex;
+    margin: 0px 5px;
+}
+.box ul li {
+    list-style: none;
+    margin: 0px 3px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 100px;
+    text-align: center;
+}
+.box ul li a {
+    font-size: 12px;
+    text-decoration: none;
+    color: #000;
+    display: block;
+    border-radius: 100px;
+    transition: 0.2s;
+}
+.box ul li .active_page {
+    background-color: #2F3787;
+    color: #fff;
+}
+.box ul li a:hover {
+    background-color: #2F3787;
+    color: #fff;
+}
+.box button {
+    font-size: 12px;
+    font-weight: bold;
+    width: 50px;
+    height: 30px;
+    background-color: #F1F1F1;
+    border: none;
+    cursor: pointer;
+    border-radius: 20px;
+    overflow: hidden;
+}
+.box button a {
+    text-decoration: none;
+    display: block;
+    color: #000;
+    transition: 0.2s;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.box button a:hover {
+    background-color: #2F3787;
+    color: #fff;
+}
+.box button[disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+}

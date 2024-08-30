@@ -1,0 +1,230 @@
+.deleteOverlay h2,.errorOverlay h2,.saveOverlay h2 {
+    color: #2F3787;
+    font-family: 'Lexend';
+    padding-top: 10px;
+    font-size: 25px;
+    font-weight: 500;
+    text-align: center;
+}
+.message h4 {
+    padding-top: 30px;
+    font-size: 18px;
+    font-weight: 300;
+    text-align: center;
+}
+
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+    justify-content: space-between
+}
+.no-button,.yes-button {
+    font-size: 18px;
+    color: #fff;
+    width: 30%;
+    height: 30px;
+    background-color: #2f3787;
+    border: 0;
+    cursor: pointer;
+    border-radius: 10px;
+}
+.yes-button:hover {
+    background-color: #376fb7
+}
+.no-button {
+    color: #2f3787;
+    background-color: transparent;
+    border: 2px solid #2f3787
+}
+.no-button:hover {
+    background-color: #d3d3d3;
+    border: transparent
+}
+
+.ok-button-container {
+    text-align: center;
+    margin-top: 20px
+}
+.ok-button {
+    font-size: 18px;
+    color: #fff;
+    width: 30%;
+    height: 30px;
+    background-color: #2f3787;
+    border: 0;
+    cursor: pointer;
+    border-radius: 10px;
+}
+.ok-button:hover {
+    background-color: #376fb7
+}
+
+
+.errorOverlay {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,.4);
+    padding-top: 60px
+}
+.error-content {
+    background-color: #f1f1f1;
+    margin: auto;
+    width: 23%;
+    height: fit-content;
+    padding: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,.2),0 6px 20px 0 rgba(0,0,0,.19);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    border-radius: 15px;
+}
+.closeError {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 30px;
+    color: #aaa;
+    cursor: pointer
+}
+.closeError:hover {
+    color: #000
+}
+
+.deleteOverlay {
+    display: none;
+    position: fixed;
+    z-index: 100; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+    padding-top: 60px;
+}
+.delete-content {
+    background-color: #f1f1f1;
+    margin: auto;
+    width: 30%; 
+    height: fit-content;
+    padding: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 15px;
+}
+.deleteOverlay h2 {
+    color: #2F3787;
+    font-family: 'Lexend';
+    padding-top: 30px;
+    font-size: 25px;
+    font-weight: 500;
+    text-align: center;
+}
+.deleteOverlay p {
+    color: #000000;
+    font-size: 15px;
+    font-weight: 300;
+    padding-left: 10%;
+    padding-right: 10%;
+}
+.inner-content {
+    padding-bottom: 30px;
+    padding-left: 10%;
+}
+.deleteText {
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+    display: inline-block;
+}
+.inner-content .input {
+    font-size: 15px;    
+    font-weight: 300;
+    width: 85%;
+    height: 40px;
+    padding-left: 10px;
+    background-color: #D9D9D9;
+    border: none;
+    border-radius: 10px;
+    letter-spacing: 1px;
+    outline: none;
+}
+.delete-button-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding-right: 10%;
+}
+.delete-button {
+    font-size: 16px;
+    color: red;
+    width: 27%;
+    height: 40px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: 15px;
+}
+.cancel-button {
+    font-size: 16px;
+    color: #2f3787;
+    width: 17%;
+    height: 40px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: 15px; 
+}
+.delete-button:hover
+.cancel-button:hover {
+    background-color: #d3d3d3;
+}
+
+.saveOverlay {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,.4);
+    padding-top: 60px;
+}
+.save-content {
+    background-color: #f1f1f1;
+    margin: auto;
+    width: 23%;
+    height: fit-content;
+    padding: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,.2),0 6px 20px 0 rgba(0,0,0,.19);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    border-radius: 15px;
+}
+.closeSave {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 30px;
+    color: #aaa;
+    cursor: pointer
+}
+.closeSave:hover {
+    color: #000
+}
