@@ -31,24 +31,31 @@
                     <span class="text"> Scholar </span> 
                 </a> </li>
 
-                <li class="navLink"> <a href="eval_reports.php" onclick="activateLink(this)">
+                <li class="navLink"> <a href="eval_docs.php" onclick="activateLink(this)">
+                    <span class="icon">
+                        <ion-icon name="document-outline"></ion-icon>
+                    </span>
+                    <span class="text"> Pending </span> 
+                </a> </li>
+
+                <!-- <li class="navLink"> <a href="eval_reports.php" onclick="activateLink(this)">
                     <span class="icon">
                         <ion-icon name="stats-chart-outline"></ion-icon>
                     </span>
                     <span class="text"> Reports </span> 
-                </a> </li>
+                </a> </li> -->
+
+                <!-- <li class="navLink"><a href="eval_faq.php">
+                    <span class="icon">
+                        <ion-icon name="help-circle-outline"></ion-icon>
+                    </span>
+                    <span class="text"> FAQ </span>
+                </a></li> -->
             </ul>
         </div> 
 
         <div class="bottom-content">
-            <li class="navLink"><a href="eval_faq.php">
-                <span class="icon">
-                    <ion-icon name="help-circle-outline"></ion-icon>
-                </span>
-                <span class="text"> FAQ </span>
-            </a></li>
-
-            <li class="navLink"><a href="../functions/logout.php">
+            <li class="navLink"><a href="front_page.php">
                 <span class="icon">
                     <ion-icon name="log-out-outline"></ion-icon>
                 </span>

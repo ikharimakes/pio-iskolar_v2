@@ -12,7 +12,7 @@
             </div>
             <br> 
             
-            <form method="POST" action="delete_report.php">
+            <form method="POST">
             <!-- Hidden input field to store osqcar value -->
             <input type="hidden" id="delete-osqcar" name="osqcar">
                 <div class="inner-content">

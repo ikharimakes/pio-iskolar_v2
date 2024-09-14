@@ -1,3 +1,10 @@
+<?php 
+    include_once('../functions/general.php');
+    include_once('../functions/dashboard_view.php');
+    include_once('../functions/announce_view.php');
+    updateStatus();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,79 +38,76 @@
         <div class="line"></div>
 
 
-        <!-- DASHBOARD -->
+        <!-- DASHBOARD 
          <div class="info">  
             <div class="welcome-box">
                 <h1>Welcome Back, Coordinator</h1>
                 <ion-icon name="school"></ion-icon>
             </div>
-        </div>
+        </div>-->
 
 
-        <div class="content-grid">
-            <div class="cards">
-                <div class="card"> 
-                    <div class="container">
-                        <h5 class="detail"> Total Scholars </h5>
-                        <br>
-                        <h2 class="num"> 21,350 </h2>
+        <div class="box-container">
+            <div class="box-row">
+                <div class="box box-large">
+                    <h1>Pending (# of pending)</h1>
+
+                    <div class="box-pending">
+                        <table>
+                            <?php pendingFiles();?>
+                        </table>
                     </div>
                 </div>
 
-                <div class="card"> 
-                    <div class="container">
-                        <h5 class="detail"> Current Scholars </h5>
-                        <br>
-                        <h2 class="num"> 2,500 </h2>
-                    </div> 
+                <div class="box box-large">
+                    <h1>Files (per batch)</h1>
+
+                    <div class="box-batch">
+                        <ul>
+                            <?php existingFiles();?>
+                        </ul>
+                    </div>
                 </div>
 
-                <div class="card"> 
-                    <div class="container">
-                        <h5 class="detail"> Pending Documents Approval </h5>
-                        <br>
-                        <h2 class="num"> 100 </h2>
-                    </div> 
+                <div class="box box-large">
+                    <h1>Calendar</h1>
+
+                    <div class="box-calendar">
+                        <div class="nav-btn">
+                            <button id="prevBtn"><ion-icon name="chevron-back-outline"></ion-icon></button>
+                            <div class="month-year" id="monthYear"></div>
+                            <button id="nextBtn"><ion-icon name="chevron-forward-outline"></ion-icon></button>
+                        </div>
+
+                        <div class="weekdays" id="weekdays"></div>
+                    </div>
+
+                    <div class="event">
+                        <h3>Events</h3>
+                        <ul>
+                            <!-- <li> <a href="">Application for Batch 23</a> </li> -->
+                            <?php activeEvents(); ?>
+                        </ul>
+                    </div>
                 </div>
-            </div> <br> <br>
+            </div>
+
+            <div class="box-row">
+                <div class="box-small-big">
+                    <h1>No. of Scholars & Active Scholars per Batch</h1>
+
+                    <div class="box-graph">
+                        <canvas id="myBarChart"></canvas>
+                    </div>
+                </div>
                 
-            <!-- LINE GRAPH -->
-            <div class="chart-container">
-                <h1> Number of Scholars per Batch </h1>
-                <canvas id="canvas" width="950" height="400"></canvas>
-            </div>
-        </div>
+                <div class="box-small">
+                    <h1>Summary</h1>
 
-        <div class="right">
-            <!-- CALENDAR -->
-            <div class="calendar">
-                <div class="month">
-                    <div class="prev">&#10094;</div>
-
-                    <div class="date">
-                        <h1 id="month"></h1>
+                    <div class="box-summary">
+                        <?php summaryScholars(); ?>
                     </div>
-
-                    <div class="next">&#10095;</div>
                 </div>
-
-                <div class="weekdays">
-                    <div>Sun</div>
-                    <div>Mon</div>
-                    <div>Tue</div>
-                    <div>Wed</div>
-                    <div>Thu</div>
-                    <div>Fri</div>
-                    <div>Sat</div>
-                </div>
-                <div class="days" id="days"></div>
-            </div>
-
-            <div class="event">
-                <h4>Events and Announcements</h4>
-                <table id="eventTable">
-                    <!-- Dynamic content will be inserted here -->
-                </table>
             </div>
         </div>
     </div>
@@ -114,6 +118,7 @@
 
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- FOR GRAPH-->
     <script>
 
         //CHANGE PASS
@@ -128,70 +133,139 @@
         }
 
         //CALENDAR
-        const monthNames = ["January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"];
+        document.addEventListener("DOMContentLoaded", function() {
+            const monthYearElement = document.getElementById("monthYear");
+            const weekdaysElement = document.getElementById("weekdays");
+            const prevBtn = document.getElementById("prevBtn");
+            const nextBtn = document.getElementById("nextBtn");
 
-        const today = new Date();
-        let currentMonth = today.getMonth();
-        let currentYear = today.getFullYear();
+            const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-        function generateCalendar() {
-            const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-            const startingDay = firstDayOfMonth.getDay();
+            let currentDate = new Date();
 
-            document.getElementById("month").innerHTML = monthNames[currentMonth] + " " + currentYear;
+            function renderWeek(date) {
+                weekdaysElement.innerHTML = "";
 
-            let calendarDays = document.getElementById("days");
-            calendarDays.innerHTML = "";
+                const firstDayOfWeek = new Date(date.setDate(date.getDate() - date.getDay()));
+                const month = firstDayOfWeek.toLocaleString('default', { month: 'long' });
+                const year = firstDayOfWeek.getFullYear();
 
-            for (let i = 0; i < startingDay; i++) {
-                let day = document.createElement("div");
-                calendarDays.appendChild(day);
-            }
+                monthYearElement.textContent = `${month} ${year}`;
 
-            for (let i = 1; i <= daysInMonth; i++) {
-                let day = document.createElement("div");
-                day.textContent = i;
-                calendarDays.appendChild(day);
-            }
-        }
+                for (let i = 0; i < 7; i++) {
+                    const dayDate = new Date(firstDayOfWeek);
+                    dayDate.setDate(firstDayOfWeek.getDate() + i);
+                    const dayName = daysOfWeek[dayDate.getDay()];
+                    const dayNumber = dayDate.getDate();
 
-        document.querySelector(".prev").addEventListener("click", () => {
-            currentMonth -= 1;
-            if (currentMonth < 0) {
-                currentMonth = 11;
-                currentYear -= 1;
-            }
-            generateCalendar();
-        });
+                    const dayElement = document.createElement("div");
+                    dayElement.classList.add("weekday");
 
-        document.querySelector(".next").addEventListener("click", () => {
-            currentMonth += 1;
-            if (currentMonth > 11) {
-                currentMonth = 0;
-                currentYear += 1;
-            }
-            generateCalendar();
-        });
+                    const dayNameElement = document.createElement("div");
+                    dayNameElement.classList.add("day-name");
+                    dayNameElement.textContent = dayName;
 
-        generateCalendar();
-        
-        // LINE GRAPH
-        var lineChartData = {
-            labels : ["Batch 1","Batch 2","Batch 3","Batch 4","Batch 5","Batch 6","Batch 7","Batch 8","Batch 9","Batch 10"],
-            datasets : [
-                {
-                    fillColor : "#FFEFD8",
-                    strokeColor : "#FFE4C7",
-                    pointColor : "#CCCCCC",
-                    pointStrokeColor : "#FFF",
-                    data : [200, 195, 250, 257, 270, 186, 204, 237, 178, 241]
+                    const dayNumberElement = document.createElement("div");
+                    dayNumberElement.classList.add("day-number");
+                    dayNumberElement.textContent = dayNumber;
+
+                    dayElement.appendChild(dayNameElement);
+                    dayElement.appendChild(dayNumberElement);
+                    weekdaysElement.appendChild(dayElement);
                 }
-            ]
+            }
+
+            prevBtn.addEventListener("click", function() {
+                currentDate.setDate(currentDate.getDate() - 7);
+                renderWeek(currentDate);
+            });
+
+            nextBtn.addEventListener("click", function() {
+                currentDate.setDate(currentDate.getDate() + 7);
+                renderWeek(currentDate);
+            });
+
+            renderWeek(new Date());
+        });
+
+
+        //GRAPH
+        // const ctx = document.getElementById('myBarChart').getContext('2d');
+        // const myBarChart = new Chart(ctx, {
+        //     type: 'bar',
+        //     data: {
+        //         labels: ['Batch 21', 'Batch 22', 'Batch 23', 'Batch 24', '  Batch 25'],
+        //         datasets: [
+        //             {
+        //                 label: '1st Semester',
+        //                 data: [65, 59, 80, 81, 56],
+        //                 backgroundColor: 'rgb(47, 55, 135)',
+        //                 borderWidth: 1
+        //             },
+        //             {
+        //                 label: '2nd Semester',
+        //                 data: [28, 48, 40, 19, 86],
+        //                 backgroundColor: 'rgb(217, 217, 217)',
+        //                 borderWidth: 1
+        //             }
+        //         ]
+        //     },
+        //     options: {
+        //         scales: {
+        //             y: {
+        //                 beginAtZero: true
+        //             }
+        //         }
+        //     }
+        // });
+
+        async function fetchChartData() {
+            try {
+                const response = await fetch('../functions/dashboard_graph.php'); // Fetch data from PHP script
+                const data = await response.json(); // Parse JSON response
+
+                // Check if data was fetched successfully
+                if (!data || !data.labels || !data.total_scholars || !data.active_scholars) {
+                    console.error("Invalid data structure received from the server.");
+                    return;
+                }
+
+                // Initialize the chart with fetched data
+                const ctx = document.getElementById('myBarChart').getContext('2d');
+                const myBarChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,  // Use dynamic labels from PHP
+                        datasets: [
+                            {
+                                label: 'Total Scholars',
+                                data: data.total_scholars,  // Use dynamic data for total scholars
+                                backgroundColor: 'rgb(47, 55, 135)',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'ACTIVE Scholars',
+                                data: data.active_scholars,  // Use dynamic data for ACTIVE scholars
+                                backgroundColor: 'rgb(217, 217, 217)',
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error("Error fetching chart data:", error);
+            }
         }
 
-        var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Line(lineChartData);
+        // Fetch data and render the chart
+        fetchChartData();
     </script>
 </body>
 </html>

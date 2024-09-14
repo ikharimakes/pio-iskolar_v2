@@ -123,8 +123,10 @@
     flex-direction: column;
     margin-left: 5px;
 }
-.sort-icons a {
-    color: #000;
+a {
+    color: black;
+    text-decoration: none;
+    display: block;
 }
 .sort-icon {
     line-height: 0;
@@ -306,9 +308,4 @@ textarea {
     width: 700px; 
     height: 100%; 
     border: 1px solid #ccc;
-}
-
-a {
-    text-decoration: none;
-    color: black;
 }

@@ -1,3 +1,39 @@
+<?php 
+    include('../functions/general.php');
+    include('../functions/document_upload.php');
+
+    // Assume $scholar_id is set from the session or another reliable source
+    //$scholar_id = $_SESSION['sid'];
+    $scholar_id = "197";
+    global $year, $sem;
+
+    function getUploadButtonHtml($scholar_id, $doc_type, $year, $sem) {
+        $docDetails = getDocumentDetails($scholar_id, $doc_type, $year, $sem);
+        if ($docDetails) {
+            if ($docDetails['doc_status'] === 'DECLINED') {
+                $buttonLabel = 'REPLACE DOCUMENT';
+                $buttonStyle = 'style=""';
+            } else {
+                $buttonLabel = '';
+                $buttonStyle = 'style="display:none;"';
+            }
+            return "
+                <label type='button' class='lblAdd' for='choose-file-$doc_type' $buttonStyle>
+                    <ion-icon name='share-outline'></ion-icon> <b> $buttonLabel </b>
+                </label>
+                <input name='$doc_type' type='file' id='choose-file-$doc_type' accept='.pdf' style='display: none;' $buttonStyle /> <p>{$docDetails['doc_name']} - <b>{$docDetails['doc_status']}</b></p>
+            ";
+        } else {
+            return "
+                <label type='button' class='lblAdd' for='choose-file-$doc_type'>
+                    <ion-icon name='share-outline'></ion-icon> UPLOAD FILE
+                </label>
+                <input name='$doc_type' type='file' id='choose-file-$doc_type' accept='.pdf' style='display: none;' />
+            ";
+        }
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -49,7 +85,7 @@
                     <div class="container">
                         <div class="reqs">
                             <h2> Photocopy of Certificate of Registration </h2>
-                            <h5> A.Y. 2024-2025, Semester 1 </h5>
+                            <h5> <?php echo 'A.Y. '.$year.', Semester '.$sem?> </h5>
                         </div>
                         
                         <div class="formats">
@@ -62,10 +98,7 @@
                             <p class="files"> PDF File </p>
                         </div> <br> 
 
-                        <label type="button" class="lblAdd" for="choose-file1"> 
-                            <ion-icon name="share-outline"> </ion-icon> Upload File
-                        </label>
-                        <input name="COR" type="file" id="choose-file1" accept=".pdf" style="display: none;" /> 
+                        <?php echo getUploadButtonHtml($scholar_id, 'COR', $year, $sem); ?> 
                     </div>
                 </div> <br>
 
@@ -73,7 +106,7 @@
                     <div class="container">
                         <div class="reqs">
                             <h2> Photocopy of Grades/Transcript of Records </h2>
-                            <h5> A.Y. 2024-2025, Semester 1 </h5>
+                            <h5> <?php echo 'A.Y. '.$year.', Semester '.$sem?> </h5>
                         </div>
                         
                         <div class="formats">
@@ -86,10 +119,7 @@
                             <p class="files"> PDF File </p>
                         </div> <br> 
 
-                        <label type="button" class="lblAdd" for="choose-file1"> 
-                            <ion-icon name="share-outline"> </ion-icon> Upload File
-                        </label>
-                        <input name="GRADES" type="file" id="choose-file1" accept=".pdf" style="display: none;" /> 
+                        <?php echo getUploadButtonHtml($scholar_id, 'GRADES', $year, $sem); ?> 
                     </div>
                 </div> <br>
 
@@ -97,7 +127,7 @@
                     <div class="container">
                         <div class="reqs">
                             <h2> Social Service Monitoring Record with complete 40 hours </h2>
-                            <h5> A.Y. 2024-2025 </h5>
+                            <h5> <?php echo 'A.Y. '.$year.', Semester '.$sem?> </h5>
                         </div>
                         
                         <div class="formats">
@@ -110,10 +140,7 @@
                             <p class="files"> PDF File </p>
                         </div> <br> 
 
-                        <label type="button" class="lblAdd" for="choose-file1"> 
-                            <ion-icon name="share-outline"> </ion-icon> Upload File
-                        </label>
-                        <input name="SC" type="file" id="choose-file1" accept=".pdf" style="display: none;" /> 
+                        <?php echo getUploadButtonHtml($scholar_id, 'SOCIAL', $year, $sem); ?> 
                     </div>
                 </div> <br>
 
@@ -135,10 +162,7 @@
                             <p class="files"> PDF File </p>
                         </div> <br> 
 
-                        <label type="button" class="lblAdd" for="choose-file1"> 
-                            <ion-icon name="share-outline"> </ion-icon> Upload File
-                        </label>
-                        <input name="DIPLOMA" type="file" id="choose-file1" accept=".pdf" style="display: none;" /> 
+                        <?php echo getUploadButtonHtml($scholar_id, 'DIPLOMA', $year, $sem); ?> 
                     </div>
                 </div> <br>
 
@@ -156,5 +180,16 @@
 
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Select all input elements with class 'custom-file-upload'
+            $('input[type=file]').change(function () {
+                var file = $(this)[0].files[0].name;
+                // Find the corresponding label by its 'for' attribute
+                var labelFor = $(this).attr('id');
+                $('label[for=' + labelFor + ']').text(file);
+            });
+        });
+    </script>
 </body>
 </html>

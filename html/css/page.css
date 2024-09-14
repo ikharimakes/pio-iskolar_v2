@@ -9,7 +9,7 @@
 
 /*PAGINATION*/
 .pagination {
-    grid-row: 4 / 5;
+    grid-row: 5 / 6;
     grid-column: 1 / 5;
     display: flex;
     align-items: center;
@@ -17,10 +17,9 @@
     background-color: #fff;
     padding: 0 20px 0 0;
     border-radius: 100px;
-    margin-top: 100px;
+    margin-bottom: 0px;
 }
 .pagination1 {
-    grid-row: 5 / 6;
     grid-column: 1 / 5;
     display: flex;
     align-items: center;
@@ -80,7 +79,7 @@
     border-radius: 20px;
     overflow: hidden;
 }
-.box button a {
+.box button {
     text-decoration: none;
     display: block;
     color: #000;
@@ -90,7 +89,7 @@
     align-items: center;
     justify-content: center;
 }
-.box button a:hover {
+.box button:hover {
     background-color: #2F3787;
     color: #fff;
 }

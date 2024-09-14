@@ -1,3 +1,9 @@
+<?php 
+    include_once('../functions/general.php');
+    include_once('../functions/announce_view.php');
+    updateStatus();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,128 +16,99 @@
 </head>
 
 <body>
-    <!-- HEADER -->
-    <header>
-        <div class="topBar">
-            <span class="headerLogo">
-                <img src="images/pio-logo.png" alt="logo"> 
-                <div class="headerText">
-                    <h1>Pio Iskolar</h1>
-                </div>
-            </span>
-
-            <div class="info">
-                <h1>ANNOUNCEMENT</h1>
-            </div>
-
-            <a href="#" class="btnLogIn"> 
-                <ion-icon name="log-in-outline"></ion-icon>
-                <h5> Log In </h5>
-            </a>
-        </div>
-    </header> <br> <br>
     
-            
-    <!-- ANNOUNCEMENT -->
-    <center><div class="cards">
-	    <div class="card">
-            
-            <div class="slideshow">
-                <div class="mySlides fade">
-                    <img src="images/pic1.jpg" style="width:100%">
-                    <div class="text">
-                        <h2> Application for Batch 23 </h2>
-                        <hr>
-                        <p> The City Government of Valenzuela 
-                            will start accepting applicants for the Dr. Pio Valenzuela
-                            Scholarship Program on December 13, 2023. Here are the 
-                            qualifications and requirements for the scholarship program. 
-                            <br> <br>
-                            Get the downloadable scholarship application form here: 
-                            https://www.valenzuela.gov.ph/drpioscholarship 
-                            <br> <br>
-                            For other concerns, you may send an email to 
-                            drpioscholarshiphelpdesk@gmail.com. 
-                        </p> 
+    <div class="container">
+        <!-- HEADER -->
+        <header>
+            <div class="topBar">
+                <span class="headerLogo">
+                    <img src="images/pio-logo.png" alt="logo"> 
+                    <div class="headerText">
+                        <h1>Pio Iskolar</h1>
                     </div>
-                </div>
+                </span>
+            </div>
+        </header> <br> <br>
+        
+                
+        <!-- ANNOUNCEMENT -->
+        <div class="cards">
+            <div class="card">
+                <div class="slideshow">
+                        <?php annFront();?>
+                    
+                        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+                </div>  
+                    <br>
 
-                <div class="mySlides fade">
-                    <img src="images/pic2.jpg" style="width:100%">
-                    <div class="text">
-                    <h2> Contract Signing </h2>
-                    <hr>
-                        <p> City Mayor REX Gatchalian graces the 
-                            orientation and contract signing of 212 recipients of the Dr. 
-                            Pio Valenzuela Scholarship program at the Pamantasan ng Lungsod 
-                            ng Valenzuela (#PLV).
-                            <br> <br>
-                            Qualified Grantees are required to report at 
-                            the Scholarship Office at PLV Maysan Campus, 2nd floor on December 
-                            10 to 16, 2023 (except Saturday and Sunday) 8:00 AM to 5:00 PM. 
-                            Look for Ms. Miko Tongco regarding Contract Signing and Orientation. 
-                            Thank you! 
-                        </p> 
-                    </div>
+                <div style="text-align:center">
+                    <?php slideshowButtons();?>
                 </div>
-
-                <div class="mySlides fade">
-                    <img src="images/pic3.jpg" style="width:100%">
-                    <div class="text">
-                    <h2> Results for Batch 23 </h2>
-                    <hr>
-                        <p> The results of the Dr. Pio Valenzuela Scholarship 
-                            Program will be released on Dr. Pio's 154th Birth Anniversary on 
-                            December 11, 2023. 
-                            <br> <br>
-                            Rightfully deserving of the grant, they are currently getting to know 
-                            more about their future college journeys as Dr. Pio Valenzuela scholars. 
-                            <br> <br>
-                            Congratulations and make us proud, dear students! 
-                        </p> 
-                    </div>
-                </div>
-            
-                <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-                <a class="next" onclick="plusSlides(1)">&#10095;</a>
-            </div>  
-            <br>
-
-            <div style="text-align:center">
-                <span class="dot" onclick="currentSlide(1)"></span>
-                <span class="dot" onclick="currentSlide(2)"></span>
-                <span class="dot" onclick="currentSlide(3)"></span>
             </div>
         </div>
-    </div></center>
 
 
-    <!-- LOG IN MODAL -->
-    <div id="logInModal" class="logIn">
-        <div class="logIn-content"> 
-            <div class="infos">
-                <img src="images/pio-logo.png" alt="pio">
-                <h1>Log In to Pio Iskolar</h1>
-                <span id="closeModal" class="close">&times;</span>
+        <!-- LOG IN MODAL -->
+        <div class="logIn">
+            <div class="logIn-content"> 
+                <div class="infos1">
+                    <h2>Log In</h2>
+                </div>
+                <br><br>
+
+                <form id="loginForm" method="post">
+                    <center> <div class="inner-content1">
+                        <label class="texts1" for="user">Enter Username/Email:</label> <br>
+                        <input class="inputs1" type="text" id="user" name="user" placeholder="Username">
+                    </div>
+                    
+                    <div class="inner-content1">
+                        <label class="texts1" for="pass">Enter Password:</label> <br>
+                        <input class="inputs1" type="password" id="pass" name="pass" placeholder="Password"required>
+                    </div>
+
+                    <div class="rem-container">
+                        <div class="remember">
+                            <input type="checkbox" id="rememberMe">
+                            <label for="rememberMe">Remember me</label>
+                        </div>
+                        <span class="forgotPass" onclick="openModal('forgotModal')"> Forgot Password?</span>
+                    </div> 
+                
+                    <div id="loginError" style="color: red; display: none; text-align: center;">Invalid Credentials!</div>
+                    </center>
+                    <br> 
+
+                    <div class="btn1">
+                        <button type="submit" class="logInBtn"> Log In </button>
+                    </div> <br>
+                </form>
             </div>
-            <br><br>
+        </div>
 
-            <div class="inner-content">
-                <label class="texts" for="email">Enter Email Address:</label> <br>
-                <input class="inputs" type="email" id="email" name="email" placeholder="Email Address">
-            </div>
-            <div class="inner-content">
-                <label class="texts" for="confirmPassword">Enter Password:</label> <br>
-                <input class="inputs" type="password" id="password" name="password" placeholder="Password">
-            </div>
-            <a href="#" onclick="openModal('forgotModal')">Forgot Password</a>
 
-            <div class="btn">
-                <button class="logIn-button"> Log In </button>
-            </div> <br>
+        <!-- ANNOUNCEMENT LIST -->
+        <div class="lists">
+            <div class="list">
+                <h2>Announcements Lists</h2>
+                <ul>
+                    <li>
+                        <a href="">Application for Batch 23</a>
+                    </li>
+                    <li>
+                        <a href="">Contract Signing</a>
+                    </li>
+                    <li>
+                        <a href="">Results for Batch 23</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 
+
+    
     <!-- FORGOT PASSWORD MODAL -->
     <div id="forgotModal" class="forgot">
         <div class="forgot-content">
@@ -208,22 +185,41 @@
         }
 
 
-        //LOG IN
-        var modal = document.getElementById("logInModal");
-        var span = document.getElementsByClassName("close")[0];
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
 
-        document.querySelector("a[href='#']").addEventListener("click", function() {
-            modal.style.display = "block";
-        });
-        span.onclick = function() {
-            modal.style.display = "none";
-        };
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
+            const formData = new FormData(this);
+            const data = new URLSearchParams();
+
+            for (const pair of formData) {
+                data.append(pair[0], pair[1]);
             }
-        };
 
+            fetch('../functions/login.php', {
+                method: 'POST',
+                body: data,
+            })
+            .then(response => response.text())
+            .then(response => {
+                console.log('Response:', response);
+                if (response === 'admin') {
+                    console.log("admin");
+                    window.location.href = 'ad_dashboard.php';
+                } else if (response === 'scholar') {
+                    console.log("scholar");
+                    window.location.href = 'dashboard.php';
+                } else if (response === 'evaluator') {
+                    console.log("evaluator");
+                    window.location.href = 'eval_dash.php';
+                } else {
+                    console.log("invalid");
+                    document.getElementById('loginError').style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Fetch Error:', error);
+            });
+        });
 
         //FORGOT PASSWORD
         function openModal(forgotModal) {

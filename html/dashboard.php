@@ -1,3 +1,8 @@
+<?php 
+    include_once('../functions/general.php'); 
+    include('../functions/announce_view.php');
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,9 +19,8 @@
     <!-- SIDEBAR - ad_nav.php -->
     <?php include 'navbar.php'; ?>
     
-
-    <!-- TOP BAR -->
     <div class="main1">
+        <!-- TOP BAR -->
         <div class="topBar">
             <div class="headerName">
                 <h1>Dashboard</h1>
@@ -31,12 +35,11 @@
 
         <div class="line"></div>
 
-
         <!-- DASHBOARD -->
         <div class="info">  
             <div class="welcome-box">
-                <h1>Welcome Back, Jessica Raye</h1>
-                <ion-icon name="school"></ion-icon>
+                <h1><?php scholarName(); ?></h1> <!-- modify to pull name from db -->
+                <ion-icon name="school"></ion-icon> 
             </div>
 
             <!-- CALENDAR -->
@@ -69,44 +72,7 @@
         <!-- ANNOUNCEMENT -->
         <div class="announcement">
             <h1>Announcement</h1>
-        
-            <div class="title">Application for Batch 23</div>
-            <div class="titleDate">August 20, 2024</div>
-            <div class="info-box">
-                <img src="images/pic1.jpg">
-                <p class="message">
-                    The City Government of Valenzuela will start accepting applicants for the Dr. Pio Valenzuela Scholarship 
-                    Program on December 13, 2023. Here are the qualifications and requirements for the scholarship program. <br> <br>
-                    Get the downloadable scholarship application form here: https://www.valenzuela.gov.ph/drpioscholarship <br> <br>
-                    For other concerns, you may send an email to drpioscholarshiphelpdesk@gmail.com.
-                </p>
-            </div> <br> <br>
-
-            <div class="title">Contract Signing</div>
-            <div class="titleDate">July 1, 2024</div>
-            <div class="info-box">
-                <img src="images/pic2.jpg">
-                <p class="message">
-                    City Mayor REX Gatchalian graces the orientation and contract signing of 212 recipients of the Dr. Pio 
-                    Valenzuela Scholarship program at the Pamantasan ng Lungsod ng Valenzuela (#PLV) Qualified Grantees 
-                    are required to report at the Scholarship Office at PLV Maysan Campus, 2nd floor on December 10 to 16, 2023 
-                    (except Saturday and Sunday) 8:00 AM to 5:00 PM. Look for Ms. Miko Tongco regarding Contract Signing and 
-                    Orientation. Thank you!
-                </p>
-            </div> <br> <br>
-                
-            <div class="title">Results for Batch 23</div>
-            <div class="titleDate">May 22, 2024</div>
-            <div class="info-box">
-                <img src="images/pic3.jpg">
-                <p class="message">
-                    The results of the Dr. Pio Valenzuela Scholarship Program will be released on Dr. Pio's 154th Birth 
-                    Anniversary on December 11, 2023. <br> <br>
-                    deserving of the grant, they are currently getting to know more about their future college journeys 
-                    as Dr. Pio Valenzuela scholars. <br> <br>
-                    Congratulations and make us proud, dear students!
-                </p>
-            </div>
+            <?php annDisplay();?>
         </div>
     </div>
 

@@ -1,3 +1,29 @@
+<?php
+    include_once('../functions/general.php');
+    include('../functions/scholar_view.php');
+    include('../functions/scholar_fx.php');
+    include('../functions/page.php');
+    $sourceFile = 'eval_scholar.php';
+
+    $sort_column = isset($_GET['sort_column']) ? $_GET['sort_column'] : 'scholar_id';
+    $sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'asc';
+    $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+
+    $total_records = getTotalRecords();
+
+    $records_per_page = 15;
+    $total_page = ceil($total_records / $records_per_page);
+
+    if (isset($_GET['ajax'])) {
+        if ($_GET['ajax'] === 'table') {
+            scholarDisplay($current_page, $sort_column, $sort_order);
+        } elseif ($_GET['ajax'] === 'pagination') {
+            renderPagination($current_page, $records_per_page, $total_records, $total_page, $sourceFile);
+        }
+        exit;
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,10 +34,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="css/ad_scholar.css">
     <link rel="stylesheet" href="css/confirm.css">
+    <link rel="stylesheet" href="css/page.css">
+    <script src="https://kit.fontawesome.com/3d9c1c4bc8.js" crossorigin="anonymous"></script>
 </head>
-
 <body>
-    <!-- SIDEBAR - eval_navbar.php -->
+    <!-- SIDEBAR - eval_nav.php -->
     <?php include 'eval_navbar.php'; ?>
     
 
@@ -27,7 +54,7 @@
                     <ion-icon name="notifications-outline" onclick="openOverlay()"></ion-icon>
                 </div>
 
-                <a class="user">
+                <a class="user" href="eval_settings.php">
                     <img src="images/profile.png" alt="">
                 </a>
             </div>
@@ -51,127 +78,164 @@
                 <button id="downloadBtn" class="action-btn" onclick="downloadSelected()">
                     <ion-icon name="download-outline"></ion-icon>
                 </button>
+                <button id="deleteBtn" class="action-btn" onclick="deleteSelected()">
+                    <ion-icon name="trash-outline"></ion-icon>
+                </button>
             </div>
 
             <div class="sort">
-                <select id="statusSort">
+                <select id="filter">
                     <option value="" disabled selected>Status</option>
                     <option value="all">All</option>
-                    <option value="active">Active</option>
-                    <option value="probation">Probation</option>
-                    <option value="dropped">Dropped</option>
-                    <option value="loa">LOA</option>
-                    <option value="graduated">Graduated</option>
+                    <option value="ACTIVE">ACTIVE</option>
+                    <option value="PROBATION">PROBATION</option>
+                    <option value="DROPPED">DROPPED</option>
+                    <option value="LOA">LOA</option>
+                    <option value="GRADUATE">GRADUATE</option>
                 </select>
             </div>
-        </div>
 
+            <button type="button" class="btnAdd" style="margin-right: 1vh;" onclick="openAdd()"> Add Scholar </button>
+            <button type="button" class="btnAdd" onclick="openBatch()"> Batch Creation </button>
+        </div> <br>
 
         <div class="tables">
             <table>
                 <tr style="font-weight: bold;">
                     <th> <input type="checkbox" id="selectAll" name="selected_rows[]"> </th>
                     <th style="width:10%">
-                        <div class="scholar-header" style="justify-content: center">
+                        <div class="scholar-header" id="sortScholar" style="justify-content: center; cursor: pointer;">
                             Scholar No.
-                            <div class="sort-icons">
-                                <a href="#" id="scholarAsc" class="sort-icon" data-order="asc"><ion-icon name="chevron-up-outline"></ion-icon></a>
-                                <a href="#" id="scholarDesc" class="sort-icon" data-order="desc"><ion-icon name="chevron-down-outline"></ion-icon></a>
-                            </div>
+                            <i id="scholarSortIcon" class="fa fa-sort"></i>
+                        </div>
                         </div>
                     </th>
                     <th style="width:12%">  
-                        <div class="lName-header">
+                        <div class="lName-header" id="sortLastName" style="cursor: pointer;">
                             Last Name
-                            <div class="sort-icons">
-                                <a href="#" id="lNameAsc" class="sort-icon" data-order="asc"><ion-icon name="chevron-up-outline"></ion-icon></a>
-                                <a href="#" id="lNameDesc" class="sort-icon" data-order="desc"><ion-icon name="chevron-down-outline"></ion-icon></a>
-                            </div>
+                            <i id="lastSortIcon" class="fa fa-sort"></i>
+                        </div>
                         </div>
                     </th>
                     <th style="width:25%"> 
-                        <div class="fName-header">
+                        <div class="fName-header" id="sortFirstName" style="cursor: pointer;">
                             First Name
-                            <div class="sort-icons">
-                                <a href="#" id="fNameAsc" class="sort-icon" data-order="asc"><ion-icon name="chevron-up-outline"></ion-icon></a>
-                                <a href="#" id="fNameDesc" class="sort-icon" data-order="desc"><ion-icon name="chevron-down-outline"></ion-icon></a>
-                            </div>
+                            <i id="firstSortIcon" class="fa fa-sort"></i>
                         </div>
                     </th>
-                    <th style="width:36%">
-                        <div class="school-header">
+                    <th style="width:37%">
+                        <div class="school-header" id="sortSchool" style="cursor: pointer;">
                             School
-                            <div class="sort-icons">
-                                <a href="#" id="schoolAsc" class="sort-icon" data-order="asc"><ion-icon name="chevron-up-outline"></ion-icon></a>
-                                <a href="#" id="schoolDesc" class="sort-icon" data-order="desc"><ion-icon name="chevron-down-outline"></ion-icon></a>
-                            </div>
+                            <i id="schoolSortIcon" class="fa fa-sort"></i>
                         </div>
                     </th>
-                    <th style="width:12%"> Status </th>
-                    <th style="width:5%"> Action </th>
+                    <th style="justify-content: center; width:12%"> Status </th>
+                    <th style="width:5%"> Actions </th>
                 </tr>
-                <tr>
-                    <td><input type='checkbox' name='selected_rows[]'></td>
-                    <td style="width:10%; text-align: center;"> 21-2321 </td>
-                    <td style="width:12%"> ADRIANO </td>
-                    <td style="width:25%"> JESSICA RAYE </td>
-                    <td style="width:36%">PAMANTASAN NG LUNGSOD NG VALENZUELA </td>
-                    <td style="width:12%; text-align: center;" class="statusColor"> ACTIVE </td>
-                    <td style="width:100%; justify-content:center" class="wrap"> 
-                        <div class="icon">
-                            <div class="tooltip"> View </div>
-                            <span> <a href="eval_skoDetail.php"> <ion-icon name="eye-outline"></ion-icon> </a> </span>
-                        </div>
-                        <div class="icon">
-                            <div class="tooltip"> Download </div>
-                                <span> <ion-icon name="download-outline"></ion-icon> </span>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td><input type='checkbox' name='selected_rows[]'></td>
-                    <td style="width:10%; text-align: center;"> 21-0601 </td>
-                    <td style="width:12%"> HIDALGO </td>
-                    <td style="width:25%"> MAIKA JASMINE </td>
-                    <td style="width:36%"> PAMANTASAN NG LUNGSOD NG MAYNILA </td>
-                    <td style="width:12%; text-align: center;" class="statusColor"> GRADUATED </td>
-                    <td style="width:100%; justify-content:center" class="wrap"> 
-                        <div class="icon">
-                            <div class="tooltip"> View </div>
-                            <span> <a href="eval_skoDetail.php"> <ion-icon name="eye-outline"> </ion-icon> </a> </span>
-                        </div>
-                        <div class="icon">
-                            <div class="tooltip"> Download </div>
-                                <span> <ion-icon name="download-outline"></ion-icon> </span>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td><input type='checkbox' name='selected_rows[]'></td>
-                    <td style="width:10%; text-align: center;"> 21-2021 </td>
-                    <td style="width:12%"> MARCOS </td>
-                    <td style="width:25%"> DANNAH LEI </td>
-                    <td style="width:36%"> 	UNIVERSITY OF THE PHILIPPINES DILIMAN </td>
-                    <td style="width:12%; text-align: center;" class="statusColor"> PROBATION </td>
-                    <td style="width:100%; justify-content:center" class="wrap"> 
-                        <div class="icon">
-                            <div class="tooltip"> View </div>
-                            <span> <a href="eval_skoDetail.php"> <ion-icon name="eye-outline"></ion-icon> </a> </span>
-                        </div>
-                        <div class="icon">
-                            <div class="tooltip"> Download </div>
-                                <span> <ion-icon name="download-outline"></ion-icon> </span>
-                        </div>
-                    </td>
-                </tr>
+                <tbody id="scholarTableBody">
+                </tbody>
             </table>
         </div>
 
-        
-        <!-- PAGINATION - page.php -->
-        <?php include 'page.php'; ?>
+        <?php renderPagination($current_page, $records_per_page, $total_records, $total_page, $sourceFile); ?>
+
     </div>
     
+
+    <!-- ADD SCHOLAR MODAL -->    
+    <div id="addModal" class="overlay">
+        <form id="addScholarForm" method="post" action="">
+            <div class="overlay-content">
+                <h2>Add Individual Scholar</h2>
+                <span class="closeOverlay" onclick="closeAdd()">&times;</span>
+                <br> <br>
+                
+                <table>
+                    <tr>
+                        <td class="details">SCHOLAR ID</td>
+                        <td><input type="text" class="input" name="scholar_id" maxlength="5" pattern="\d{5}" placeholder="29001" required></td>
+                    </tr>
+                    <tr>
+                        <td class="details">NAME</td>
+                        <td>
+                            <input type="text" class="input" name="last_name" placeholder="Last Name" required>
+                            <input type="text" class="input" name="first_name" placeholder="First Name(s)" required>
+                            <input type="text" class="input" name="middle_name" placeholder="Middle Name">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="details">SCHOOL</td>
+                        <td>
+                            <input list="school" class="input" name="school" required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="details">COURSE</td>
+                        <td>
+                            <input list="course" class="input" name="course" required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="details">ADDRESS</td>
+                        <td><input type="text" class="input" name="address" required></td>
+                    </tr>
+                    <tr>
+                        <td class="details">CONTACT</td>
+                        <td><input type="text" class="input" name="contact" pattern="\+63\d{10}" placeholder="+639012345678" value="+63" required></td>
+                    </tr>
+                    <tr>
+                        <td class="details">EMAIL</td>
+                        <td><input type="email" class="input" name="email" placeholder="example.email@gmail.com" required></td>
+                    </tr>
+                </table>
+                
+                <br><br>
+                <button name="individual" type="submit" class="button">Save</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- BATCH UPLOAD MODAL -->
+    <div id="batchModal" class="batchOverlay">
+        <div class="batch-content">
+            <div class="infos">
+                <h2>Batch Creation</h2>
+                <span class="closeBatch" onclick="closeBatch()">&times;</span>
+            </div>
+            <br><br>
+
+            <div class="step">
+                <h4>Step 1: Download CSV Template</h4>
+                <a href="../assets/SCHOLAR TEMPLATE.csv" download="SCHOLAR TEMPLATE" class="dl-button"> 
+                    <ion-icon name="download-outline"></ion-icon>CSV Template
+                </a>
+            </div> <br>
+
+            <div class="step">
+                <h4>Step 2: Fill out the Template</h4>
+            </div> <br>
+
+            <form action="" method="post" enctype="multipart/form-data">
+                <div class="step">
+                    <h4>Step 3: Batch Number</h4>
+                    <input type="number" id="textInput" name="batch_id" required>
+                </div> <br>
+
+                <div class="step">
+                    <h4>Step 4: Upload here </h4>
+                    <label type="button" class="lblAdd" for="upload"> 
+                        <ion-icon name="share-outline"> </ion-icon>
+                        Batch Creation
+                        <input type="file" name="csv" accept=".csv" id="upload" onchange="form.submit()" hidden/>
+                    </label>
+                </div>
+            </form>
+            <br> <br>
+        </div>
+    </div>
+
+    <!-- DELETE MODAL - confirm.php -->
+    <?php include 'confirm.php'; ?>
 
     <!-- NOTIFICATION - notif.php -->
     <?php include 'notif.php'; ?>
@@ -180,76 +244,163 @@
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script>
-        //SORT ICON
+        // FETCH API SEARCH/SORT/FILTER AND PAGINATION
         document.addEventListener('DOMContentLoaded', () => {
             const searchInput = document.querySelector('input[name="search"]');
-            const statusSort = document.getElementById('statusSort');
+            const filter = document.getElementById('filter');
             const selectAllCheckbox = document.getElementById('selectAll');
             const individualCheckboxes = document.querySelectorAll('input[name="selected_rows[]"]');
-            const tableRows = document.querySelectorAll('.tables table tr:not(:first-child)');
             const actionButtons = document.querySelector('.actions');
+            const tableBody = document.getElementById('scholarTableBody');
+            const pagination = document.getElementById('pagination');
 
-            // Search functionality
-            searchInput.addEventListener('input', () => {
-                const searchText = searchInput.value.toLowerCase();
-                tableRows.forEach(row => {
-                    const docName = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
-                    if (docName.includes(searchText)) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-            });
-
-            // Generalized sort function for text and numbers
-            const sortTable = (columnIndex, order) => {
-                const sortedRows = Array.from(tableRows).sort((a, b) => {
-                    const cellA = a.querySelector(`td:nth-child(${columnIndex})`).textContent.trim().toLowerCase();
-                    const cellB = b.querySelector(`td:nth-child(${columnIndex})`).textContent.trim().toLowerCase();
-                    if (!isNaN(cellA) && !isNaN(cellB)) {
-                        // Sort numerically if both are numbers
-                        return order === 'asc' ? cellA - cellB : cellB - cellA;
-                    }
-                    // Sort alphabetically
-                    return order === 'asc' ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
-                });
-                sortedRows.forEach(row => document.querySelector('.tables table').appendChild(row));
+            let sortStates = {
+                'scholar_id': 'neutral',
+                'last_name': 'neutral',
+                'first_name': 'neutral',
+                'school': 'neutral'
             };
 
-            // Attach sort functionality to each sort icon
-            document.getElementById('scholarAsc').addEventListener('click', () => sortTable(2, 'asc'));
-            document.getElementById('scholarDesc').addEventListener('click', () => sortTable(2, 'desc'));
+            const updateSortIcons = () => {
+                const icons = {
+                    'scholar_id': document.getElementById('scholarSortIcon'),
+                    'last_name': document.getElementById('lastSortIcon'),
+                    'first_name': document.getElementById('firstSortIcon'),
+                    'school': document.getElementById('schoolSortIcon')
+                };
 
-            document.getElementById('lNameAsc').addEventListener('click', () => sortTable(3, 'asc'));
-            document.getElementById('lNameDesc').addEventListener('click', () => sortTable(3, 'desc'));
-
-            document.getElementById('fNameAsc').addEventListener('click', () => sortTable(4, 'asc'));
-            document.getElementById('fNameDesc').addEventListener('click', () => sortTable(4, 'desc'));
-
-            document.getElementById('schoolAsc').addEventListener('click', () => sortTable(5, 'asc'));
-            document.getElementById('schoolDesc').addEventListener('click', () => sortTable(5, 'desc'));
-
-            // Status sort functionality
-            statusSort.addEventListener('change', () => {
-                const selectedStatus = statusSort.value.toLowerCase();
-                tableRows.forEach(row => {
-                    const status = row.querySelector('td:nth-child(6)').textContent.toLowerCase();
-                    if (selectedStatus === 'default' || status === selectedStatus || selectedStatus === 'all') {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
+                for (const [column, icon] of Object.entries(icons)) {
+                    const state = sortStates[column];
+                    if (state === 'neutral') {
+                        icon.className = 'fa fa-sort';
+                    } else if (state === 'asc') {
+                        icon.className = 'fa fa-sort-up';
+                    } else if (state === 'desc') {
+                        icon.className = 'fa fa-sort-down';
                     }
+                }
+            };
+
+            const handleSort = (headerId, sortKey) => {
+                const header = document.getElementById(headerId);
+                header.addEventListener('click', () => {
+                    const currentState = sortStates[sortKey];
+                    let nextState;
+                    if (currentState === 'neutral') {
+                        nextState = 'asc';
+                    } else if (currentState === 'asc') {
+                        nextState = 'desc';
+                    } else {
+                        nextState = 'neutral';
+                    }
+                    sortStates[sortKey] = nextState;
+
+                    for (const key in sortStates) {
+                        if (key !== sortKey) {
+                            sortStates[key] = 'neutral';
+                        }
+                    }
+
+                    updateSortIcons();
+                    fetchData();
                 });
+            };
+
+            handleSort('sortScholar', 'scholar_id');
+            handleSort('sortLastName', 'last_name');
+            handleSort('sortFirstName', 'first_name');
+            handleSort('sortSchool', 'school');
+            updateSortIcons();
+
+            const fetchData = (page = 1) => {
+                const params = new URLSearchParams(window.location.search);
+                params.set('page', page);
+                for (const [column, state] of Object.entries(sortStates)) {
+                    if (state !== 'neutral') {
+                        params.set('sort_column', column);
+                        params.set('sort_order', state);
+                    }
+                }
+
+                const searchText = searchInput.value.trim();
+                if (searchText) {
+                    params.set('search', searchText);
+                }
+
+                const selectedFilter = filter.value;
+                if (selectedFilter && selectedFilter !== 'default') {
+                    params.set('filter', selectedFilter);
+                }
+
+                // Use 'history.php' as the source file
+                navigatePage(page, 'eval_scholar.php');
+            };
+
+            const navigatePage = (page, sourceFile) => {
+                const params = new URLSearchParams(window.location.search);
+                params.set('page', page);
+                const searchText = searchInput.value.trim();
+                const selectedFilter = filter.value;
+
+                if (searchText) {
+                    params.set('search', searchText);
+                }
+
+                if (selectedFilter && selectedFilter !== 'default') {
+                    params.set('filter', selectedFilter);
+                }
+
+                const sortColumn = Object.keys(sortStates).find(column => sortStates[column] !== 'neutral');
+                if (sortColumn) {
+                    params.set('sort_column', sortColumn);
+                    params.set('sort_order', sortStates[sortColumn]);
+                }
+
+                // Fetch table data
+                params.set('ajax', 'table');
+                fetch(`${sourceFile}?${params.toString()}`)
+                    .then(response => response.text())
+                    .then(html => {
+                        tableBody.innerHTML = html;
+                        attachRowCheckboxEvents();
+                    })
+                    .catch(error => console.error('Error fetching table data:', error));
+
+                // Fetch pagination data
+                params.set('ajax', 'pagination');
+                fetch(`${sourceFile}?${params.toString()}`)
+                    .then(response => response.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        const newPagination = doc.querySelector('#pagination');
+                        if (newPagination) {
+                            document.getElementById('pagination').innerHTML = newPagination.innerHTML;
+                        }
+                    })
+                    .catch(error => console.error('Error fetching pagination data:', error));
+            };
+
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    fetchData();
+                }
             });
 
-            // Toggle action buttons visibility based on checkbox selection
+            searchInput.addEventListener('input', () => {
+                fetchData();
+            });
+
+            filter.addEventListener('change', () => {
+                fetchData();
+            });
+
             const toggleActionButtons = () => {
                 const anyChecked = Array.from(individualCheckboxes).some(checkbox => checkbox.checked);
                 actionButtons.style.display = anyChecked ? 'block' : 'none';
             };
 
-            // Select all functionality
             selectAllCheckbox.addEventListener('change', () => {
                 const isChecked = selectAllCheckbox.checked;
                 individualCheckboxes.forEach(checkbox => {
@@ -258,64 +409,43 @@
                 toggleActionButtons();
             });
 
-            // Individual checkbox select functionality
-            individualCheckboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', () => {
-                    if (!checkbox.checked) {
-                        selectAllCheckbox.checked = false;
-                    }
-                    toggleActionButtons();
-                });
-            });
-
-            // Delete selected rows (you can add your own logic here)
-            window.deleteSelected = () => {
-                individualCheckboxes.forEach(checkbox => {
-                    if (checkbox.checked) {
-                        checkbox.closest('tr').remove();
-                    }
-                });
-                toggleActionButtons();
-            };
-
-            // Download selected rows (you can add your own logic here)
-            window.downloadSelected = () => {
-                individualCheckboxes.forEach(checkbox => {
-                    if (checkbox.checked) {
-                        const docName = checkbox.closest('tr').querySelector('td:nth-child(3)').textContent;
-                        console.log(`Download document: ${docName}`);
-                    }
+            const attachRowCheckboxEvents = () => {
+                const newCheckboxes = document.querySelectorAll('input[name="selected_rows[]"]');
+                newCheckboxes.forEach(checkbox => {
+                    checkbox.addEventListener('change', () => {
+                        if (!checkbox.checked) {
+                            selectAllCheckbox.checked = false;
+                        }
+                        toggleActionButtons();
+                    });
                 });
             };
+
+            attachRowCheckboxEvents();
+            fetchData(); // Initial fetch on page load
         });
 
+        //ADD SCHOLAR
+        function openAdd() {
+            document.getElementById("addModal").style.display = "block";
+        }
+        function closeAdd() {
+            document.getElementById("addModal").style.display = "none";
+        }
+        function submitForm() {
+            closeAdd();
+        }
 
-        //STATUS COLOR CODE
-        document.addEventListener('DOMContentLoaded', () => {
-            const statusCells = document.querySelectorAll('.statusColor');
-            statusCells.forEach(cell => {
-                switch (cell.textContent.trim()) {
-                    case 'ACTIVE':
-                        cell.style.color = 'green';
-                        break;
-                    case 'PROBATION':
-                        cell.style.color = 'orange';
-                        break;
-                    case 'DROPPED':
-                        cell.style.color = 'red';
-                        break;
-                    case 'LOA':
-                        cell.style.color = 'yellow';
-                        break;
-                    case 'GRADUATED':
-                        cell.style.color = 'blue';
-                        break;
-                    default:
-                        cell.style.color = 'black';
-                        break;
-                }
-            });
-        });
+        //BATCH UPLOAD
+        function openBatch() {
+            document.getElementById("batchModal").style.display = "block";
+        }
+        function closeBatch() {
+            document.getElementById("batchModal").style.display = "none";
+        }
+        function submitForm() {
+            closeBatch();
+        }
     </script>
 </body>
 </html>

@@ -1,3 +1,31 @@
+<?php
+    include_once('../functions/general.php');
+    include('../functions/document_view.php');
+    include('../functions/page.php');
+    $sourceFile = 'history.php';
+
+    $sort_column = isset($_GET['sort_column']) ? $_GET['sort_column'] : 'sub_date';
+    $sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'asc';
+    $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $id = isset($_SESSION['sid']) ? $_SESSION['sid'] : '';
+
+    // Define the context for the records you're fetching (e.g., 'PENDING')
+    $context = 'scholar';
+    $total_records = getTotalRecords($context);
+
+    $records_per_page = 15;
+    $total_page = ceil($total_records / $records_per_page);
+
+    if (isset($_GET['ajax'])) {
+        if ($_GET['ajax'] === 'table') {
+            docxScholar($id, $current_page, $sort_column, $sort_order);
+        } elseif ($_GET['ajax'] === 'pagination') {
+            renderPagination($current_page, $records_per_page, $total_records, $total_page, $sourceFile);
+        }
+        exit;
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,6 +36,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="css/history.css">
     <link rel="stylesheet" href="css/confirm.css">
+    <link rel="stylesheet" href="css/page.css">
+    <script src="https://kit.fontawesome.com/3d9c1c4bc8.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -54,12 +84,12 @@
             </div>
 
             <div class="sort">
-                <select id="statusSort">
+                <select id="filter">
                     <option value="" disabled selected>Status</option>
                     <option value="all">All</option>
-                    <option value="resolved">Approved</option>
-                    <option value="progress">Pending</option>
-                    <option value="pending">Declined</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Declined">Declined</option>
                 </select>
             </div>
         </div>
@@ -70,216 +100,203 @@
             <table>
                 <tr style="font-weight: bold;">
                     <th> <input type="checkbox" id="selectAll" name="selected_rows[]"> </th>
-                    <th style="width:10%"> 
-                        <div class="date-header" style="justify-content: center">
+                    <th style="width:10%">
+                        <div class="date-header" id="sortDate" style="justify-content: center; cursor: pointer;">
                             Date
-                            <div class="sort-icons">
-                                <a href="#" id="fNameAsc" class="sort-icon" data-order="asc"><ion-icon name="chevron-up-outline"></ion-icon></a>
-                                <a href="#" id="fNameDesc" class="sort-icon" data-order="desc"><ion-icon name="chevron-down-outline"></ion-icon></a>
-                            </div>
-                        </div> 
+                            <i id="dateSortIcon" class="fa fa-sort"></i>
+                        </div>
                     </th>
                     <th style="width:65%">
-                        <div class="docName-header">
+                        <div class="docName-header" id="sortDocName" style="cursor: pointer;">
                             Document Name
-                            <div class="sort-icons">
-                                <a href="#" id="fNameAsc" class="sort-icon" data-order="asc"><ion-icon name="chevron-up-outline"></ion-icon></a>
-                                <a href="#" id="fNameDesc" class="sort-icon" data-order="desc"><ion-icon name="chevron-down-outline"></ion-icon></a>
-                            </div>
+                            <i id="docNameSortIcon" class="fa fa-sort"></i>
                         </div>
                     </th>
-                    <th style="width:10%"> 
-                        <div class="type-header" style="justify-content: center">
-                            Type
-                            <div class="sort-icons">
-                                <a href="#" id="fNameAsc" class="sort-icon" data-order="asc"><ion-icon name="chevron-up-outline"></ion-icon></a>
-                                <a href="#" id="fNameDesc" class="sort-icon" data-order="desc"><ion-icon name="chevron-down-outline"></ion-icon></a>
-                            </div>
-                        </div>
-                    </th>
+                    <th style="width:10%"> Type </th>
                     <th style="width:10%"> Status </th>
                     <th style="width:5%"> Action </th>
                 </tr>
-                <tr> 
-                    <td><input type='checkbox' name='selected_rows[]'></td>
-                    <td style="width:10%; text-align: center;"> 07/29/2024 </td>
-                    <td style="width:65%"> Adriano,JessicaRaye_1stYear_COR.pdf </td>
-                    <td style="width:10%; text-align: center;"> COR </td>
-                    <td style="width:10%; text-align: center;" class="statusColor"> APPROVED </td>
-                    <td style="width:100%; justify-content:center" class="wrap"> 
-                        <div class="icon">
-                            <div class="tooltip"> View </div>
-                            <span onclick="openPrev(this)"> <ion-icon name="eye-outline"></ion-icon> </span>
-                        </div>
-                        <div class="icon">
-                            <div class="tooltip"> Download </div>
-                                <span> <ion-icon name="download-outline"></ion-icon> </span>
-                        </div>
-                    </td>
-                </tr>
-                <tr> 
-                    <td><input type='checkbox' name='selected_rows[]'></td>
-                    <td style="width:10%; text-align: center;"> 08/26/2024 </td>
-                    <td style="width:65%"> Adriano,JessicaRaye_1stYear_Grades.pdf </td>
-                    <td style="width:10%; text-align: center;"> GRADES </td>
-                    <td style="width:10%; text-align: center;" class="statusColor"> PENDING </td>
-                    <td style="width:100%; justify-content:center" class="wrap"> 
-                        <div class="icon">
-                            <div class="tooltip"> View </div>
-                            <span onclick="openPrev(this)"> <ion-icon name="eye-outline"></ion-icon> </span>
-                        </div>
-                        <div class="icon">
-                            <div class="tooltip"> Download </div>
-                                <span> <ion-icon name="download-outline"></ion-icon> </span>
-                        </div>
-                    </td>
-                </tr>
-                <tr> 
-                    <td><input type='checkbox' name='selected_rows[]'></td>
-                    <td style="width:10%; text-align: center;"> 07/23/2024 </td>
-                    <td style="width:65%"> Adriano,JessicaRaye_1stYear_SC.pdf </td>
-                    <td style="width:10%; text-align: center;"> SC </td>
-                    <td style="width:10%; text-align: center;" class="statusColor"> DECLINED </td>
-                    <td style="width:100%; justify-content:center" class="wrap"> 
-                        <div class="icon">
-                            <div class="tooltip"> View </div>
-                            <span onclick="openPrev(this)"> <ion-icon name="eye-outline"></ion-icon> </span>
-                        </div>
-                        <div class="icon">
-                            <div class="tooltip"> Download </div>
-                                <span> <ion-icon name="download-outline"></ion-icon> </span>
-                        </div>
-                    </td>
-                </tr>
+                <tbody id="docTableBody">
+                </tbody>
             </table>
         </div>
-    
+        
+        <?php renderPagination($current_page, $records_per_page, $total_records, $total_page, $sourceFile); ?>
 
-        <!-- PAGINATION - page.php -->
-        <?php include 'page.php';?>
     </div>
 
-
     <!-- VIEW MODAL -->
-    <div id="viewOverlay" class="view">
+    <div id="viewModal" class="view">
         <div class="view-content">
             <h2 id="view-doc_name">Document Name</h2>
             <span class="closeView" onclick="closePrev()">&times;</span>
-
+            <div id="denialReason" style="display: none;">
+                <h3 id="denialReasonHeader">REASON FOR DECLINING: <span id="denialReasonText" style="text-decoration: underline;"></span></h3>
+            </div>
             <br>
-
             <center>
                 <div id="pdfViewer" style="width: 700px; height: 100%; border: 1px solid #ccc;"></div>
             </center>
         </div>
     </div>
 
-
     <!-- NOTIFICATION - notif.php -->
     <?php include 'notif.php'; ?>
 
-
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.1.81/pdf.min.js"></script>
     <script>
-        // SORT ICON
+        // FETCH API SEARCH/SORT/FILTER AND PAGINATION
         document.addEventListener('DOMContentLoaded', () => {
             const searchInput = document.querySelector('input[name="search"]');
-            const statusSort = document.getElementById('statusSort');
+            const filter = document.getElementById('filter');
             const selectAllCheckbox = document.getElementById('selectAll');
             const individualCheckboxes = document.querySelectorAll('input[name="selected_rows[]"]');
-            const tableRows = document.querySelectorAll('.tables table tr:not(:first-child)');
             const actionButtons = document.querySelector('.actions');
+            const tableBody = document.getElementById('docTableBody');
 
-            // Search functionality
+            let sortStates = {
+                'doc_name': 'neutral',
+                'sub_date': 'neutral'
+            };
+
+            const updateSortIcons = () => {
+                const icons = {
+                    'doc_name': document.getElementById('docNameSortIcon'),
+                    'sub_date': document.getElementById('dateSortIcon'),
+                };
+
+                for (const [column, icon] of Object.entries(icons)) {
+                    const state = sortStates[column];
+                    if (state === 'neutral') {
+                        icon.className = 'fa fa-sort';
+                    } else if (state === 'asc') {
+                        icon.className = 'fa fa-sort-up';
+                    } else if (state === 'desc') {
+                        icon.className = 'fa fa-sort-down';
+                    }
+                }
+            };
+
+            const handleSort = (headerId, sortKey) => {
+                const header = document.getElementById(headerId);
+                header.addEventListener('click', () => {
+                    const currentState = sortStates[sortKey];
+                    let nextState;
+                    if (currentState === 'neutral') {
+                        nextState = 'asc';
+                    } else if (currentState === 'asc') {
+                        nextState = 'desc';
+                    } else {
+                        nextState = 'neutral';
+                    }
+                    sortStates[sortKey] = nextState;
+
+                    for (const key in sortStates) {
+                        if (key !== sortKey) {
+                            sortStates[key] = 'neutral';
+                        }
+                    }
+
+                    updateSortIcons();
+                    fetchData();
+                });
+            };
+
+            handleSort('sortDocName', 'doc_name');
+            handleSort('sortDate', 'sub_date');
+            updateSortIcons();
+
+            const fetchData = (page = 1) => {
+                const params = new URLSearchParams(window.location.search);
+                params.set('page', page);
+                for (const [column, state] of Object.entries(sortStates)) {
+                    if (state !== 'neutral') {
+                        params.set('sort_column', column);
+                        params.set('sort_order', state);
+                    }
+                }
+
+                const searchText = searchInput.value.trim();
+                if (searchText) {
+                    params.set('search', searchText);
+                }
+
+                const selectedFilter = filter.value;
+                if (selectedFilter && selectedFilter !== 'default') {
+                    params.set('filter', selectedFilter);
+                }
+
+                // Use 'history.php' as the source file
+                navigatePage(page, 'history.php');
+            };
+
+            const navigatePage = (page, sourceFile) => {
+                const params = new URLSearchParams(window.location.search);
+                params.set('page', page);
+
+                const searchText = searchInput.value.trim();
+                if (searchText) {
+                    params.set('search', searchText);
+                }
+
+                const selectedFilter = filter.value;
+                if (selectedFilter && selectedFilter !== 'default') {
+                    params.set('filter', selectedFilter);
+                }
+
+                const sortColumn = Object.keys(sortStates).find(column => sortStates[column] !== 'neutral');
+                if (sortColumn) {
+                    params.set('sort_column', sortColumn);
+                    params.set('sort_order', sortStates[sortColumn]);
+                }
+
+                // Fetch table data
+                params.set('ajax', 'table');
+                fetch(`${sourceFile}?${params.toString()}`)
+                    .then(response => response.text())
+                    .then(html => {
+                        tableBody.innerHTML = html;
+                        attachRowCheckboxEvents();
+                    })
+                    .catch(error => console.error('Error fetching table data:', error));
+
+                // Fetch pagination data
+                params.set('ajax', 'pagination');
+                fetch(`${sourceFile}?${params.toString()}`)
+                    .then(response => response.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        const newPagination = doc.querySelector('#pagination');
+                        if (newPagination) {
+                            document.getElementById('pagination').innerHTML = newPagination.innerHTML;
+                        }
+                    })
+                    .catch(error => console.error('Error fetching pagination data:', error));
+            };
+
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    fetchData();
+                }
+            });
+
             searchInput.addEventListener('input', () => {
-                const searchText = searchInput.value.toLowerCase();
-                tableRows.forEach(row => {
-                    const docName = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
-                    if (docName.includes(searchText)) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
+                fetchData();
             });
 
-            // Sort functionality for date column
-            const sortByDate = (order) => {
-                const sortedRows = Array.from(tableRows).sort((a, b) => {
-                    const dateA = new Date(a.querySelector('td:nth-child(2)').textContent);
-                    const dateB = new Date(b.querySelector('td:nth-child(2)').textContent);
-                    return order === 'asc' ? dateA - dateB : dateB - dateA;
-                });
-                sortedRows.forEach(row => document.querySelector('.tables table').appendChild(row));
-            };
-
-            document.querySelector('.date-header .sort-icons').addEventListener('click', (e) => {
-                const sortIcon = e.target.closest('.sort-icon');
-                const order = sortIcon.getAttribute('data-order');
-                sortByDate(order);
+            filter.addEventListener('change', () => {
+                fetchData();
             });
 
-            // Sort functionality for document name column
-            const sortByDocName = (order) => {
-                const sortedRows = Array.from(tableRows).sort((a, b) => {
-                    const docNameA = a.querySelector('td:nth-child(3)').textContent.toLowerCase();
-                    const docNameB = b.querySelector('td:nth-child(3)').textContent.toLowerCase();
-                    if (order === 'asc') {
-                        return docNameA.localeCompare(docNameB);
-                    } else {
-                        return docNameB.localeCompare(docNameA);
-                    }
-                });
-                sortedRows.forEach(row => document.querySelector('.tables table').appendChild(row));
-            };
-
-            document.querySelector('.docName-header .sort-icons').addEventListener('click', (e) => {
-                const sortIcon = e.target.closest('.sort-icon');
-                const order = sortIcon.getAttribute('data-order');
-                sortByDocName(order);
-            });
-
-            // Sort functionality for type column
-            const sortByType = (order) => {
-                const sortedRows = Array.from(tableRows).sort((a, b) => {
-                    const typeA = a.querySelector('td:nth-child(4)').textContent.toLowerCase();
-                    const typeB = b.querySelector('td:nth-child(4)').textContent.toLowerCase();
-                    if (order === 'asc') {
-                        return typeA.localeCompare(typeB);
-                    } else {
-                        return typeB.localeCompare(typeA);
-                    }
-                });
-                sortedRows.forEach(row => document.querySelector('.tables table').appendChild(row));
-            };
-
-            document.querySelector('.type-header .sort-icons').addEventListener('click', (e) => {
-                const sortIcon = e.target.closest('.sort-icon');
-                const order = sortIcon.getAttribute('data-order');
-                sortByType(order);
-            });
-
-            // Status sort functionality
-            statusSort.addEventListener('change', () => {
-                const selectedStatus = statusSort.value.toLowerCase();
-                tableRows.forEach(row => {
-                    const status = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
-                    if (selectedStatus === 'default' || status === selectedStatus || selectedStatus === 'all') {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-            });
-
-            // Toggle action buttons visibility based on checkbox selection
             const toggleActionButtons = () => {
                 const anyChecked = Array.from(individualCheckboxes).some(checkbox => checkbox.checked);
                 actionButtons.style.display = anyChecked ? 'block' : 'none';
             };
 
-            // Select all functionality
             selectAllCheckbox.addEventListener('change', () => {
                 const isChecked = selectAllCheckbox.checked;
                 individualCheckboxes.forEach(checkbox => {
@@ -288,63 +305,87 @@
                 toggleActionButtons();
             });
 
-            // Individual checkbox select functionality
-            individualCheckboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', () => {
-                    if (!checkbox.checked) {
-                        selectAllCheckbox.checked = false;
-                    }
-                    toggleActionButtons();
-                });
-            });
-
-            // Delete selected rows (you can add your own logic here)
-            window.deleteSelected = () => {
-                individualCheckboxes.forEach(checkbox => {
-                    if (checkbox.checked) {
-                        checkbox.closest('tr').remove();
-                    }
-                });
-                toggleActionButtons();
-            };
-
-            // Download selected rows (you can add your own logic here)
-            window.downloadSelected = () => {
-                individualCheckboxes.forEach(checkbox => {
-                    if (checkbox.checked) {
-                        const docName = checkbox.closest('tr').querySelector('td:nth-child(3)').textContent;
-                        console.log(`Download document: ${docName}`);
-                    }
+            const attachRowCheckboxEvents = () => {
+                const newCheckboxes = document.querySelectorAll('input[name="selected_rows[]"]');
+                newCheckboxes.forEach(checkbox => {
+                    checkbox.addEventListener('change', () => {
+                        if (!checkbox.checked) {
+                            selectAllCheckbox.checked = false;
+                        }
+                        toggleActionButtons();
+                    });
                 });
             };
-        });
 
-        // STATUS COLOR CODED
-        document.addEventListener('DOMContentLoaded', () => {
-            const statusCells = document.querySelectorAll('.statusColor');
-            statusCells.forEach(cell => {
-                switch (cell.textContent.trim()) {
-                    case 'APPROVED':
-                        cell.style.color = 'green';
-                        break;
-                    case 'DECLINED':
-                        cell.style.color = 'red';
-                        break;
-                    case 'PENDING':
-                        cell.style.color = 'orange';
-                        break;
-                }
-            });
+            attachRowCheckboxEvents();
+            fetchData(); // Initial fetch on page load
         });
-    
 
         // VIEW MODAL
         function openPrev(elem) {
-            document.getElementById("viewOverlay").style.display = "block";
+            document.getElementById("viewModal").style.display = "block";
+            
+            const status = elem.getAttribute("data-doc_status");
+            const reason = elem.getAttribute("data-doc_reason") || "";
+
+            document.getElementById("view-doc_name").innerText = elem.getAttribute("data-doc_name");
+
+            if (status === "DECLINED") {
+                document.getElementById("denialReason").style.display = "block";
+                document.getElementById("denialReasonText").innerText = reason;
+            } else {
+                document.getElementById("denialReason").style.display = "none";
+            }
+
+            const pdfPath = '../assets/' + elem.getAttribute("data-doc_name");
+            loadPDF(pdfPath);
         }
 
         function closePrev() {
-            document.getElementById("viewOverlay").style.display = "none";
+            document.getElementById("viewModal").style.display = "none";
+        }
+
+        window.addEventListener('click', function(event) {
+            if (event.target === document.getElementById('viewModal')) {
+                closePrev();
+            }
+        });
+
+        // PDF VIEWER
+        function loadPDF(pdfPath) {
+            var pdfjsLib = window['pdfjs-dist/build/pdf'];
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.1.81/pdf.worker.min.js';
+
+            var loadingTask = pdfjsLib.getDocument(pdfPath);
+            loadingTask.promise.then(function(pdf) {
+                console.log('PDF loaded');
+
+                pdf.getPage(1).then(function(page) {
+                    console.log('Page loaded');
+
+                    var scale = 1.5;
+                    var viewport = page.getViewport({ scale: scale });
+
+                    var canvas = document.createElement('canvas');
+                    var context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+
+                    var renderContext = {
+                        canvasContext: context,
+                        viewport: viewport
+                    };
+                    var renderTask = page.render(renderContext);
+                    renderTask.promise.then(function() {
+                        console.log('Page rendered');
+                        var pdfViewer = document.getElementById('pdfViewer');
+                        pdfViewer.innerHTML = '';
+                        pdfViewer.appendChild(canvas);
+                    });
+                });
+            }, function (reason) {
+                console.error(reason);
+            });
         }
     </script>
 </body>

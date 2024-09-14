@@ -137,8 +137,10 @@
     flex-direction: column;
     margin-left: 5px;
 }
-.sort-icons a {
-    color: #000;
+a {
+    color: black;
+    text-decoration: none;
+    display: block;
 }
 .sort-icon {
     line-height: 0;
@@ -310,8 +312,7 @@
 }
 .announceTitle h3,
 .announceImg h3,
-.announceDetail h3,
-.announceDate h3 {
+.announceDetail h3 {
     font-size: 20px;
     font-weight: 500;
     padding-bottom: 10px;
@@ -361,35 +362,47 @@
     outline: none;
     padding-left: 10px;
 }
+.batch h3,
+.announceDate h3 {
+    font-size: 20px;
+    font-weight: 500;
+}
+.announceDate {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 .announceDate input {
-    width: 45%;
+    width: 35%;
     font-size: 15px;
     font-weight: 300;
     border: none;
     border-bottom: 1px solid #777777;
     background-color: transparent;
     outline: none;
-    padding-left: 10px;
+    padding-left: 5px;
 }
-.batch h3 {
-    font-size: 18px;
-    font-weight: 500;
-    padding-bottom: 10px;
+.batch {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
-.batch label {
+.batch option {
     font-size: 15px;
     font-weight: 300;
-    background-color: transparent;
-    color: #000;
-    padding-bottom: 20px;
 }
-.hideText input {
-    border: none; 
-    border-bottom: 1px solid; 
-    background-color: transparent;
+#batchDrop {
+    padding: 5px;
     font-size: 15px;
     font-weight: 300;
-    width: 100px;
+    cursor: pointer;
+    outline: 0;
+    border: none;
+    background-color: transparent;
+    border-bottom: 1px solid #777777;
+}
+#batchDrop:focus {
+    outline: none;
 }
 .close {
     position: absolute;
@@ -421,4 +434,16 @@
 }
 .publish-button:hover {
     background-color: #376FB7;
+}
+
+.custom-file-upload {
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    border: thin solid grey;
+    border-radius: 3px;
+    padding: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    color: rgb(112, 112, 112);
+    background-color: #ffffff;
 }

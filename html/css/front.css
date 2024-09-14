@@ -1,18 +1,23 @@
 @import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Lexend');
 
 * {
     margin: 0;
     padding:0;
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', 'Lexend';
 }
 
-body {
-    background: linear-gradient(to bottom, #376FB7, #2F3787);
-    height: 110vh;
+
+.container {
+    display: grid;
+    grid-template-rows: 70px 60% 40%;
+    grid-template-columns: 30% 30% 40%;
+    overflow: hidden;
 }
 header {
-    position: absolute;
+    grid-row: 1 / 2;
+    grid-column: 1 / 4;
     width: 100%;
     min-height: 100vh;
     background-color: transparent;
@@ -25,18 +30,18 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 10px;
-    margin-top: 10px;
+    padding: 0 20px;
+    margin-top: 20px;
 }
 .headerLogo {
     min-width: 50px;
     display: flex;
     align-items: center;
 }
-.topBar img {
+.headerLogo img {
     width: 75px;
 }
-header .topBar .headerText {
+.headerText {
     display: flex;
     flex-direction: column;
     margin-top: 10px;
@@ -44,80 +49,48 @@ header .topBar .headerText {
 }
 .headerText h1 {
     font-weight: 600;
-    color: white;
+    color: #2F3787;
 }
-.info h1 {
-    color: #ffffff;
-	text-align: center;
-	margin-top: 20px;
-	font-size: 25px;
-}
-.btnLogIn {
-    width: 150px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: transparent;
-    background-color: transparent;
-    margin-right: 10px;
-    color: #000;
-    text-decoration: none;
-}
-.btnLogIn ion-icon {
-    width: 35px;
-    height: 35px;
-    margin-right: 5px;
-    color: #ffffff;
-}
-.btnLogIn h5 {
-    font-size: 24px;
-    font-weight: 400;
-    margin: 0;
-    color: #ffffff;
-}
+
 
 /*ANNOUNCEMENT*/
 .cards {
-    padding-top: 80px;
+    grid-row: 2 / 4;
+    grid-column: 1 / 3;
+    padding: 50px 20px 80px 40px;
 }
 .card {
-    width: 80%;
-    height: 870px;
-    box-shadow: 0 4px 8px 0
-    rgba(0,0,0,0.2);
+    height: 100%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: 0.3s;
-    border: 5px solid #FFEFD8;
-    border-radius: 20px;
     text-align: center;
-    background: #2F3787;
 }
-.card:hover {
-    box-shadow: 0 8px 16px 0
-    rgba(0,0,0,0.2);
+.slideshow {
+    padding-top: 10px;
+    width: 80%;
+    position: relative;
+    margin: auto;
 }
-.text h2 {
-	font-size: 20px;
-    padding-top: 30px;
+.slideshow img {
+    vertical-align: middle;
+    border-radius: 10px;
 }
 .mySlides {
     display: none;
 }
-.slide-image {
-    flex: 1;
-    margin-right: 40px;
-    overflow: hidden;
+.text h2 {
+	font-size: 25px;
+    color: #2F3787;
+    font-weight: 700;
+    text-decoration: underline;
+    font-family: 'Lexend';
 }
-.slide-image img {
-    vertical-align: middle;
-    border-radius: 10px;
-    z-index: 1;
-}
-.slideshow {
+.text p {
+	font-size: 15px;
     padding-top: 30px;
-    width: 50%;
-    position: relative;
-    margin: auto;
+    color: #000;
+    font-weight: 300;
+    text-align: justify;
 }
 .prev, 
 .next {
@@ -127,7 +100,7 @@ header .topBar .headerText {
     width: auto;
     padding: 16px;
     margin-top: -22px;
-    color: white;
+    color: black;
     font-weight: bold;
     font-size: 18px;
     transition: 0.6s ease;
@@ -154,7 +127,7 @@ header .topBar .headerText {
     width: 100%;
     text-align: center;
 }
-.dot {
+/* .dot {
     cursor: pointer;
     height: 15px;
     width: 15px;
@@ -166,16 +139,163 @@ header .topBar .headerText {
 }
 .active, .dot:hover {
     background-color: #717171;
-}
+} */
 .fade {
     -webkit-animation-name: fade;
     -webkit-animation-duration: 1.5s;
     animation-name: fade;
     animation-duration: 1.5s;
 }
+.imgContainer{
+    height:50vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.imgContainer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+/* LOG IN */
+.logIn {    
+    grid-row: 2 / 3;
+    grid-column: 3 / 4;
+    padding: 50px 40px 0 20px;
+    margin-bottom: 0;
+}
+.logIn-content {
+    border-radius: 15px;
+    background-color: #F1F1F1;
+}
+.infos1 h2 {
+    padding-top: 40px;
+	font-size: 25px;
+    color: #2F3787;
+    font-weight: 700;
+    text-decoration: underline;
+    text-align: center;
+    font-family: 'Lexend';
+}
+.inner-content1 {
+    padding-bottom: 20px;
+    width: 60%;
+}
+.texts1 {
+    font-size: 18px;
+    font-weight: 300;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+    float: left;
+}
+.inputs1 {
+    font-size: 15px;
+    font-weight: 300;
+    width: 100%;
+    height: 40px;
+    padding-left: 10px;
+    padding-right: 40px;
+    background-color: #D9D9D9;
+    border: none;
+    border-radius: 10px;
+    outline: none;
+}
+.rem-container {
+    width: 60%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.remember {
+    display: flex;
+    align-items: center;
+}
+.remember input {
+    margin-right: 10px;
+}
+.remember label {
+    font-family: 'Roboto Serif', serif;
+    font-weight: 400;
+    color: #2F3787;
+}
+.forgotPass {
+    font-family: 'Roboto Serif', serif;
+    font-weight: 400;
+    color: #2F3787;
+    cursor: pointer; 
+}
+.btn1 {
+    text-align: center;
+    margin-top: 40px;
+}
+.logInBtn {
+    font-size: 20px;
+    color: white;
+    width: 40%;
+    height: 40px;
+    background-color: #2F3787;
+    border: none;
+    cursor: pointer;
+    border-radius: 15px; 
+}
+.logInBtn:hover {
+    background-color: #376FB7;
+}
+
+
+/*ANNOUNCEMENT LIST*/
+.lists {
+    grid-row: 3 / 4;
+    grid-column: 3 / 4;
+    padding: 0 40px 0 20px;
+    height: 100%;
+    margin-top: 0;
+}
+.list {
+    border-radius: 15px;
+    background-color: #F1F1F1;
+    overflow-x: auto;
+    height: 300px;
+}
+.list h2 {
+    position: sticky;
+    top: 0;
+    background-color: #F1F1F1;
+    padding-top: 40px;
+    padding-bottom: 10px;
+	font-size: 25px;
+    color: #2F3787;
+    font-weight: 700;
+    text-decoration: underline;
+    text-align: center;
+    font-family: 'Lexend';
+}
+.list ul {
+    list-style-type: disc; 
+    padding-top: 20px;
+    padding-left: 40px;
+}
+.list li {
+    color: #000;
+    margin-bottom: 15px;
+    text-align: justify;
+}
+.list a {
+    font-weight: 500;
+    font-size: 15px;
+    color: #000;
+    text-decoration: none;
+}
+.list a:hover {
+    text-decoration: underline;
+}
+
 
 /*LOG IN & FORGOT PASS*/
-.logIn,
 .forgot,
 .pass {
     display: none;
@@ -189,10 +309,9 @@ header .topBar .headerText {
     background-color: rgba(0,0,0,0.4);
     padding-top: 60px;
 }
-.logIn-content,
 .forgot-content,
 .pass-content {
-    background-color: #FFEFD8;
+    background-color: #F1F1F1;
     margin: auto;
     width: 40%; 
     height: fit-content;
@@ -236,15 +355,15 @@ header .topBar .headerText {
 }
 .inputs {
     font-size: 15px;
+    font-weight: 500;
     width: 100%;
     height: 40px;
-    padding-left: 15px;
+    padding-left: 10px;
     padding-right: 40px;
-    border: 1px solid #000000;
-    border-radius: 15px;
-    letter-spacing: 1px;
+    background-color: #D9D9D9;
+    border: none;
+    border-radius: 10px;
     outline: none;
-    background: #ffffff;
 }
 .inner-content ion-icon {
     position: absolute;
@@ -289,134 +408,11 @@ header .topBar .headerText {
     cursor: pointer;
 }
 
-
 @-webkit-keyframes fade {
     from {opacity: .4} 
     to {opacity: 1}
 }
-
 @keyframes fade {
     from {opacity: .4} 
     to {opacity: 1}
-}
-
-
-/* On smaller screens, decrease text size */
-@media only screen and (max-width: 300px) {
-    .prev, 
-    .next,
-    .text {
-        font-size: 11px
-    }
-    .dot {
-        height: 10px;
-        width: 10px;
-    }
-}
-
-@media only screen and (max-width: 500px) {
-    .prev, 
-    .next,
-    .text {
-        font-size: 14px
-    }
-    * {
-        box-sizing: border-box
-    }
-    body {
-        font-family: Verdana, sans-serif; margin:0
-    }
-    .mySlides {
-        display: none
-    }
-    img {
-        vertical-align: middle;
-    }
-    .slideshow-container {
-        max-width: 80%;
-        position: relative;
-        margin: auto;
-    }
-    .prev, .next {
-        cursor: pointer;
-        position: absolute;
-        top: 50%;
-        width: auto;
-        padding: 16px;
-        margin-top: -22px;
-        color: white;
-        font-weight: bold;
-        font-size: 18px;
-        transition: 0.6s ease;
-        border-radius: 0 3px 3px 0;
-        user-select: none;
-    }
-    .next {
-        right: 0;
-        border-radius: 3px 0 0 3px;
-    }
-    .prev:hover, 
-    .next:hover {
-        background-color: rgba(0,0,0,0.8);
-    }
-    .text {
-        color: #f2f2f2;
-        font-size: 15px;
-        padding: 8px 12px;
-        position: absolute;
-        bottom: 8px;
-        width: 100%;
-        text-align: center;
-    }
-    .dot {
-        cursor: pointer;
-        height: 15px;
-        width: 15px;
-        margin: 0 2px;
-        background-color: #bbb;
-        border-radius: 50%;
-        display: inline-block;
-        transition: background-color 0.6s ease;
-    }
-    .active, 
-    .dot:hover {
-        background-color: #717171;
-    }
-    .fade {
-        -webkit-animation-name: fade;
-        -webkit-animation-duration: .5s;
-        animation-name: fade;
-        animation-duration: .5s;
-    }
-}
-
-@-webkit-keyframes fade {
-    from {opacity: 1} 
-    to {opacity: 1}
-}
-@keyframes fade {
-    from {opacity: 1} 
-    to {opacity: 1}
-}
-
-/* On smaller screens, decrease text size */
-@media only screen and (max-width: 300px) {
-    .prev, 
-    .next,
-    .text {
-        font-size: 8px
-    }
-    .dot{
-        height: 10px;
-        width:
-        10px;
-    }
-}
-   
-@media only screen and (max-width: 500px) {
-    .prev, 
-    .next,
-    .text {
-        font-size: 14px
-    }
 }

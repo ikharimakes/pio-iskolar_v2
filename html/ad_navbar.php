@@ -51,18 +51,25 @@
                     </span>
                     <span class="text"> Reports </span>
                 </a> </li>
+
+                <!-- <li class="navLink"> <a href="ad_inbox.php" onclick="activateLink(this)">
+                    <span class="icon">
+                        <ion-icon name="chatbubbles-outline"></ion-icon>
+                    </span>
+                    <span class="text"> Inbox </span> 
+                </a> </li> -->
+
+                <!-- <li class="navLink"><a href="ad_faq.php">
+                    <span class="icon">
+                        <ion-icon name="help-circle-outline"></ion-icon>
+                    </span>
+                    <span class="text"> FAQ </span>
+                </a></li> -->
             </ul>
         </div> 
 
         <div class="bottom-content">
-            <li class="navLink"><a href="../functions/faq.php">
-                <span class="icon">
-                    <ion-icon name="help-circle-outline"></ion-icon>
-                </span>
-                <span class="text"> FAQ </span>
-            </a></li>
-
-            <li class="navLink"><a href="../functions/logout.php">
+            <li class="navLink"><a href="front_page.php">
                 <span class="icon">
                     <ion-icon name="log-out-outline"></ion-icon>
                 </span>

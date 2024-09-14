@@ -14,7 +14,7 @@ function updatePageLinks() {
     let after_page = current_page + 2;
     let searchParams = new URLSearchParams(window.location.search);
     let search = searchParams.get('search') || '';
-    let sort = searchParams.get('sort') || 'batch_num';
+    let sort = searchParams.get('sort') || 'batch_no';
     let order = searchParams.get('order') || 'DESC';
 
     if (current_page == 2) {

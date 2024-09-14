@@ -1,3 +1,10 @@
+<?php 
+    include_once('../functions/general.php');
+    include_once('../functions/dashboard_view.php');
+    include_once('../functions/announce_view.php');
+    updateStatus();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,16 +13,16 @@
     <title>Pio Iskolar</title>
     <link rel="icon" type="image/x-icon" href="images/pio-logo.png">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/ad_dashboard.css">
     <link rel="stylesheet" href="css/confirm.css">
 </head>
 <body>
-    <!-- SIDEBAR - eval_navbar.php -->
+    <!-- SIDEBAR - eval_nav.php -->
     <?php include 'eval_navbar.php'; ?>
     
 
     <!-- TOP BAR -->
-    <div class="main1">
+    <d class="main1">
         <div class="topBar">
             <div class="headerName">
                 <h1>Dashboard</h1>
@@ -31,138 +38,234 @@
         <div class="line"></div>
 
 
-        <!-- DASHBOARD -->
-        <div class="info">  
+        <!-- DASHBOARD 
+         <div class="info">  
             <div class="welcome-box">
-                <h1>Welcome Back, Evaluator</h1>
+                <h1>Welcome Back, Coordinator</h1>
                 <ion-icon name="school"></ion-icon>
             </div>
+        </div>-->
 
-            <!-- CALENDAR -->
-            <div class="calendar">
-                <div class="month">
-                    <div class="prev">&#10094;</div>
 
-                    <div class="date">
-                        <h1 id="month"></h1>
+        <div class="box-container">
+            <div class="box-row">
+                <div class="box box-large">
+                    <h1>Pending (# of pending)</h1>
+
+                    <div class="box-pending">
+                        <table>
+                            <?php pendingFiles();?>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="box box-large">
+                    <h1>Files (per batch)</h1>
+
+                    <div class="box-batch">
+                        <ul>
+                            <?php existingFiles();?>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="box box-large">
+                    <h1>Calendar</h1>
+
+                    <div class="box-calendar">
+                        <div class="nav-btn">
+                            <button id="prevBtn"><ion-icon name="chevron-back-outline"></ion-icon></button>
+                            <div class="month-year" id="monthYear"></div>
+                            <button id="nextBtn"><ion-icon name="chevron-forward-outline"></ion-icon></button>
+                        </div>
+
+                        <div class="weekdays" id="weekdays"></div>
                     </div>
 
-                    <div class="next">&#10095;</div>
+                    <div class="event">
+                        <h3>Events</h3>
+                        <ul>
+                            <!-- <li> <a href="">Application for Batch 23</a> </li> -->
+                            <?php activeEvents(); ?>
+                        </ul>
+                    </div>
                 </div>
-
-                <div class="weekdays">
-                    <div>Sun</div>
-                    <div>Mon</div>
-                    <div>Tue</div>
-                    <div>Wed</div>
-                    <div>Thu</div>
-                    <div>Fri</div>
-                    <div>Sat</div>
-                </div>
-
-                <div class="days" id="days"></div>
             </div>
-        </div>
 
-        <div class="announcement">
-            <h1>Announcement</h1>
-        
-            <div class="title">Application for Batch 23</div>
-            <div class="titleDate">August 20, 2024</div>
-            <div class="info-box">
-                <img src="images/pic1.jpg">
-                <p class="message">
-                    The City Government of Valenzuela will start accepting applicants for the Dr. Pio Valenzuela Scholarship 
-                    Program on December 13, 2023. Here are the qualifications and requirements for the scholarship program. <br> <br>
-                    Get the downloadable scholarship application form here: https://www.valenzuela.gov.ph/drpioscholarship <br> <br>
-                    For other concerns, you may send an email to drpioscholarshiphelpdesk@gmail.com.
-                </p>
-            </div> <br> <br>
+            <div class="box-row">
+                <div class="box-small-big">
+                    <h1>No. of Scholars & Active Scholars per Batch</h1>
 
-            <div class="title">Contract Signing</div>
-            <div class="titleDate">July 1, 2024</div>
-            <div class="info-box">
-                <img src="images/pic2.jpg">
-                <p class="message">
-                    City Mayor REX Gatchalian graces the orientation and contract signing of 212 recipients of the Dr. Pio 
-                    Valenzuela Scholarship program at the Pamantasan ng Lungsod ng Valenzuela (#PLV) Qualified Grantees 
-                    are required to report at the Scholarship Office at PLV Maysan Campus, 2nd floor on December 10 to 16, 2023 
-                    (except Saturday and Sunday) 8:00 AM to 5:00 PM. Look for Ms. Miko Tongco regarding Contract Signing and 
-                    Orientation. Thank you!
-                </p>
-            </div> <br> <br>
+                    <div class="box-graph">
+                        <canvas id="myBarChart"></canvas>
+                    </div>
+                </div>
                 
-            <div class="title">Results for Batch 23</div>
-            <div class="titleDate">May 22, 2024</div>
-            <div class="info-box">
-                <img src="images/pic3.jpg">
-                <p class="message">
-                    The results of the Dr. Pio Valenzuela Scholarship Program will be released on Dr. Pio's 154th Birth 
-                    Anniversary on December 11, 2023. <br> <br>
-                    deserving of the grant, they are currently getting to know more about their future college journeys 
-                    as Dr. Pio Valenzuela scholars. <br> <br>
-                    Congratulations and make us proud, dear students!
-                </p>
+                <div class="box-small">
+                    <h1>Summary</h1>
+
+                    <div class="box-summary">
+                        <?php summaryScholars(); ?>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+
     <!-- NOTIFICATION - notif.php -->
     <?php include 'notif.php'; ?>
 
-
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- FOR GRAPH-->
     <script>
+
+        //CHANGE PASS
+        function openPass() {
+            document.getElementById("passOverlay").style.display = "block";
+        }
+        function closePass() {
+            document.getElementById("passOverlay").style.display = "none";
+        }
+        function submitForm() {
+            closePass();
+        }
+
         //CALENDAR
-        const monthNames = ["January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"];
+        document.addEventListener("DOMContentLoaded", function() {
+            const monthYearElement = document.getElementById("monthYear");
+            const weekdaysElement = document.getElementById("weekdays");
+            const prevBtn = document.getElementById("prevBtn");
+            const nextBtn = document.getElementById("nextBtn");
 
-        const today = new Date();
-        let currentMonth = today.getMonth();
-        let currentYear = today.getFullYear();
+            const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-        function generateCalendar() {
-            const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-            const startingDay = firstDayOfMonth.getDay();
+            let currentDate = new Date();
 
-            document.getElementById("month").innerHTML = monthNames[currentMonth] + " " + currentYear;
+            function renderWeek(date) {
+                weekdaysElement.innerHTML = "";
 
-            let calendarDays = document.getElementById("days");
-            calendarDays.innerHTML = "";
+                const firstDayOfWeek = new Date(date.setDate(date.getDate() - date.getDay()));
+                const month = firstDayOfWeek.toLocaleString('default', { month: 'long' });
+                const year = firstDayOfWeek.getFullYear();
 
-            for (let i = 0; i < startingDay; i++) {
-                let day = document.createElement("div");
-                calendarDays.appendChild(day);
+                monthYearElement.textContent = `${month} ${year}`;
+
+                for (let i = 0; i < 7; i++) {
+                    const dayDate = new Date(firstDayOfWeek);
+                    dayDate.setDate(firstDayOfWeek.getDate() + i);
+                    const dayName = daysOfWeek[dayDate.getDay()];
+                    const dayNumber = dayDate.getDate();
+
+                    const dayElement = document.createElement("div");
+                    dayElement.classList.add("weekday");
+
+                    const dayNameElement = document.createElement("div");
+                    dayNameElement.classList.add("day-name");
+                    dayNameElement.textContent = dayName;
+
+                    const dayNumberElement = document.createElement("div");
+                    dayNumberElement.classList.add("day-number");
+                    dayNumberElement.textContent = dayNumber;
+
+                    dayElement.appendChild(dayNameElement);
+                    dayElement.appendChild(dayNumberElement);
+                    weekdaysElement.appendChild(dayElement);
+                }
             }
 
-            for (let i = 1; i <= daysInMonth; i++) {
-                let day = document.createElement("div");
-                day.textContent = i;
-                calendarDays.appendChild(day);
+            prevBtn.addEventListener("click", function() {
+                currentDate.setDate(currentDate.getDate() - 7);
+                renderWeek(currentDate);
+            });
+
+            nextBtn.addEventListener("click", function() {
+                currentDate.setDate(currentDate.getDate() + 7);
+                renderWeek(currentDate);
+            });
+
+            renderWeek(new Date());
+        });
+
+
+        //GRAPH
+        // const ctx = document.getElementById('myBarChart').getContext('2d');
+        // const myBarChart = new Chart(ctx, {
+        //     type: 'bar',
+        //     data: {
+        //         labels: ['Batch 21', 'Batch 22', 'Batch 23', 'Batch 24', '  Batch 25'],
+        //         datasets: [
+        //             {
+        //                 label: '1st Semester',
+        //                 data: [65, 59, 80, 81, 56],
+        //                 backgroundColor: 'rgb(47, 55, 135)',
+        //                 borderWidth: 1
+        //             },
+        //             {
+        //                 label: '2nd Semester',
+        //                 data: [28, 48, 40, 19, 86],
+        //                 backgroundColor: 'rgb(217, 217, 217)',
+        //                 borderWidth: 1
+        //             }
+        //         ]
+        //     },
+        //     options: {
+        //         scales: {
+        //             y: {
+        //                 beginAtZero: true
+        //             }
+        //         }
+        //     }
+        // });
+
+        async function fetchChartData() {
+            try {
+                const response = await fetch('../functions/dashboard_graph.php'); // Fetch data from PHP script
+                const data = await response.json(); // Parse JSON response
+
+                // Check if data was fetched successfully
+                if (!data || !data.labels || !data.total_scholars || !data.active_scholars) {
+                    console.error("Invalid data structure received from the server.");
+                    return;
+                }
+
+                // Initialize the chart with fetched data
+                const ctx = document.getElementById('myBarChart').getContext('2d');
+                const myBarChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,  // Use dynamic labels from PHP
+                        datasets: [
+                            {
+                                label: 'Total Scholars',
+                                data: data.total_scholars,  // Use dynamic data for total scholars
+                                backgroundColor: 'rgb(47, 55, 135)',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'ACTIVE Scholars',
+                                data: data.active_scholars,  // Use dynamic data for ACTIVE scholars
+                                backgroundColor: 'rgb(217, 217, 217)',
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error("Error fetching chart data:", error);
             }
         }
 
-        document.querySelector(".prev").addEventListener("click", () => {
-            currentMonth -= 1;
-            if (currentMonth < 0) {
-                currentMonth = 11;
-                currentYear -= 1;
-            }
-            generateCalendar();
-        });
-
-        document.querySelector(".next").addEventListener("click", () => {
-            currentMonth += 1;
-            if (currentMonth > 11) {
-                currentMonth = 0;
-                currentYear += 1;
-            }
-            generateCalendar();
-        });
-
-        generateCalendar();
+        // Fetch data and render the chart
+        fetchChartData();
     </script>
 </body>
 </html>

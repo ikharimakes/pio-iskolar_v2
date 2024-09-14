@@ -44,18 +44,18 @@
                     </span>
                     <span class="text"> My Profile </span>
                 </a> </li>
-            </ul>
-        </div> 
 
-        <div class="bottom-content">
-            <li class="navLink"> <a href="faq.php" onclick="activateLink(this)">
+                <li class="navLink"> <a href="faq.php" onclick="activateLink(this)">
                 <span class="icon">
                     <ion-icon name="help-circle-outline"></ion-icon>
                 </span>
                 <span class="text"> FAQ </span>
             </a></li>
+            </ul>
+        </div> 
 
-            <li class="navLink"><a href="../functions/logout.php">
+        <div class="bottom-content">
+            <li class="navLink"><a href="front_page.php">
                 <span class="icon">
                     <ion-icon name="log-out-outline"></ion-icon>
                 </span>

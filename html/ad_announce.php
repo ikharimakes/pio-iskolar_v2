@@ -1,3 +1,29 @@
+<?php
+    include_once('../functions/general.php');
+    include('../functions/announce_view.php');
+    include('../functions/announce_fx.php');
+    include('../functions/page.php');
+    $sourceFile = 'ad_reports.php';
+
+    $sort_column = isset($_GET['sort_column']) ? $_GET['sort_column'] : 'title';
+    $sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'asc';
+    $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+
+    $total_records = getTotalRecords();
+
+    $records_per_page = 15;
+    $total_page = ceil($total_records / $records_per_page);
+
+    if (isset($_GET['ajax'])) {
+        if ($_GET['ajax'] === 'table') {
+            annList($current_page, $sort_column, $sort_order);
+        } elseif ($_GET['ajax'] === 'pagination') {
+            renderPagination($current_page, $records_per_page, $total_records, $total_page, $sourceFile);
+        }
+        exit;
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,6 +34,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="css/ad_announce.css">
     <link rel="stylesheet" href="css/confirm.css">
+    <link rel="stylesheet" href="css/page.css">
+    <script src="https://kit.fontawesome.com/3d9c1c4bc8.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <!-- SIDEBAR - ad_nav.php -->
@@ -53,11 +81,11 @@
             </div>
 
             <div class="sort">
-                <select id="statusSort">
+                <select id="filter">
                     <option value="" disabled selected>Status</option>
                     <option value="all">All</option>
-                    <option value="resolved">Active</option>
-                    <option value="progress">Inactive</option>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
                 </select>
             </div>
             
@@ -70,105 +98,40 @@
             <table>
                 <tr style="font-weight: bold;">
                     <th> <input type="checkbox" id="selectAll" name="selected_rows[]"> </th>
-                    <th style="width:59%"> 
-                        <div class="title-header">
+                    <th style="width:8%"> 
+                <!-- replace class with batchdate-header -->
+                        <div class="startDate-header" id="sortBatch" style="justify-content: center; cursor: pointer;">
+                            Batch No.
+                            <i id="batchSortIcon" class="fa fa-sort"></i>
+                        </div> 
+                    </th>
+                    <th style="width:50%"> 
+                        <div class="title-header" id="sortTitle" style="cursor: pointer;">
                             Title
-                            <div class="sort-icons">
-                                <a href="#" id="scholarAsc" class="sort-icon" data-order="asc"><ion-icon name="chevron-up-outline"></ion-icon></a>
-                                <a href="#" id="scholarDesc" class="sort-icon" data-order="desc"><ion-icon name="chevron-down-outline"></ion-icon></a>
-                            </div>
+                            <i id="titleSortIcon" class="fa fa-sort"></i>
                         </div> 
                     </th>
                     <th style="width:12%"> 
-                        <div class="startDate-header" style="justify-content: center">
+                        <div class="startDate-header" id="sortStart" style="cursor: pointer;">
                             Start Date
-                            <div class="sort-icons">
-                                <a href="#" id="scholarAsc" class="sort-icon" data-order="asc"><ion-icon name="chevron-up-outline"></ion-icon></a>
-                                <a href="#" id="scholarDesc" class="sort-icon" data-order="desc"><ion-icon name="chevron-down-outline"></ion-icon></a>
-                            </div>
+                            <i id="startSortIcon" class="fa fa-sort"></i>
                         </div> 
                     </th>
                     <th style="width:12%"> 
-                        <div class="endDate-header" style="justify-content: center">
+                        <div class="endDate-header" id="sortEnd" style="cursor: pointer;">
                             End Date
-                            <div class="sort-icons">
-                                <a href="#" id="scholarAsc" class="sort-icon" data-order="asc"><ion-icon name="chevron-up-outline"></ion-icon></a>
-                                <a href="#" id="scholarDesc" class="sort-icon" data-order="desc"><ion-icon name="chevron-down-outline"></ion-icon></a>
-                            </div>
+                            <i id="endSortIcon" class="fa fa-sort"></i>
                         </div>
                     </th>
                     <th style="width:12%"> Status </th>
                     <th style="width:5%"> Action </th>
-                </tr>
-                <tr> 
-                    <td><input type='checkbox' name='selected_rows[]'></td>
-                    <td style="width:59%"> Application for Batch 23 </td>
-                    <td style="width:12%; text-align: center"> 2024-08-18 </td>
-                    <td style="width:12%; text-align: center"> 2024-06-23 </td>
-                    <td style="width:12%; text-align: center" class="statusColor"> ACTIVE </td>
-                    <td style="width:100%; justify-content:center" class="wrap"> 
-                        <div class="icon">
-                            <div class="tooltip"> View </div>
-                            <span onclick="openPrev(this)"> <ion-icon name="eye-outline"></ion-icon> </span>
-                        </div>
-                        <div class="icon">
-                            <div class="tooltip"> Edit </div>
-                            <span onclick="openEdit(this)"> <ion-icon name="create-outline"></ion-icon> </span>
-                        </div>
-                        <div class="icon">
-                            <div class="tooltip">Delete</div>
-                            <span onclick="openDelete(this)"> <ion-icon name="trash-outline"></ion-icon> </span>
-                        </div>
-                    </td>
-                </tr>
-                <tr> 
-                    <td><input type='checkbox' name='selected_rows[]'></td>
-                    <td style="width:59%"> Contract Signing </td>
-                    <td style="width:12%; text-align: center"> 2024-06-02 </td>
-                    <td style="width:12%; text-align: center"> 2024-06-07 </td>
-                    <td style="width:12%; text-align: center" class="statusColor"> ACTIVE </td>
-                    <td style="width:100%; justify-content:center" class="wrap"> 
-                        <div class="icon">
-                            <div class="tooltip"> View </div>
-                            <span onclick="openPrev(this)"> <ion-icon name="eye-outline"></ion-icon> </span>
-                        </div>
-                        <div class="icon">
-                            <div class="tooltip"> Edit </div>
-                            <span onclick="openEdit(this)"> <ion-icon name="create-outline"></ion-icon> </span>
-                        </div>
-                        <div class="icon">
-                            <div class="tooltip">Delete</div>
-                            <span onclick="openDelete(this)"> <ion-icon name="trash-outline"></ion-icon> </span>
-                        </div>
-                    </td>
-                </tr>
-                <tr> 
-                    <td><input type='checkbox' name='selected_rows[]'></td>
-                    <td style="width:59%"> Results for Batch 27 </td>
-                    <td style="width:12%; text-align: center"> 2024-05-21 </td>
-                    <td style="width:12%; text-align: center"> 2024-06-01 </td>
-                    <td style="width:12%; text-align: center" class="statusColor"> INACTIVE </td>
-                    <td style="width:100%; justify-content:center" class="wrap"> 
-                        <div class="icon">
-                            <div class="tooltip"> View </div>
-                            <span onclick="openPrev(this)"> <ion-icon name="eye-outline"></ion-icon> </span>
-                        </div>
-                        <div class="icon">
-                            <div class="tooltip"> Edit </div>
-                            <span onclick="openEdit(this)"> <ion-icon name="create-outline"></ion-icon> </span>
-                        </div>
-                        <div class="icon">
-                            <div class="tooltip">Delete</div>
-                            <span onclick="openDelete(this)"> <ion-icon name="trash-outline"></ion-icon> </span>
-                        </div>
-                    </td>
-                </tr>
+                <tbody id="announceTableBody">
+                </tbody>
             </table>
         </div>
 
+        <?php renderPagination($current_page, $records_per_page, $total_records, $total_page, $sourceFile); ?>
 
-        <!-- PAGINATION - page.php -->
-        <?php include 'page.php'; ?>
     </div>
 
 
@@ -182,6 +145,27 @@
                 </div>
                 <br><br>
 
+                <div class="batch"> 
+                    <h3>Batch</h3>
+                    <form>
+                        <select id="batchDrop" name="batch">
+                            <option value="all">All Batches</option>
+                            <option value="20">Batch 20</option>
+                            <option value="21">Batch 21</option>
+                            <option value="22">Batch 22</option>
+                            <option value="23">Batch 23</option>
+                            <option value="24">Batch 24</option>
+                            <option value="25">Batch 25</option>
+                            <option value="26">Batch 26</option>
+                            <option value="27">Batch 27</option>
+                            <option value="28">Batch 28</option>
+                            <option value="29">Batch 29</option>
+                            <option value="30">Batch 30</option>
+                            <option value="31">Batch 31</option>
+                        </select>
+                    </form>
+                </div> <br>
+
                 <div class="announceTitle">
                     <h3>Announcement Title</h3>
                     <input type="text" name="title"> 
@@ -189,10 +173,10 @@
 
                 <div class="announceImg">
                     <h3>Upload an Image</h3>
-                    <label for="choose-file1" class="custom-file-upload">
+                    <label for="add-file" class="custom-file-upload">
                         <ion-icon name="share-outline"> </ion-icon> Upload Image
                     </label>
-                    <input name="cover" type="file" id="choose-file1" accept="image/png, image/gif, image/jpeg" style="display: none;" /> 
+                    <input name="cover" type="file" id="add-file" accept="image/png, image/gif, image/jpeg" style="display: none;" /> 
                 </div> <br>
 
                 <div class="announceDetail">
@@ -201,28 +185,9 @@
                 </div> <br>
 
                 <div class="announceDate">
-                    <h3>Start Date</h3>
-                    <input type="date" name="startDate" required> <br> <br> 
-
                     <h3>End Date</h3>
                     <input type="date" name="endDate" required>
                 </div> <br>
-
-                <div class="batch"> 
-                    <h3>Batch</h3>
-                    <form>
-                        <input type="radio" id="all" name="batches" value="all">
-                        <label for="all">All Batches</label> <br>
-                            
-                        <input type="radio" id="batch" name="batches" value="batch">
-                        <label for="batch" onclick="showInput('batch')">By Batch</label>
-                        <br> <br>
-                        <div id="inputField" class="hideText" style="display: none;">
-                            <label for="textInput" style="font-weight: bold;">Enter Batch ID:</label>
-                            <input type="text" id="textInput">
-                        </div>
-                    </form>
-                </div>
 
                 <div class="btn">
                     <button type="submit" name="add_ann" class="publish-button"> Publish </button>
@@ -232,7 +197,7 @@
     </div>
 
     <!-- VIEW MODAL -->
-    <div id="viewOverlay" class="overlay">
+    <div id="viewModal" class="overlay">
         <div class="overlay-content">
             <h2 id="view-title"> Application for Batch 23 </h2>
             <span class="closeOverlay" onclick="closePrev()">&times;</span>
@@ -249,7 +214,7 @@
     </div>
 
     <!-- EDIT MODAL -->
-    <div id="EditModal" class="announce">
+    <div id="editModal" class="announce">
         <div class="announce-content">
             <div class="infos">
                 <h1>Edit Announcement</h1>
@@ -267,10 +232,10 @@
                 <div class="announceImg">
                     <h3>Upload an Image</h3>
 
-                    <label for="choose-file1" class="custom-file-upload">
+                    <label for="update-file" class="custom-file-upload">
                         <ion-icon name="share-outline"> </ion-icon> Upload Image
                     </label>
-                    <input name="cover" type="file" id="choose-file2" accept="image/png, image/gif, image/jpeg" style="display: none;" /> 
+                    <input name="cover" type="file" id="update-file" accept="image/png, image/gif, image/jpeg" style="display: none;" /> 
                 </div> <br>
 
                 <div class="announceDetail">
@@ -303,85 +268,191 @@
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script>
-        // SORT ICON
-        document.addEventListener('DOMContentLoaded', function () {
-            // Function to sort table rows
-            function sortTable(table, column, order) {
-                const tbody = table.tBodies[0];
-                const rows = Array.from(tbody.rows); // Include all rows including the header row
-                const compare = (rowA, rowB) => {
-                    const cellA = rowA.cells[column].innerText.trim();
-                    const cellB = rowB.cells[column].innerText.trim();
-                    
-                    if (!isNaN(Date.parse(cellA)) && !isNaN(Date.parse(cellB))) {
-                        return order === 'asc' ? new Date(cellA) - new Date(cellB) : new Date(cellB) - new Date(cellA);
-                    } else if (!isNaN(cellA) && !isNaN(cellB)) {
-                        return order === 'asc' ? cellA - cellB : cellB - cellA;
-                    } else {
-                        return order === 'asc' ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
-                    }
+        // FETCH API SEARCH/SORT/FILTER AND PAGINATION
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.querySelector('input[name="search"]');
+            const filter = document.getElementById('filter');
+            const selectAllCheckbox = document.getElementById('selectAll');
+            const individualCheckboxes = document.querySelectorAll('input[name="selected_rows[]"]');
+            const actionButtons = document.querySelector('.actions');
+            const tableBody = document.getElementById('announceTableBody');
+            const pagination = document.getElementById('pagination');
+
+            let sortStates = {
+                'batch_no': 'neutral',
+                'title': 'neutral',
+                'st_date': 'neutral',
+                'end_date': 'neutral'
+            };
+
+            const updateSortIcons = () => {
+                const icons = {
+                    'batch_no': document.getElementById('batchSortIcon'),
+                    'title': document.getElementById('titleSortIcon'),
+                    'st_date': document.getElementById('startSortIcon'),
+                    'end_date': document.getElementById('endSortIcon')
                 };
 
-                rows.slice(1).sort(compare).forEach(row => tbody.appendChild(row)); // Exclude header row
-            }
+                for (const [column, icon] of Object.entries(icons)) {
+                    const state = sortStates[column];
+                    if (state === 'neutral') {
+                        icon.className = 'fa fa-sort';
+                    } else 
+                    if (state === 'asc') {
+                        icon.className = 'fa fa-sort-up';
+                    } else if (state === 'desc') {
+                        icon.className = 'fa fa-sort-down';
+                    }
+                }
+            };
 
-            // Add event listeners to sort icons
-            document.querySelectorAll('.sort-icon').forEach(icon => {
-                icon.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const table = icon.closest('table');
-                    const column = Array.from(icon.closest('tr').children).indexOf(icon.closest('th'));
-                    const order = icon.getAttribute('data-order');
+            const handleSort = (headerId, sortKey) => {
+                const header = document.getElementById(headerId);
+                header.addEventListener('click', () => {
+                    const currentState = sortStates[sortKey];
+                    let nextState;
+                    if (currentState === 'neutral') {
+                        nextState = 'asc';
+                    } else if (currentState === 'asc') {
+                        nextState = 'desc';
+                    } else {
+                        nextState = 'neutral';
+                    }
+                    sortStates[sortKey] = nextState;
 
-                    // Toggle order for the next click
-                    const newOrder = order === 'asc' ? 'desc' : 'asc';
-                    icon.setAttribute('data-order', newOrder);
+                    for (const key in sortStates) {
+                        if (key !== sortKey) {
+                            sortStates[key] = 'neutral';
+                        }
+                    }
 
-                    // Sort the table
-                    sortTable(table, column, order);
+                    updateSortIcons();
+                    fetchData();
                 });
-            });
-        });
+            };
 
-        // SHOW/HIDE ICONS BASED ON CHECKBOX SELECTION
-        document.addEventListener('DOMContentLoaded', () => {
-            const checkboxes = document.querySelectorAll('input[name="selected_rows[]"]');
-            const selectAllCheckbox = document.getElementById('selectAll');
-            const actionButtons = document.querySelector('.actions');
-            
-            checkboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', toggleActionButtons);
+            handleSort('sortBatch', 'batch_no');
+            handleSort('sortTitle', 'title');
+            handleSort('sortStart', 'st_date');
+            handleSort('sortEnd', 'end_date');
+            updateSortIcons();
+
+            const fetchData = (page = 1) => {
+                const params = new URLSearchParams(window.location.search);
+                params.set('page', page);
+                for (const [column, state] of Object.entries(sortStates)) {
+                    if (state !== 'neutral') {
+                        params.set('sort_column', column);
+                        params.set('sort_order', state);
+                    }
+                }
+
+                const searchText = searchInput.value.trim();
+                if (searchText) {
+                    params.set('search', searchText);
+                }
+
+                const selectedFilter = filter.value;
+                if (selectedFilter && selectedFilter !== 'default') {
+                    params.set('filter', selectedFilter);
+                }
+
+                // Use 'history.php' as the source file
+                navigatePage(page, 'ad_announce.php');
+            };
+
+            const navigatePage = (page, sourceFile) => {
+                const params = new URLSearchParams(window.location.search);
+                params.set('page', page);
+                const searchText = searchInput.value.trim();
+                const selectedFilter = filter.value;
+
+                if (searchText) {
+                    params.set('search', searchText);
+                }
+
+                if (selectedFilter && selectedFilter !== 'default') {
+                    params.set('filter', selectedFilter);
+                }
+
+                const sortColumn = Object.keys(sortStates).find(column => sortStates[column] !== 'neutral');
+                if (sortColumn) {
+                    params.set('sort_column', sortColumn);
+                    params.set('sort_order', sortStates[sortColumn]);
+                }
+
+                // Fetch table data
+                params.set('ajax', 'table');
+                fetch(`${sourceFile}?${params.toString()}`)
+                    .then(response => response.text())
+                    .then(html => {
+                        tableBody.innerHTML = html;
+                        attachRowCheckboxEvents();
+                    })
+                    .catch(error => console.error('Error fetching table data:', error));
+
+                // Fetch pagination data
+                params.set('ajax', 'pagination');
+                fetch(`${sourceFile}?${params.toString()}`)
+                    .then(response => response.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        const newPagination = doc.querySelector('#pagination');
+                        if (newPagination) {
+                            document.getElementById('pagination').innerHTML = newPagination.innerHTML;
+                        }
+                    })
+                    .catch(error => console.error('Error fetching pagination data:', error));
+            };
+
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    fetchData();
+                }
             });
 
-            selectAllCheckbox.addEventListener('change', function() {
-                checkboxes.forEach(checkbox => checkbox.checked = selectAllCheckbox.checked);
+            searchInput.addEventListener('input', () => {
+                fetchData();
+            });
+
+            filter.addEventListener('change', () => {
+                fetchData();
+            });
+
+            const toggleActionButtons = () => {
+                const anyChecked = Array.from(individualCheckboxes).some(checkbox => checkbox.checked);
+                actionButtons.style.display = anyChecked ? 'block' : 'none';
+            };
+
+            selectAllCheckbox.addEventListener('change', () => {
+                const isChecked = selectAllCheckbox.checked;
+                individualCheckboxes.forEach(checkbox => {
+                    checkbox.checked = isChecked;
+                });
                 toggleActionButtons();
             });
 
-            function toggleActionButtons() {
-                const anyChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
-                actionButtons.style.display = anyChecked ? 'block' : 'none';
-            }
-        });
+            const attachRowCheckboxEvents = () => {
+                const newCheckboxes = document.querySelectorAll('input[name="selected_rows[]"]');
+                newCheckboxes.forEach(checkbox => {
+                    checkbox.addEventListener('change', () => {
+                        if (!checkbox.checked) {
+                            selectAllCheckbox.checked = false;
+                        }
+                        toggleActionButtons();
+                    });
+                });
+            };
 
-        // STATUS COLOR CODE
-        document.addEventListener('DOMContentLoaded', () => {
-            const statusCells = document.querySelectorAll('.statusColor');
-            statusCells.forEach(cell => {
-                switch (cell.textContent.trim()) {
-                    case 'ACTIVE':
-                        cell.style.color = 'green';
-                        break;
-                    case 'INACTIVE':
-                        cell.style.color = 'red';
-                        break;
-                    default:
-                        cell.style.color = 'black';
-                        break;
-                }
-            });
+            attachRowCheckboxEvents();
+            fetchData(); // Initial fetch on page load
+
+            debugger;
+            const datePicker = document.querySelectorAll('input[type="date"]').innerHTML;
+            datePicker.min = new Date().toISOString().split("T")[0];
         });
-    
 
         //ADD 
         function openModal(announceModal) {
@@ -406,10 +477,10 @@
             document.getElementById("view-title").innerText = elem.getAttribute("data-title");
             document.getElementById("view-img").src = '../assets/' + elem.getAttribute("data-img");
             document.getElementById("view-content").innerText = elem.getAttribute("data-content");
-            document.getElementById("viewOverlay").style.display = "block";
+            document.getElementById("viewModal").style.display = "block";
         }
         function closePrev() {
-            document.getElementById("viewOverlay").style.display = "none";
+            document.getElementById("viewModal").style.display = "none";
         }
 
         //EDIT
@@ -419,11 +490,21 @@
             document.getElementById("edit-content").value = elem.getAttribute("data-content");
             document.getElementById("edit-startDate").value = elem.getAttribute("data-st_date");
             document.getElementById("edit-endDate").value = elem.getAttribute("data-end_date");
-            document.getElementById("EditModal").style.display = "block";
+            document.getElementById("editModal").style.display = "block";
         }
         function closeEdit() {
-            document.getElementById("EditModal").style.display = "none";
+            document.getElementById("editModal").style.display = "none";
         }
+
+        $(document).ready(function () {
+            // Select all input elements with class 'custom-file-upload'
+            $('input[type=file]').change(function () {
+                var file = $(this)[0].files[0].name;
+                // Find the corresponding label by its 'for' attribute
+                var labelFor = $(this).attr('id');
+                $('label[for=' + labelFor + ']').text(file);
+            });
+        });
     </script>
 </body>
 </html>
