@@ -19,7 +19,7 @@
     <!-- SIDEBAR - ad_nav.php -->
     <?php include 'navbar.php'; ?>
     
-    <div class="main1">
+    <div class="main5">
         <!-- TOP BAR -->
         <div class="topBar">
             <div class="headerName">
@@ -41,38 +41,59 @@
                 <h1><?php scholarName(); ?></h1> <!-- modify to pull name from db -->
                 <ion-icon name="school"></ion-icon> 
             </div>
-
-            <!-- CALENDAR -->
-            <div class="calendar">
-                <div class="month">
-                    <div class="prev">&#10094;</div>
-
-                    <div class="date">
-                        <h1 id="month"></h1>
-                    </div>
-
-                    <div class="next">&#10095;</div>
-                </div>
-
-                <div class="weekdays">
-                    <div>Sun</div>
-                    <div>Mon</div>
-                    <div>Tue</div>
-                    <div>Wed</div>
-                    <div>Thu</div>
-                    <div>Fri</div>
-                    <div>Sat</div>
-                </div>
-
-                <div class="days" id="days"></div>
-            </div>
         </div>
 
+
+        <!-- CALENDAR -->
+        <div class="calendar">
+            <div class="month">
+                <div class="prev">&#10094;</div>
+
+                <div class="date">
+                    <h1 id="month"></h1>
+                </div>
+
+                <div class="next">&#10095;</div>
+            </div> <br>
+
+            <div class="weekdays">
+                <div>Sunday</div>
+                <div>Monday</div>
+                <div>Tuesday</div>
+                <div>Wednesday</div>
+                <div>Thursday</div>
+                <div>Friday</div>
+                <div>Saturday</div>
+            </div> <br>
+
+            <div class="days" id="days"></div>
+        </div>
+        
 
         <!-- ANNOUNCEMENT -->
         <div class="announcement">
             <h1>Announcement</h1>
             <?php annDisplay();?>
+        </div>
+    </div>
+
+
+    <!-- VIEW MODAL -->
+    <div id="viewOverlay" class="overlay">
+        <div class="overlay-content">
+            <span class="closeOverlay" onclick="closeView()">&times;</span>
+            <br>
+
+            <div class="card"> 
+                <img id="modalImage" class="pic" src="" alt="Image" /> <!-- Updated src -->
+                <div class="container">
+                    <h2 id="modalTitle"> <!-- Updated title --> </h2>
+                    <p id="modalDate" class="date"> <!-- Updated date --> </p>
+                    <center> 
+                        <p id="modalContent" class="caption"> <!-- Updated content --> </p>
+                    </center>
+                </div> 
+            </div>
         </div>
     </div>
 
@@ -133,6 +154,23 @@
         });
 
         generateCalendar();
+
+
+        // VIEW
+        function openView(img, title, content, date) {
+            // Display the modal
+            document.getElementById("viewOverlay").style.display = "block";
+
+            // Populate modal fields
+            document.getElementById("modalImage").src = "../assets/" + img;
+            document.getElementById("modalTitle").innerText = title;
+            document.getElementById("modalContent").innerText = content;
+            document.getElementById("modalDate").innerText = date;
+        }
+
+        function closeView() {
+            document.getElementById("viewOverlay").style.display = "none";
+        }
     </script>
 </body>
 </html>

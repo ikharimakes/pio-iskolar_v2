@@ -20,10 +20,7 @@
     padding-right: 20px;
 }
 
-.view-content canvas {
-    max-width: 100%;
-    height: auto;
-}
+
 /*SEARCH*/
 .search {
     flex: 1;

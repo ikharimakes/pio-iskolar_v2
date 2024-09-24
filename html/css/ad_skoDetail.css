@@ -40,6 +40,11 @@
 }
 
 /*DETAILS*/
+form {
+    display:inherit;
+    margin:0;
+    padding:0;
+ }
 .profile {
     grid-row: 3 / 4;
     grid-column: 1 / 5;
@@ -65,8 +70,8 @@
     display: flex;
     gap: 10px;
 }
-.edit-button, 
-.cancel-button {
+.edit, 
+.cancel {
     background-color: #2F3787;
     width: 100px;
     height: 40px;
@@ -77,14 +82,15 @@
     justify-content: center;
     align-items: center;
 }
-.edit-button h3, 
-.cancel-button h3 {
+.edit h3, 
+.cancel h3,
+.save h3 {
     margin: 0;
     font-size: 15px;
     font-weight: normal;
 }
-.edit-button:hover, 
-.cancel-button:hover {
+.edit:hover, 
+.cancel:hover {
     background-color: #376FB7;
 }
 .profile-info table {
@@ -141,7 +147,6 @@
     flex: 1;
     border: none;
     outline: none;
-    padding: 3px;
     background-color: transparent;
     width: 100%;
     text-align: center;
@@ -170,20 +175,22 @@
     border: .5%;
     border-radius: 10px;
 }
-.save-button {
+.save {
     display: block;
     font-size: 20px;
     margin-top: 20px;
     background-color: #2F3787;
-    width: 150px;
+    width: 100px;
     height: 40px;
     color: white;
     border: none;
-    border-radius: 15px; 
+    border-radius: 15px;
     cursor: pointer;
+    justify-content: center;
+    align-items: center;
     left: 50%;
 }
-.save-button:hover {
+.save:hover {
     background-color: #376FB7;;
 }
 

@@ -215,6 +215,24 @@ function js_debug_log($message) {
         $_SESSION['last_name'] = $data['last_name'];
         print 'Welcome Back, ' . $data['first_name'] . '!';
     }
+    
+    function scholarFull() {
+        global $conn;
+        if(isset($_POST['scholar_id'])) {$_SESSION['id'] = $_POST['scholar_id'];}
+        $id = $_SESSION['id'];
+        // SCHOLAR DETAILS
+        $display = "SELECT * FROM scholar WHERE scholar_id = '$id'";
+        $result = $conn->query($display);
+    
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                print '
+                    <h1>'.$row['last_name'].', '.$row['first_name'].' '.$row['middle_name'].'</h1> 
+                ';
+            }
+        }
+    }
+    
 
     $year = academic();
     $sem = semester();

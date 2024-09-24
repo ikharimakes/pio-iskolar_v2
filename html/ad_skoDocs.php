@@ -1,6 +1,7 @@
 <?php
     include_once('../functions/general.php');
     include('../functions/document_view.php');
+    include('../functions/document_fx.php');
     include('../functions/page.php');
     $sourceFile = 'ad_skoDocs.php';
 
@@ -69,11 +70,11 @@
 
         <!-- TOP NAV -->
         <div class="details"><center> 
-            <h1> ADRIANO, JESSICA RAYE </h1> 
+            <? scholarFull();?>
 
             <div class="topnav">
-                <a href="eval_skoDetail.php">Scholar Details</a>
-                <a href="eval_skoDocs.php">Documents</a>
+                <a href="ad_skoDetail.php">Scholar Details</a>
+                <a href="ad_skoDocs.php">Documents</a>
             </div> 
         </center></div>
 
@@ -389,6 +390,28 @@
         window.addEventListener('click', function(event) {
             if (event.target === document.getElementById('viewOverlay')) {
                 closePrev();
+            }
+        });
+
+
+        // Show reason for declining when "DECLINED" is selected
+        document.getElementById('declineRadio').addEventListener('click', function() {
+            document.getElementById('declineOptions').style.display = 'block';
+        });
+
+        // Hide reason for declining when "APPROVED" is selected
+        document.getElementById('approveRadio').addEventListener('click', function() {
+            document.getElementById('declineOptions').style.display = 'none';
+            document.getElementById('otherReason').style.display = 'none'; // Hide "Other" reasons if previously selected
+            document.getElementById('declineReasonSelect').selectedIndex = 0; // Reset dropdown
+        });
+
+        // Show textarea when "OTHER" is selected
+        document.getElementById('declineReasonSelect').addEventListener('change', function() {
+            if (this.value === 'OTHER') {
+                document.getElementById('otherReason').style.display = 'block';
+            } else {
+                document.getElementById('otherReason').style.display = 'none';
             }
         });
 

@@ -16,7 +16,7 @@
 
     if (isset($_GET['ajax'])) {
         if ($_GET['ajax'] === 'table') {
-            scholarDisplay($current_page, $sort_column, $sort_order);
+            scholarList($current_page, $sort_column, $sort_order);
         } elseif ($_GET['ajax'] === 'pagination') {
             renderPagination($current_page, $records_per_page, $total_records, $total_page, $sourceFile);
         }

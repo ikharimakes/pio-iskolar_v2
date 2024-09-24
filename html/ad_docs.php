@@ -1,6 +1,7 @@
 <?php
     include_once('../functions/general.php');
     include('../functions/document_view.php');
+    include('../functions/document_fx.php');
     include('../functions/page.php');
     $sourceFile = 'ad_docs.php';
 
@@ -127,7 +128,7 @@
     </div>
 
     <!-- VIEW MODAL -->
-    <div id="viewOverlay" class="view">
+    <div id="viewModal" class="view">
         <div class="view-content">
             <h2 id="view-doc_name">Document Name</h2>
             <span class="closeView" onclick="closePrev()">&times;</span>
@@ -170,7 +171,21 @@
 
             <br> <hr> <br>
             <center>
-                <div class="pdfViewer" id="pdfViewer"></div>
+                <div id="pdfViewer" style="width: 700px; height: 100%; border: 1px solid #ccc;"></div>
+            </center>
+        </div>
+    </div>
+
+    <div id="viewModal" class="view">
+        <div class="view-content">
+            <h2 id="view-doc_name">Document Name</h2>
+            <span class="closeView" onclick="closePrev()">&times;</span>
+            <div id="denialReason" style="display: none;">
+                <h3 id="denialReasonHeader">REASON FOR DECLINING: <span id="denialReasonText" style="text-decoration: underline;"></span></h3>
+            </div>
+            <br>
+            <center>
+                <div id="pdfViewer" style="width: 700px; height: 100%; border: 1px solid #ccc;"></div>
             </center>
         </div>
     </div>
@@ -361,19 +376,45 @@
         });
 
         // VIEW MODAL
-        function openPrev() {
-            document.getElementById('viewOverlay').style.display = 'block';
+        function openPrev(elem) {
+            document.getElementById('viewModal').style.display = 'block';
             const docName = event.target.closest('tr').querySelector('td').innerText;
             document.getElementById('view-doc_name').innerText = docName;
+            document.getElementById("update-doc_id").value = elem.getAttribute("data-id");
+
+            const pdfPath = '../assets/' + elem.getAttribute("data-doc_name");
+            console.log(pdfPath);
+            loadPDF(pdfPath);
         }
 
         function closePrev() {
-            document.getElementById('viewOverlay').style.display = 'none';
+            document.getElementById('viewModal').style.display = 'none';
         }
 
         window.addEventListener('click', function(event) {
-            if (event.target === document.getElementById('viewOverlay')) {
+            if (event.target === document.getElementById('viewModal')) {
                 closePrev();
+            }
+        });
+
+        // Show reason for declining when "DECLINED" is selected
+        document.getElementById('declineRadio').addEventListener('click', function() {
+            document.getElementById('declineOptions').style.display = 'block';
+        });
+
+        // Hide reason for declining when "APPROVED" is selected
+        document.getElementById('approveRadio').addEventListener('click', function() {
+            document.getElementById('declineOptions').style.display = 'none';
+            document.getElementById('otherReason').style.display = 'none'; // Hide "Other" reasons if previously selected
+            document.getElementById('declineReasonSelect').selectedIndex = 0; // Reset dropdown
+        });
+
+        // Show textarea when "OTHER" is selected
+        document.getElementById('declineReasonSelect').addEventListener('change', function() {
+            if (this.value === 'OTHER') {
+                document.getElementById('otherReason').style.display = 'block';
+            } else {
+                document.getElementById('otherReason').style.display = 'none';
             }
         });
 

@@ -28,7 +28,7 @@
                     <span class="icon">
                         <ion-icon name="document-outline"></ion-icon>
                     </span>
-                    <span class="text"> Documents </span> 
+                    <span class="text"> Requirements </span> 
                 </a> </li>
 
                 <li class="navLink"> <a href="history.php" onclick="activateLink(this)">

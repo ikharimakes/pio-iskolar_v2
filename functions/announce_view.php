@@ -142,31 +142,33 @@ function annList($current_page = 1, $sort_column = 'title', $sort_order = 'asc')
     }    
 
 // Dashboard Announcements
-    // For Scholars -- add eval logic later
-    function annDisplay() {
-        global $conn;
-        $batch_no = $_SESSION['bid'];
-        $display = "SELECT img_name, title, content, _status, st_date 
-                    FROM announcements 
-                    WHERE _status = 'ACTIVE' 
-                    AND (batch_no = 0 OR batch_no = $batch_no) 
-                    ORDER BY st_date DESC, announce_id DESC";
-        $result = $conn->query($display);
+// For Scholars -- add eval logic later
+function annDisplay() {
+    global $conn;
+    $batch_no = $_SESSION['bid'];
+    $display = "SELECT img_name, title, content, _status, st_date 
+                FROM announcements 
+                WHERE _status = 'ACTIVE' 
+                AND (batch_no = 0 OR batch_no = $batch_no) 
+                ORDER BY st_date DESC, announce_id DESC";
+    $result = $conn->query($display);
 
-        if ($result->num_rows > 0) {
-            $hr = false;
-            while ($row = $result->fetch_assoc()) {
-                print '
-                    <div class="title">'.$row["title"].'</div>
-                    <div class="titleDate">'.$row["st_date"].'</div>
-                    <div class="info-box">
-                        <img src="../assets/'.$row["img_name"].'">
-                        <p class="message">'.nl2br($row["content"]).'</p>
-                    </div> <br> <br>
-                ';
-            }
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $img_name = htmlspecialchars($row["img_name"], ENT_QUOTES, 'UTF-8');
+            $title = htmlspecialchars($row["title"], ENT_QUOTES, 'UTF-8');
+            $content = htmlspecialchars($row["content"], ENT_QUOTES, 'UTF-8');
+            $st_date = htmlspecialchars($row["st_date"], ENT_QUOTES, 'UTF-8');
+
+            print '
+                <div class="announce" onclick="openView(\'' . $img_name . '\', \'' . $title . '\', \'' . $content . '\', \'' . $st_date . '\')">
+                    <div class="title">' . $title . '</div>
+                    <div class="titleDate">' . $st_date . '</div>
+                </div> <hr>
+            ';
         }
     }
+}
 
 // Front Page Announcements
     function annFront() {

@@ -98,33 +98,34 @@
 
     <!-- JS CODE-->
     <script>
-        // DELETE
-        function openDelete() {
-            document.getElementById("deleteOverlay").style.display = "block";
-        }
-        function closeDelete() {
-            document.getElementById("deleteOverlay").style.display = "none";
-        }
-        function submitForm() {
-            closeDelete();
-        }
-
         // APPROVE
         function openApprove(elem) {
+            if (elem.closest('.icon').classList.contains('disabled')) return;
             document.getElementById("approve-id").value = elem.getAttribute("data-id");
             document.getElementById("approveOverlay").style.display = "block";
         }
-
         function closeApprove() {
             document.getElementById("approveOverlay").style.display = "none";
         }
 
         // DECLINE
         function openDecline(elem) {
+            if (elem.closest('.icon').classList.contains('disabled')) return;
             document.getElementById("decline-id").value = elem.getAttribute("data-id");
             document.getElementById("declineOverlay").style.display = "block";
         }
+
         function closeDecline(elem) {
             document.getElementById("declineOverlay").style.display = "none";
+        }
+
+        // DELETE
+        function openDelete(elem) {
+            document.getElementById("delete-id").value = elem.getAttribute("data-id");
+            document.getElementById("delete-name").value = elem.getAttribute("data-name");
+            document.getElementById("deleteOverlay").style.display = "block";
+        }
+        function closeDelete() {
+            document.getElementById("deleteOverlay").style.display = "none";
         }
     </script>

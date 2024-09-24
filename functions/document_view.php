@@ -48,7 +48,7 @@ function docxPending($current_page = 1, $sort_column = 'scholar_id', $sort_order
                         <div class="icon">
                             <div class="tooltip">View</div>
                             <span> <ion-icon name="eye-outline" onclick="openPrev(this)"
-                                data-submit_id="'.$row["submit_id"].'"  
+                                data-id="'.$row["submit_id"].'"  
                                 data-doc_name="'.$row["doc_name"].'" 
                                 data-doc_status="'.$row["doc_status"].'"
                                 data-doc_reason="'.$row["reason"].'"></ion-icon> </span>
@@ -221,7 +221,7 @@ function docxAdmin($id, $current_page = 1, $sort_column = 'sub_date', $sort_orde
                         <div class="icon">
                             <div class="tooltip">View</div>
                             <span> <ion-icon name="eye-outline" onclick="openPrev(this)"
-                                data-submit_id="'.$row["submit_id"].'"  
+                                data-id="'.$row["submit_id"].'"  
                                 data-doc_name="'.$row["doc_name"].'" 
                                 data-doc_status="'.$row["doc_status"].'"
                                 data-doc_reason="'.$row["reason"].'"></ion-icon> </span>

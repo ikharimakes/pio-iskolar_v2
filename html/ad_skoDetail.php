@@ -1,5 +1,7 @@
 <?php 
     include_once('../functions/general.php'); 
+    include('../functions/scholar_view.php');
+    include('../functions/scholar_fx.php');
 ?>
 
 <!DOCTYPE html>
@@ -42,7 +44,7 @@
 
         <!-- TOP NAV -->
         <div class="details"><center> 
-            <h1> ADRIANO, JESSICA RAYE </h1> 
+            <?php scholarFull(); ?>
 
             <div class="topnav">
                 <a href="ad_skoDetail.php">Scholar Details</a>
@@ -52,7 +54,8 @@
 
 
         <!-- SCHOLAR DETAILS -->
-        <div class="profile">
+        <!-- <div class="profile">
+            <form action="" method="post" id="profileForm">
             <div class="profile_name">
                 <img src="images/profile.png" alt="Profile Picture"> <br>
             </div>
@@ -93,7 +96,9 @@
                     </tr>
                 </table>
             </div>
-        </div>
+            </form>
+        </div> -->
+        <?php scholarDetail();?>
         
         <br> 
         <div class="table">
@@ -383,28 +388,10 @@
             }
         }
 
-        // SAVE MODAL
-        var modal = document.getElementById("saveOverlay");
-        var span = document.getElementsByClassName("closeSave")[0];
-
-        function openSave() {
-            modal.style.display = "block";
-        }
-
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-        
         document.addEventListener('DOMContentLoaded', function() {
             const editButton = document.getElementById('editButton');
             const cancelButton = document.getElementById('cancelButton');
-            const saveButton = document.querySelector('button[name="save"]');
+            const saveButton = document.getElementById('saveButton');
             const inputs = document.querySelectorAll('input[readonly], select[disabled]');
 
             editButton.addEventListener('click', function() {
@@ -413,8 +400,8 @@
                     input.removeAttribute('disabled');
                 });
                 editButton.style.display = 'none';
-                cancelButton.style.display = 'inline';
-                saveButton.style.display = 'inline';
+                cancelButton.style.display = 'block';
+                saveButton.style.display = 'block';
             });
 
             cancelButton.addEventListener('click', function() {
