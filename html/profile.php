@@ -1,5 +1,6 @@
 <?php 
     include_once('../functions/general.php'); 
+    include('../functions/scholar_view.php');
 ?>
 
 <!DOCTYPE html>
@@ -10,7 +11,8 @@
     <title>Pio Iskolar</title>
     <link rel="icon" type="image/x-icon" href="images/pio-logo.png">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="css/profile.css">
+    <link rel="stylesheet" href="css/ad_skoDetail.css">
+    <!-- <link rel="stylesheet" href="css/profile.css"> -->
     <link rel="stylesheet" href="css/confirm.css">
 </head>
 <body>
@@ -27,7 +29,7 @@
 
             <div class="headerRight">
                 <div class="notifs">
-                    <ion-icon name="notifications-outline" onclick="openOverlay()"></ion-icon>
+                    <ion-icon name="notifications-outline" onclick="openNotif()"></ion-icon>
                 </div>
             </div>
         </div>
@@ -36,61 +38,11 @@
 
 
         <!-- MY PROFILE-->
-        <div class="info">
-            <div class="profile_name"> 
-                <img src="images/profile.png" alt="Profile Picture"> <br>
-                <h2> ADRIANO, Jessica Raye </h2>
-            </div>
+        <div class="details"><center> 
+            <?php scholarFull(); ?>
+        </center></div>
 
-            <div class="profile-info">
-                <table>
-                    <tr>
-                        <th>Scholar No.:</th>
-                        <td>21-2321</td>
-                    </tr>
-                    <tr>
-                        <th>School:</th>
-                        <td>PAMANTASAN NG LUNGSOD NG VALENZUELA</td>
-                    </tr>
-                    <tr>
-                        <th>Course:</th>
-                        <td>BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY</td>
-                    </tr>
-                    <tr>
-                        <th>Scholar Status:</th>
-                        <td>ACTIVE</td>
-                    </tr>
-                    <tr style="height: 40px;">
-                        <th> </th>
-                        <td> </td>
-                    </tr>
-                    <tr>
-                        <th>Address:</th>
-                        <td>123 SAMPAGUITA STREET, MALINTA, VALENZUELA CITY</td>
-                    </tr>
-                    <tr>
-                        <th>Contact:</th>
-                        <td>+63963821954</td>
-                    </tr>
-                    <tr>
-                        <th>Email:</th>
-                        <td>j**********@gmail.com</td>
-                    </tr>
-                    <tr style="height: 40px;">
-                        <th> </th>
-                        <td> </td>
-                    </tr>
-                    <tr style="height: 40px;">
-                        <th> <a href="#" onclick="openPass()"> Change Password </a></th>
-                        <td></td>
-                    </tr>
-                    <tr style="height: 40px;">
-                        <th> Download Profile </th>
-                        <td></td>
-                    </tr>
-                </table>
-            </div>
-        </div>
+        <?php scholarDetail();?>
     </div>
 
 

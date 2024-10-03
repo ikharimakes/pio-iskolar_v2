@@ -11,21 +11,21 @@
                     <ion-icon name="trash-outline"></ion-icon> 
                 </button>
                 
-                <span class="close-btn" onclick="closeOverlay()"> &times; </span>
+                <span class="close-btn" onclick="closeNotif()"> &times; </span>
             </div>
 
             <ul class="notif-list">
                 <li class="notif-item">
                     <input type="checkbox" class="notif-checkbox" onclick="toggleDeleteIcon()">
-                    <span onclick="openNotif('Notification 1', 'April 29, 2024', 'Content...')">Notification 1</span>
+                    <span onclick="openNotifItem('Notification 1', 'April 29, 2024', 'Content...')">Notification 1</span>
                 </li>
                 <li class="notif-item">
                     <input type="checkbox" class="notif-checkbox" onclick="toggleDeleteIcon()">
-                    <span onclick="openNotif('Notification 2', 'April 30, 2024', 'Content...')">Notification 2</span>
+                    <span onclick="openNotifItem('Notification 2', 'April 30, 2024', 'Content...')">Notification 2</span>
                 </li>
                 <li class="notif-item">
                     <input type="checkbox" class="notif-checkbox" onclick="toggleDeleteIcon()">
-                    <span onclick="openNotif('Notification 3', 'May 1, 2024', 'Content...')">Notification 3</span>
+                    <span onclick="openNotifItem('Notification 3', 'May 1, 2024', 'Content...')">Notification 3</span>
                 </li>
             </ul>
         </div>
@@ -36,7 +36,7 @@
             <div class="header-notif">
                 <span class="back-btn" onclick="backToNotif()">	&lt; </span>
                 <h1 id="notifTitle"></h1>
-                <span class="close-btn" onclick="closeNotif()"> &times; </span>
+                <span class="close-btn" onclick="closeNotifItem()"> &times; </span>
             </div>
                 
             <p id="notifDate"></p><br>
@@ -51,21 +51,21 @@
     <!-- JS CODE -->
     <script>
         //NOTIFICATION
-        function openOverlay() {
+        function openNotif() {
             document.getElementById('notifOverlay').style.display = 'block';
         }
-        function closeOverlay() {
+        function closeNotif() {
             document.getElementById('notifOverlay').style.display = 'none';
         }
 
-        function openNotif(title, date, content) {
+        function openNotifItem(title, date, content) {
             document.getElementById('notifOverlay').style.display = 'none';
             document.getElementById('notifContent').style.display = 'block';
             document.getElementById('notifTitle').innerText = title;
             document.getElementById('notifDate').innerText = date;
             document.getElementById('notifContents').innerText = content;
         }
-        function closeNotif() {
+        function closeNotifItem() {
             document.getElementById('notifContent').style.display = 'none';
         }
         function backToNotif() {

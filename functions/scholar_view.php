@@ -65,6 +65,7 @@ function scholarList($current_page = 1, $sort_column = 'scholar_id', $sort_order
                         <div class="icon">
                             <div class="tooltip"> Delete</div>
                             <span> <ion-icon name="trash-outline" onclick="openDelete(this)" 
+                                type="user" 
                                 data-id="'.$row["user_id"].'" ></ion-icon> </span>
                         </div>
                     </td>

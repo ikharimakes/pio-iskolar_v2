@@ -103,8 +103,9 @@ function annList($current_page = 1, $sort_column = 'title', $sort_order = 'asc')
                         <div class="icon">
                             <div class="tooltip"> Delete</div>
                             <span> <ion-icon name="trash-outline" onclick="openDelete(this)" 
+                                type="announce" 
                                 data-id="'.$row["announce_id"].'" 
-                                data-img="'.$row["img_name"].'"></ion-icon> </span>
+                                data-name="'.$row["img_name"].'"></ion-icon> </span>
                         </div>
                     </td>
                 </tr>

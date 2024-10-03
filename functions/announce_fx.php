@@ -86,17 +86,4 @@ if (isset($_POST['add_ann'])) {
             die(mysqli_error($conn));
         }
     }
-
-//* ANNOUNCEMENT DELETION *//
-    if(isset($_POST['delete'])){
-        $path = "../assets/".$_POST['img'];
-        unlink($path);
-
-        $id = $_POST['id'];
-        $delete = "DELETE FROM announcements WHERE announce_id = '$id'";
-        $result = $conn->query($delete);
-        $_POST = array();
-        header('Location: '.$_SERVER['PHP_SELF']);
-        die;
-    }
 ?>

@@ -1,4 +1,5 @@
-.deleteOverlay h2,.errorOverlay h2,.saveOverlay h2 {
+.deleteOverlay h2,
+.overlay h2 {
     color: #2F3787;
     font-family: 'Lexend';
     padding-top: 10px;
@@ -6,11 +7,12 @@
     font-weight: 500;
     text-align: center;
 }
-.message h4 {
+.message p {
     padding-top: 30px;
-    font-size: 18px;
+    font-size: 15px;
     font-weight: 300;
     text-align: center;
+    color: #000000;
 }
 
 .button-container {
@@ -60,7 +62,7 @@
 }
 
 
-.errorOverlay {
+.overlay {
     display: none;
     position: fixed;
     z-index: 1;
@@ -72,10 +74,10 @@
     background-color: rgba(0,0,0,.4);
     padding-top: 60px
 }
-.error-content {
+.overlay-content {
     background-color: #f1f1f1;
     margin: auto;
-    width: 23%;
+    width: 20%;
     height: fit-content;
     padding: 20px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,.2),0 6px 20px 0 rgba(0,0,0,.19);
@@ -85,16 +87,44 @@
     transform: translate(-50%,-50%);
     border-radius: 15px;
 }
-.closeError {
+
+.decline h4,
+.others h4 {
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+.decline select {
+    width: 50%;
+    font-size: 15px;
+    font-weight: 300;
+    border: none;
+    border-bottom: 1px solid #000;
+    outline: none;
+    background-color: transparent;
+}
+textarea {
+    font-size: 15px;
+    font-weight: 300;
+    border-radius: 10px;
+    width: 100%;
+    height: 150px;
+    padding: 10px;
+    outline: none;
+}
+
+
+.closeOverlay {
     position: absolute;
     top: 20px;
     right: 20px;
     font-size: 30px;
     color: #aaa;
-    cursor: pointer
+    cursor: pointer;
 }
-.closeError:hover {
-    color: #000
+.closeOverlay:hover {
+    color: #000;
 }
 
 .deleteOverlay {
@@ -190,41 +220,4 @@
 .delete-button:hover
 .cancel-button:hover {
     background-color: #d3d3d3;
-}
-
-.saveOverlay {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,.4);
-    padding-top: 60px;
-}
-.save-content {
-    background-color: #f1f1f1;
-    margin: auto;
-    width: 23%;
-    height: fit-content;
-    padding: 20px;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,.2),0 6px 20px 0 rgba(0,0,0,.19);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    border-radius: 15px;
-}
-.closeSave {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    font-size: 30px;
-    color: #aaa;
-    cursor: pointer
-}
-.closeSave:hover {
-    color: #000
 }

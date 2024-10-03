@@ -68,6 +68,7 @@ function reportDisplay($current_page = 1, $sort_column = 'title', $sort_order = 
                         <div class="icon">
                             <div class="tooltip"> Delete</div>
                             <span> <ion-icon name="trash-outline" onclick="openDelete(this)" 
+                                type="reports" 
                                 data-id="'.$row["report_id"].'"></ion-icon> </span>
                         </div>
                     </td>

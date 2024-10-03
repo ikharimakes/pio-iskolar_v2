@@ -76,6 +76,7 @@ function docxPending($current_page = 1, $sort_column = 'scholar_id', $sort_order
                         <div class="icon">
                             <div class="tooltip">Delete</div>
                             <span> <ion-icon name="trash-outline" onclick="openDelete(this)" 
+                                type="submission" 
                                 data-id="'.$row["submit_id"].'" 
                                 data-name="'.$row["doc_name"].'"></ion-icon> </span>
                         </div>
@@ -156,6 +157,7 @@ function docxScholar($id, $current_page = 1, $sort_column = 'sub_date', $sort_or
                         <div class="icon '.$disabledClass.'">
                             <div class="tooltip">Delete</div>
                             <span> <ion-icon name="trash-outline" onclick="openDelete(this)" 
+                                type="submission" 
                                 data-id="'.$row["submit_id"].'" 
                                 data-name="'.$row["doc_name"].'"></ion-icon> </span>
                         </div>
@@ -213,8 +215,8 @@ function docxAdmin($id, $current_page = 1, $sort_column = 'sub_date', $sort_orde
             echo '
                 <tr>
                     <td><input type="checkbox" name="selected_rows[]"></td> 
-                    <td>'.$row["doc_name"].'</td>
                     <td>'.$row["sub_date"].'</td>
+                    <td>'.$row["doc_name"].'</td>
                     <td>'.$row["doc_type"].'</td>
                     <td style="'.$style.'">'.$row["doc_status"].'</td>
                     <td style="float: right;" class="wrap"> 
@@ -249,6 +251,7 @@ function docxAdmin($id, $current_page = 1, $sort_column = 'sub_date', $sort_orde
                         <div class="icon">
                             <div class="tooltip">Delete</div>
                             <span> <ion-icon name="trash-outline" onclick="openDelete(this)" 
+                                type="submission" 
                                 data-id="'.$row["submit_id"].'" 
                                 data-name="'.$row["doc_name"].'"></ion-icon> </span>
                         </div>

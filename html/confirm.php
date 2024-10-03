@@ -8,18 +8,14 @@
             <div class="infos">
                 <h2>Confirm Delete</h2>
                 <br>
-                <p>You are about to delete this report. Please enter your credentials to delete it permanently:</p>
+                <p>You are about to delete this record. Please enter your credentials to delete it permanently:</p>
             </div>
             <br> 
-            
-            <form method="POST">
-            <!-- Hidden input field to store osqcar value -->
-            <input type="hidden" id="delete-osqcar" name="osqcar">
+            <form id="deleteForm" method="POST">
                 <div class="inner-content">
                     <label class="deleteText" for="username">Username:</label> <br>
-                    <input class="input" type="username" id="username" name="username" placeholder="Enter Username" required>
+                    <input class="input" type="text" id="username" name="username" placeholder="Enter Username" required>
                 </div>
-
                 <div class="inner-content">
                     <label class="deleteText" for="password">Password:</label> <br>
                     <input class="input" type="password" id="password" name="password" placeholder="Enter Password" required>
@@ -27,21 +23,24 @@
                     <input type="checkbox" id="showPassword" style="position:absolute; top:355px">
                     <label for="showPassword" style="font-size: 12px; position:absolute; top: 353px; left:90px">Show Password</label>
                 </div>
-
+                <div id="loginError" style="color: red; display: none; text-align: center;">Invalid Credentials!</div>
                 <div class="delete-button-container">
-                    <button class="cancel-button" type="submit" onclick="closeDelete()"> Cancel </button>
-                    <button class="delete-button" type="submit"> Delete Report </button>
+                    <input type="hidden" id="type" name="type">
+                    <input type="hidden" id="delete-id" name="id">
+                    <input type="hidden" id="delete-name" name="name">
+                    <button class="cancel-button" type="button" onclick="closeDelete()"> Cancel </button>
+                    <button class="delete-button" type="submit"> Confirm Delete </button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- APPROVE MODAL -->
-    <div id="approveOverlay" class="deleteOverlay">
-        <div class="delete-content">
+    <div id="approveOverlay" class="overlay">
+        <div class="overlay-content">
             <div class="infos">
                 <h2>Confirm Approval</h2>
-                <span class="closeDelete" onclick="closeApprove()">&times;</span>
+                <span class="closeOverlay" onclick="closeApprove()">&times;</span>
             </div>
             <div class="message">
                 <h4>Are you sure you want to approve this document?</h4>
@@ -57,11 +56,11 @@
     </div>
 
     <!-- DECLINE MODAL -->
-    <div id="declineOverlay" class="deleteOverlay">
-        <div class="delete-content">
+    <div id="declineOverlay" class="overlay">
+        <div class="overlay-content">
             <div class="infos">
                 <h2>Confirm Decline</h2>
-                <span class="closeDelete" onclick="closeDecline()">&times;</span>
+                <span class="closeOverlay" onclick="closeDecline()">&times;</span>
             </div>
             <form id="declineForm" method="post" action="">
                 <input type="hidden" id="decline-id" name="doc_id">
@@ -121,6 +120,7 @@
 
         // DELETE
         function openDelete(elem) {
+            document.getElementById("type").value = elem.getAttribute("type");
             document.getElementById("delete-id").value = elem.getAttribute("data-id");
             document.getElementById("delete-name").value = elem.getAttribute("data-name");
             document.getElementById("deleteOverlay").style.display = "block";
@@ -128,4 +128,35 @@
         function closeDelete() {
             document.getElementById("deleteOverlay").style.display = "none";
         }
+
+        document.getElementById('deleteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = new URLSearchParams();
+
+            for (const pair of formData) {
+                data.append(pair[0], pair[1]);
+            }
+
+            fetch('../functions/delete_fx.php', {
+                method: 'POST',
+                body: data,
+            })
+            .then(response => response.text())
+            .then(response => {
+                if (response === 'success') {
+                    window.location.href = '<?php echo $_SERVER["PHP_SELF"]; ?>';
+                } else if (response === 'invalid') {
+                    document.getElementById('loginError').style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Fetch Error:', error);
+            });
+        });
+
+        document.getElementById('showPassword').addEventListener('change', function() {
+            const passwordField = document.getElementById('password');
+            passwordField.type = this.checked ? 'text' : 'password';
+        });
     </script>

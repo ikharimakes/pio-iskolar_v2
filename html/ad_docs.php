@@ -50,7 +50,7 @@
 
             <div class="headerRight">
                 <div class="notif">
-                    <ion-icon name="notifications-outline" onclick="openOverlay()"></ion-icon>
+                    <ion-icon name="notifications-outline" onclick="openNotif()"></ion-icon>
                 </div>
 
                 <a class="user" href="ad_settings.php">
@@ -170,20 +170,6 @@
             </form>
 
             <br> <hr> <br>
-            <center>
-                <div id="pdfViewer" style="width: 700px; height: 100%; border: 1px solid #ccc;"></div>
-            </center>
-        </div>
-    </div>
-
-    <div id="viewModal" class="view">
-        <div class="view-content">
-            <h2 id="view-doc_name">Document Name</h2>
-            <span class="closeView" onclick="closePrev()">&times;</span>
-            <div id="denialReason" style="display: none;">
-                <h3 id="denialReasonHeader">REASON FOR DECLINING: <span id="denialReasonText" style="text-decoration: underline;"></span></h3>
-            </div>
-            <br>
             <center>
                 <div id="pdfViewer" style="width: 700px; height: 100%; border: 1px solid #ccc;"></div>
             </center>
@@ -378,8 +364,7 @@
         // VIEW MODAL
         function openPrev(elem) {
             document.getElementById('viewModal').style.display = 'block';
-            const docName = event.target.closest('tr').querySelector('td').innerText;
-            document.getElementById('view-doc_name').innerText = docName;
+            document.getElementById("view-doc_name").innerText = elem.getAttribute("data-doc_name");
             document.getElementById("update-doc_id").value = elem.getAttribute("data-id");
 
             const pdfPath = '../assets/' + elem.getAttribute("data-doc_name");

@@ -27,6 +27,10 @@
                         <h1>Pio Iskolar</h1>
                     </div>
                 </span>
+                
+                <div class="aboutUs">
+                    <a href="https://valenzuela.gov.ph/drpioscholarship"> About Us </a>
+                </div>
             </div>
         </header> <br> <br>
         

@@ -9,7 +9,7 @@
     $sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'asc';
     $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
     // $id = isset($_SESSION['id']) ? $_SESSION['id'] : '';
-    $id =  '197';
+    $id =  $_SESSION['sid'];
 
     // Define the context for the records you're fetching (e.g., 'PENDING')
     $context = 'pending';
@@ -59,7 +59,7 @@
 
             <div class="headerRight">
                 <div class="notif">
-                    <ion-icon name="notifications-outline" onclick="openOverlay()"></ion-icon>
+                    <ion-icon name="notifications-outline" onclick="openNotif()"></ion-icon>
                 </div>
 
                 <a class="user">
@@ -70,7 +70,7 @@
 
         <!-- TOP NAV -->
         <div class="details"><center> 
-            <? scholarFull();?>
+            <?php scholarFull();?>
 
             <div class="topnav">
                 <a href="ad_skoDetail.php">Scholar Details</a>
@@ -143,7 +143,7 @@
 
 
     <!-- VIEW MODAL -->
-    <div id="viewOverlay" class="view">
+    <div id="viewModal" class="view">
         <div class="view-content">
             <h2 id="view-doc_name">Document Name</h2>
             <span class="closeView" onclick="closePrev()">&times;</span>
@@ -377,18 +377,22 @@
         });
 
         // VIEW MODAL
-        function openPrev() {
-            document.getElementById('viewOverlay').style.display = 'block';
-            const docName = event.target.closest('tr').querySelector('td').innerText;
-            document.getElementById('view-doc_name').innerText = docName;
+        function openPrev(elem) {
+            document.getElementById('viewModal').style.display = 'block';
+            document.getElementById("view-doc_name").innerText = elem.getAttribute("data-doc_name");
+            document.getElementById("update-doc_id").value = elem.getAttribute("data-id");
+
+            const pdfPath = '../assets/' + elem.getAttribute("data-doc_name");
+            console.log(pdfPath);
+            loadPDF(pdfPath);
         }
 
         function closePrev() {
-            document.getElementById('viewOverlay').style.display = 'none';
+            document.getElementById('viewModal').style.display = 'none';
         }
 
         window.addEventListener('click', function(event) {
-            if (event.target === document.getElementById('viewOverlay')) {
+            if (event.target === document.getElementById('viewModal')) {
                 closePrev();
             }
         });

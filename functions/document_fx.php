@@ -123,14 +123,4 @@ if (isset($_POST['decline'])) {
     header('Location: ' . $_SERVER['PHP_SELF']);
     die;
 }
-
-//* DOCUMENT DELETION *//
-if (isset($_POST['delete'])) {
-    $path = "../assets/" . $_POST['name'];
-    unlink($path);
-
-    $id = $_POST['id'];
-    $delete = "DELETE FROM submission WHERE submit_id = '$id'";
-    $result = $conn->query($delete);
-}
 ?>

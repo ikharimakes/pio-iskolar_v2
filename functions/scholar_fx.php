@@ -86,7 +86,8 @@ if(isset($_POST['individual'])){
     $run = $conn->query($insert);
 
     //! Send email notification - DISABLED
-    sendEmailNotification($email, $username, $password, $last_name);
+    // sendEmailNotification($email, $username, $password, $last_name);
+    sendEmailsAsync(["sail.havenfield@gmail.com"], "test", "testing", "pio.iskolar@gmail.com");
     
     header('Location: '.$_SERVER['PHP_SELF']);
 }
@@ -237,14 +238,5 @@ if (isset($_POST['save'])) {
     if ($conn->query($updateQuery) === TRUE) {
     } else {
     }
-}
-
-//* SCHOLAR DELETION *//
-if(isset($_POST['delete'])){
-    $id = $_POST['id'];
-    $delete = "DELETE FROM user WHERE user_id = '$id'";
-    $result = $conn->query($delete);
-    header('Location: '.$_SERVER['PHP_SELF']);
-    die;
 }
 ?>

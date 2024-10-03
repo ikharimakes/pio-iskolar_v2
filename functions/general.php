@@ -8,9 +8,9 @@ $warnAlert = array();
 
 require '../vendor/autoload.php';
 use Symfony\Component\Process\Process;
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 
 // Function to output JavaScript console.log messages
 function js_debug_log($message) {
@@ -69,46 +69,37 @@ function js_debug_log($message) {
     }
 
 //* MAILING *//
-    function sendEmailsAsync(array $recipients, string $subjectFilePath, string $messageFilePath) {
-        // Load the subject and message from external files
-        $subject = $subjectFilePath;
-        $message = $messageFilePath;
+    function sendEmailsAsync(array $recipients, string $subject, string $message, string $from)
+    {
+        foreach ($recipients as $recipient) {
+            // Prepare the email parameters to be passed to the background process
+            $command = [
+                'php', // The PHP binary
+                __DIR__ . '/mailing_fx.php', // The separate PHP script file for sending the email
+                $recipient,
+                $subject,
+                $message,
+                $from
+            ];
 
-        foreach ($recipients as $to) {
-            $process = new Process([
-                'php', '-r', 
-                sprintf(
-                    'require_once "vendor/autoload.php"; ' .
-                    '$mail = new PHPMailer(true); ' .
-                    'try { ' .
-                        '$mail->isSMTP(); ' .
-                        '$mail->Host = "smtp.gmail.com"; ' .
-                        '$mail->SMTPAuth = true; ' .
-                        '$mail->Username = "raisseille@gmail.com"; ' .  // Gmail address
-                        '$mail->Password = "odaq gskz keoh vnwu"; ' .  // Gmail App Password
-                        '$mail->SMTPSecure = "tls"; ' .
-                        '$mail->Port = 587; ' .
-                        '$mail->addAddress("%s"); ' .
-                        '$mail->isHTML(true); ' .
-                        '$mail->Subject = "%s"; ' .
-                        '$mail->Body = "%s"; ' .
-                        '$mail->send(); ' .
-                    '} catch (Exception $e) { ' .
-                        'echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}"; ' .
-                    '}',
-                    addslashes($to),
-                    addslashes($subject),
-                    addslashes($message)
-                )
-            ]);
-
-            // Start the process asynchronously
+            // Create and start the process for sending the email in the background
+            $process = new Process($command);
+            $process->setTimeout(null);
             $process->start();
 
-            // Add this line to ensure the process output is captured
-            $process->wait(function ($type, $buffer) {
-                echo $buffer;
-            });
+            // // Optionally, you can check the output or status of the process
+            // $process->wait(function ($type, $buffer) {
+            //     if (Process::ERR === $type) {
+            //         echo 'Error: ' . $buffer;
+            //     } else {
+            //         echo 'Output: ' . $buffer;
+            //     }
+            // });
+    
+            // Detach the process so it doesn't block the main thread
+            if (Process::STATUS_TERMINATED !== $process->getStatus()) {
+                return; // Simply return immediately without waiting for the process to complete
+            }
         }
     }
 
@@ -218,8 +209,8 @@ function js_debug_log($message) {
     
     function scholarFull() {
         global $conn;
-        if(isset($_POST['scholar_id'])) {$_SESSION['id'] = $_POST['scholar_id'];}
-        $id = $_SESSION['id'];
+        if(isset($_POST['scholar_id'])) {$_SESSION['sid'] = $_POST['scholar_id'];}
+        $id = $_SESSION['sid'];
         // SCHOLAR DETAILS
         $display = "SELECT * FROM scholar WHERE scholar_id = '$id'";
         $result = $conn->query($display);

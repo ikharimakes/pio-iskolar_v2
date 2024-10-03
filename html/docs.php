@@ -60,7 +60,7 @@
 
             <div class="headerRight">
                 <div class="notif">
-                    <ion-icon name="notifications-outline" onclick="openOverlay()"></ion-icon>
+                    <ion-icon name="notifications-outline" onclick="openNotif()"></ion-icon>
                 </div>
 
                 <a class="user" href="profile.php">
