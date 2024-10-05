@@ -65,17 +65,31 @@
 }
 
 /*SORT*/
+.sorts {
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.sorts h4 {
+    font-size: 15px;
+    font-weight: 500;
+}
 .sort {
     display: flex;
     align-items: center;
     height: 30px;
-    margin-left: 15px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 .sort option {
     font-size: 13px;
     font-weight: 400;
 }
-#statusSort {
+#colSort,
+#dateSort,
+#statusSort,
+#filter {
     padding: 5px;
     font-size: 13px;
     border-radius: 10px;
@@ -209,10 +223,10 @@ a {
 
 
 /* VIEW MODAL */
-.overlay {
+.viewOverlay {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 10;
     left: 0;
     top: 0;
     width: 100%;
@@ -221,7 +235,7 @@ a {
     background-color: rgba(0,0,0,.4);
     padding-top: 60px;
 }
-.overlay-content {
+.view-content {
     background-color: #f1f1f1;
     margin: auto;
     width: 35%; 
@@ -234,7 +248,7 @@ a {
     transform: translate(-50%, -50%);
     border-radius: 15px;
 }
-.overlay h2 {
+.viewOverlay h2 {
     color: #2F3787;
     font-family: 'Lexend';
     padding-top: 30px;
@@ -277,10 +291,10 @@ a {
 }
 
 /* ADD MODAL */
-.announce {
+.addOverlay {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 10;
     left: 0;
     top: 0;
     width: 100%;
@@ -289,7 +303,7 @@ a {
     background-color: rgba(0,0,0,.4);
     padding-top: 60px;
 }
-.announce-content {
+.add-content {
     background-color: #f1f1f1;
     margin: auto;
     width: 35%; 
@@ -387,36 +401,40 @@ a {
     align-items: center;
     gap: 10px;
 }
-.batch option {
-    font-size: 15px;
-    font-weight: 300;
+.dropdown {
+    position: relative;
+    display: inline-block;
 }
-#batchDrop {
+.dropdown-button {
     padding: 5px;
-    font-size: 15px;
-    font-weight: 300;
-    cursor: pointer;
-    outline: 0;
-    border: none;
     background-color: transparent;
     border-bottom: 1px solid #777777;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 300;
+    width: auto;
 }
-#batchDrop:focus {
-    outline: none;
-}
-.close {
+.dropdown-content {
+    display: none;
     position: absolute;
-    top: 20px;
-    right: 20px;
-    font-size: 30px;
-    color: #aaa;
+    background-color: #FFF;
+    min-width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    padding: 10px;
+}
+.dropdown-content label {
+    font-size: 15px;
+    font-weight: 300;
+    display: block;
+    padding: 5px;
     cursor: pointer;
 }
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+.dropdown-content label:hover {
+    background-color: #ddd;
+}
+.dropdown.active .dropdown-content {
+    display: block;
 }
 .btn {
     text-align: center;

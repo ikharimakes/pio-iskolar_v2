@@ -27,7 +27,7 @@
 
             <div class="headerRight">
                 <div class="notif">
-                    <ion-icon name="notifications-outline" onclick="openNotif()"></ion-icon>
+                    <ion-icon name="notifications-outline" onclick="openOverlay()"></ion-icon>
                 </div>
 
                 <a class="user" href="profile.php">
@@ -241,6 +241,11 @@
 
                 <button type="submit" name="inquire">Send Inquiry</button>
             </form>
+
+            <div class="note-wrapper">
+                <p class="note">Note:</p>
+                <p class="note1">This email is for inquiry about scholarship only.</p>
+            </div>
         </div>
 
 
@@ -298,19 +303,19 @@
         var i;
 
         for (i = 0; i < acc.length; i++) {
-        acc[i].addEventListener("click", function() {
-            /* Toggle between adding and removing the "active" class,
-            to highlight the button that controls the panel */
-            this.classList.toggle("active");
+            acc[i].addEventListener("click", function() {
+                /* Toggle between adding and removing the "active" class,
+                to highlight the button that controls the panel */
+                this.classList.toggle("active");
 
-            /* Toggle between hiding and showing the active panel */
-            var panel = this.nextElementSibling;
-            if (panel.style.display === "block") {
-                panel.style.display = "none";
-            } else {
-                panel.style.display = "block";
-            }
-        });
+                /* Toggle between hiding and showing the active panel */
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") {
+                    panel.style.display = "none";
+                } else {
+                    panel.style.display = "block";
+                }
+            });
         }
     </script>
 </body>

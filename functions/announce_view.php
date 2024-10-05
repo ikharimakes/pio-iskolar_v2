@@ -8,13 +8,13 @@
         $currentDate = date('Y-m-d');
         // Update status to ACTIVE where current date is between st_date and end_date
         $updateActive = "UPDATE announcements 
-                        SET _status = 'ACTIVE' 
+                        SET status = 'ACTIVE' 
                         WHERE st_date <= '$currentDate' AND end_date >= '$currentDate'";
         $conn->query($updateActive);
 
         // Update status to INACTIVE where current date is not between st_date and end_date
         $updateInactive = "UPDATE announcements 
-                        SET _status = 'INACTIVE' 
+                        SET status = 'INACTIVE' 
                         WHERE st_date > '$currentDate' OR end_date < '$currentDate'";
         $conn->query($updateInactive);
     }
@@ -34,7 +34,7 @@ function annList($current_page = 1, $sort_column = 'title', $sort_order = 'asc')
     $offset = ($current_page - 1) * $records_per_page;
 
     // Define valid columns for sorting
-    $validColumns = ['batch_no', 'title', '_status', 'st_date', 'end_date'];
+    $validColumns = ['batch_no', 'title', 'status', 'st_date', 'end_date'];
     if (!in_array($sort_column, $validColumns)) {
         $sort_column = 'st_date';
     }
@@ -46,7 +46,7 @@ function annList($current_page = 1, $sort_column = 'title', $sort_order = 'asc')
     $filter = isset($_GET['filter']) ? $conn->real_escape_string($_GET['filter']) : '';
 
     // Build the search query
-    $conditions = $search !== '' ? "WHERE title LIKE '%$search%' OR _status LIKE '%$search%' OR st_date LIKE '%$search%' OR end_date LIKE '%$search%'" : "";
+    $conditions = $search !== '' ? "WHERE title LIKE '%$search%' OR status LIKE '%$search%' OR st_date LIKE '%$search%' OR end_date LIKE '%$search%'" : "";
     if ($filter !== '' && $filter !== 'all') {
         $conditions .= $conditions === '' ? "WHERE status = '$filter'" : " AND status = '$filter'";
     }
@@ -59,7 +59,7 @@ function annList($current_page = 1, $sort_column = 'title', $sort_order = 'asc')
 
     if ($result && $result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            $style = match ($row["_status"]) {
+            $style = match ($row["status"]) {
                 "ACTIVE" => "color: rgb(0, 136, 0); font-weight: 600;",
                 "INACTIVE" => "color: rgb(189, 0, 0); font-weight: 600;",
                 default => "",
@@ -71,18 +71,18 @@ function annList($current_page = 1, $sort_column = 'title', $sort_order = 'asc')
             echo '   
                 <tr>
                     <td><input type="checkbox" name="selected_rows[]"></td> 
-                    <td style="text-align: center;">'.$batchNoDisplay.'</td>
                     <td>'.$row["title"].'</td>
+                    <td style="text-align: center;">'.$batchNoDisplay.'</td>
                     <td>'.$row["st_date"].'</td>
                     <td>'.$row["end_date"].'</td>
-                    <td style="'.$style.'; text-align: center;">'.$row["_status"].'</td>
+                    <td style="'.$style.'; text-align: center;">'.$row["status"].'</td>
                     <td style="text-align: right;" class="wrap"> 
                         <div class="icon">
                             <div class="tooltip"> View</div>
                             <span> <ion-icon name="eye-outline" onclick="openPrev(this)" 
                                 data-id="'.$row["announce_id"].'" 
                                 data-title="'.$row["title"].'" 
-                                data-status="'.$row["_status"].'" 
+                                data-status="'.$row["status"].'" 
                                 data-st_date="'.$row["st_date"].'" 
                                 data-end_date="'.$row["end_date"].'" 
                                 data-img="'.$row["img_name"].'" 
@@ -94,7 +94,7 @@ function annList($current_page = 1, $sort_column = 'title', $sort_order = 'asc')
                             <span> <ion-icon name="create-outline" onclick="openEdit(this)" 
                                 data-id="'.$row["announce_id"].'" 
                                 data-title="'.$row["title"].'" 
-                                data-status="'.$row["_status"].'" 
+                                data-status="'.$row["status"].'" 
                                 data-st_date="'.$row["st_date"].'" 
                                 data-end_date="'.$row["end_date"].'"
                                 data-content="'.$row["content"].'"></ion-icon> </span>
@@ -128,12 +128,12 @@ function annList($current_page = 1, $sort_column = 'title', $sort_order = 'asc')
     
         // Add search conditions
         if ($search !== '') {
-            $conditions .= " AND (title LIKE '%$search%' OR _status LIKE '%$search%' OR st_date LIKE '%$search%' OR end_date LIKE '%$search%')";
+            $conditions .= " AND (title LIKE '%$search%' OR status LIKE '%$search%' OR st_date LIKE '%$search%' OR end_date LIKE '%$search%')";
         }
     
         // Add filter conditions
         if ($filter !== '' && $filter !== 'all') {
-            $conditions .= " AND _status = '$filter'";
+            $conditions .= " AND status = '$filter'";
         }
     
         // Final query to count the records
@@ -147,9 +147,9 @@ function annList($current_page = 1, $sort_column = 'title', $sort_order = 'asc')
 function annDisplay() {
     global $conn;
     $batch_no = $_SESSION['bid'];
-    $display = "SELECT img_name, title, content, _status, st_date 
+    $display = "SELECT img_name, title, content, status, st_date 
                 FROM announcements 
-                WHERE _status = 'ACTIVE' 
+                WHERE status = 'ACTIVE' 
                 AND (batch_no = 0 OR batch_no = $batch_no) 
                 ORDER BY st_date DESC, announce_id DESC";
     $result = $conn->query($display);
@@ -174,7 +174,7 @@ function annDisplay() {
 // Front Page Announcements
     function annFront() {
         global $conn;
-        $display = "SELECT img_name, title, content, _status FROM announcements WHERE _status = 'ACTIVE' AND batch_no = 0 ORDER BY st_date DESC, announce_id DESC";
+        $display = "SELECT img_name, title, content, status FROM announcements WHERE status = 'ACTIVE' AND batch_no = 0 ORDER BY st_date DESC, announce_id DESC";
         $result = $conn->query($display);
 
         if ($result->num_rows > 0) {
@@ -196,7 +196,7 @@ function annDisplay() {
 
     function slideshowButtons() {
         global $conn;
-        $display = "SELECT COUNT(_status) as count FROM announcements WHERE _status = 'ACTIVE'"; // Using alias to retrieve count as 'count'
+        $display = "SELECT COUNT(status) as count FROM announcements WHERE status = 'ACTIVE'"; // Using alias to retrieve count as 'count'
         $result = $conn->query($display);
         if ($result->num_rows > 0) {
             $count = $result->fetch_assoc()['count']; // Fetching the count directly

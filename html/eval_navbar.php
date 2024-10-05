@@ -31,12 +31,12 @@
                     <span class="text"> Scholar </span> 
                 </a> </li>
 
-                <li class="navLink"> <a href="eval_docs.php" onclick="activateLink(this)">
+                <!-- <li class="navLink"> <a href="eval_docs.php" onclick="activateLink(this)">
                     <span class="icon">
                         <ion-icon name="document-outline"></ion-icon>
                     </span>
                     <span class="text"> Pending </span> 
-                </a> </li>
+                </a> </li> -->
 
                 <!-- <li class="navLink"> <a href="eval_reports.php" onclick="activateLink(this)">
                     <span class="icon">
@@ -66,7 +66,7 @@
 
     <!-- JS CODE -->
     <script>
-        //SIDEBAR
+        // SIDEBAR
         function activateLink(link) {
             var navLinks = document.querySelectorAll('.navLink');
             navLinks.forEach(function(navLink) {
@@ -74,7 +74,22 @@
                     navLink.classList.remove('active');
                 }
             });
-            
+
             link.parentNode.classList.add('active');
         }
+
+        // Automatically add 'active' class to matching link
+        document.addEventListener("DOMContentLoaded", function() {
+            var currentPath = window.location.pathname.split('/').pop(); // Get the current URL path
+            var navLinks = document.querySelectorAll('.navLink a'); // Get all <a> inside .navLink
+
+            navLinks.forEach(function(link) {
+                var linkPath = link.getAttribute('href').split('/').pop(); // Get href path
+
+                // If the current URL path matches the link's href path, add 'active' to the parent <li>
+                if (currentPath === linkPath) {
+                    link.parentNode.classList.add('active');
+                }
+            });
+        });
     </script>

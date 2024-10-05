@@ -44,7 +44,7 @@ function existingFiles() {
 function activeEvents() {
     global $conn, $sem;
 
-    $query = "SELECT title FROM announcements WHERE _status = 'ACTIVE' ORDER BY st_date DESC";
+    $query = "SELECT title FROM announcements WHERE status = 'ACTIVE' ORDER BY st_date DESC";
     $result = mysqli_query($conn, $query);
     while ($row = mysqli_fetch_assoc($result)) {
         echo "<li><a>" . $row['title'] . "</a></li>";

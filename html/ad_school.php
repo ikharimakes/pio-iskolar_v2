@@ -3,7 +3,7 @@
     include('../functions/scholar_view.php');
     include('../functions/scholar_fx.php');
     include('../functions/page.php');
-    $sourceFile = 'ad_scholar.php';
+    $sourceFile = 'ad_school.php';
 
     $sort_column = isset($_GET['sort_column']) ? $_GET['sort_column'] : 'scholar_id';
     $sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'asc';
@@ -14,14 +14,14 @@
     $records_per_page = 15;
     $total_page = ceil($total_records / $records_per_page);
 
-    if (isset($_GET['ajax'])) {
-        if ($_GET['ajax'] === 'table') {
-            scholarList($current_page, $sort_column, $sort_order);
-        } elseif ($_GET['ajax'] === 'pagination') {
-            renderPagination($current_page, $records_per_page, $total_records, $total_page, $sourceFile);
-        }
-        exit;
-    }
+    // if (isset($_GET['ajax'])) {
+    //     if ($_GET['ajax'] === 'table') {
+    //         scholarList($current_page, $sort_column, $sort_order);
+    //     } elseif ($_GET['ajax'] === 'pagination') {
+    //         renderPagination($current_page, $records_per_page, $total_records, $total_page, $sourceFile);
+    //     }
+    //     exit;
+    // }
 ?>
 
 <!DOCTYPE html>
@@ -32,7 +32,7 @@
     <title>Pio Iskolar</title>
     <link rel="icon" type="image/x-icon" href="images/pio-logo.png">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="css/ad_scholar.css">
+    <link rel="stylesheet" href="css/ad_scholar.css"> <!-- REPLACE -->
     <link rel="stylesheet" href="css/page.css">
     <script src="https://kit.fontawesome.com/3d9c1c4bc8.js" crossorigin="anonymous"></script>
 </head>
@@ -45,7 +45,7 @@
     <div class="main">
         <div class="topBar">
             <div class="headerName">
-                <h1>Scholar</h1>
+                <h1>Schools and Universities</h1>
             </div>
 
             <div class="headerRight">
@@ -78,7 +78,7 @@
                 </button>
             </div>
 
-            <div class="sorts">
+            <!-- <div class="sorts">
                 <h4> Filter by:</h4>
 
                 <div class="sort">
@@ -87,11 +87,10 @@
                         <option value="all">All</option>
                         <option value="lName">Last Name</option>
                         <option value="school">School</option>
-                        <option value="school">Batch</option>
                     </select>
                 </div>
 
-                <!-- <div class="sort">
+                <div class="sort">
                     <select id="statusSort">
                         <option value="" disabled selected>Status</option>
                         <option value="all">All</option>
@@ -101,7 +100,7 @@
                         <option value="loa">LOA</option>
                         <option value="graduated">Graduated</option>
                     </select>
-                </div> -->
+                </div>
 
                 <select id="filter">
                     <option value="" disabled selected>Status</option>
@@ -112,51 +111,45 @@
                     <option value="LOA">LOA</option>
                     <option value="GRADUATE">GRADUATE</option>
                 </select>
-            </div>
+            </div> -->
 
-            <button type="button" class="btnAdd" style="margin-right: 1vh;" onclick="openAdd()"> Add Scholar </button>
-            <button type="button" class="btnAdd" onclick="openBatch()"> Batch Creation </button>
+            <button type="button" class="btnAdd" style="margin-right: 1vh;" onclick="openAdd()"> Add School</button>
         </div> <br>
 
         <div class="tables">
             <table>
-                <tr style="font-weight: bold;">
+            <tr style="font-weight: bold;">
                     <th> <input type="checkbox" id="selectAll" name="selected_rows[]"> </th>
-                    <th style="width:10%">
-                        <div class="scholar-header" id="sortScholar" style="justify-content: center; cursor: pointer;">
-                            Scholar No.
-                            <i id="scholarSortIcon" class="fa fa-sort"></i>
-                        </div>
-                    </th>
-                    <th style="width:12%">  
-                        <div class="lName-header" id="sortLastName" style="cursor: pointer;">
-                            Last Name
-                            <i id="lastSortIcon" class="fa fa-sort"></i>
-                        </div>
-                    </th>
-                    <th style="width:20%"> 
-                        <div class="fName-header" id="sortFirstName" style="cursor: pointer;">
-                            First Name
-                            <i id="firstSortIcon" class="fa fa-sort"></i>
-                        </div>
-                    </th>
-                    <th style="width:30%">
+                    <th style="width:35%">
                         <div class="school-header" id="sortSchool" style="cursor: pointer;">
-                            School
-                            <i id="schoolSortIcon" class="fa fa-sort"></i>
+                            School Name
+                            <i id=schoolSortIcon" class="fa fa-sort"></i>
                         </div>
                     </th>
-                    <th style="justify-content: center; width:12%"> Doc Status </th>
-                    <th style="justify-content: center; width:12%"> Status </th>
-                    <th style="width:5%"> Actions </th>
+                    <th style="width:35%">
+                        <div class="address-header" id="sortAddress" style="cursor: pointer;">
+                            Address
+                            <i id="addressSortIcon" class="fa fa-sort"></i>
+                        </div>
+                    </th>
+                    <th style="width:10%">
+                        <div class="acad-header" id="sortAcad" style="justify-content: center; cursor: pointer;">
+                            Academic Year
+                            <i id="acadSortIcon" class="fa fa-sort"></i>
+                        </div>
+                    </th>
+                    <th style="width:10%">
+                        <div class="sem-header" id="sortSem" style="justify-content: center; cursor: pointer;">
+                            Semester
+                            <i id="semSortIcon" class="fa fa-sort"></i>
+                        </div>
+                    </th>
+                    <th style="width:12%"> Action </th>
                 </tr>
-                <tbody id="scholarTableBody">
+                <tbody id="schoolTableBody">
                 </tbody>
             </table>
         </div>
-
-        <?php renderPagination($current_page, $records_per_page, $total_records, $total_page, $sourceFile); ?>
-
     </div>
     
 
@@ -213,10 +206,9 @@
                 
                 <br>
                 <center> <div class="button-container">
-                <button name="individual" type="submit" class="discard">Discard</button>
                     <button name="individual" type="submit" class="save">Save</button>
+                    <button name="individual" type="submit" class="discard">Discard</button>
                 </div> <center>
-            </div>
         </form>
     </div>
 
@@ -355,7 +347,7 @@
                 }
 
                 // Use 'history.php' as the source file
-                navigatePage(page, 'ad_scholar.php');
+                navigatePage(page, 'ad_school.php');
             };
 
             const navigatePage = (page, sourceFile) => {

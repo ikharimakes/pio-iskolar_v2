@@ -22,16 +22,16 @@
     
 
     <!-- TOP BAR -->
-    <d class="main1">
+    <div class="main1">
         <div class="topBar">
             <div class="headerName">
                 <h1>Dashboard</h1>
             </div>
 
             <div class="headerRight">
-                <div class="notifs">
-                    <ion-icon name="notifications-outline" onclick="openNotif()"></ion-icon>
-                </div>
+                <a class="user" href="ad_settings.php">
+                    <img src="images/profile.png" alt="">
+                </a>
             </div>
         </div>
 
@@ -47,47 +47,83 @@
         </div>-->
 
 
+        <div class="info">
+            <div class="search">
+                <form>
+                    <label>
+                        <input type="text" name="search" placeholder="Search here">
+                        <ion-icon name="search-outline"></ion-icon>
+                    </label>
+                </form>
+            </div>
+
+            <div class="actions" style="display: none;">
+                <button id="downloadBtn" class="action-btn" onclick="downloadSelected()">
+                    <ion-icon name="download-outline"></ion-icon>
+                </button>
+                <button id="deleteBtn" class="action-btn" onclick="deleteSelected()">
+                    <ion-icon name="trash-outline"></ion-icon>
+                </button>
+            </div>
+
+            <div class="sorts">
+                <h4> Filter by:</h4>
+
+                <div class="sort">
+                    <select id="acadYearSort">
+                        <option value="" disabled selected>Academic Year</option>
+                        <option value="all">All</option>
+                        <option value="24-25">2024-2025</option>
+                        <option value="25-26">2025-2026</option>
+                        <option value="26-27">2026-2027</option>
+                        <option value="27-28">2027-2028</option>
+                    </select>
+                </div>
+
+                <div class="sort">
+                    <select id="semSort">
+                        <option value="" disabled selected>Semester</option>
+                        <option value="all">All</option>
+                        <option value="1st">1st Semester</option>
+                        <option value="2nd">2nd Semester</option>
+                        <option value="3rd">3rd Semester</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+
         <div class="box-container">
             <div class="box-row">
-                <div class="box box-large">
-                    <h1>Pending (# of pending)</h1>
+                <div class="box box-small">
+                    <h5 class='detail'>Academic Scholars</h5>
 
-                    <div class="box-pending">
-                        <table>
-                            <?php pendingFiles();?>
-                        </table>
+                    <div class="box-num">
+                        <h2 class='num'>17</h2>
                     </div>
                 </div>
 
-                <div class="box box-large">
-                    <h1>Files (per batch)</h1>
+                <div class="box box-small">
+                    <h5 class='detail'>Total Scholars</h5>
 
-                    <div class="box-batch">
-                        <ul>
-                            <?php existingFiles();?>
-                        </ul>
+                    <div class="box-num">
+                        <h2 class='num'>32</h2>
                     </div>
                 </div>
 
-                <div class="box box-large">
-                    <h1>Calendar</h1>
+                <div class="box box-small">
+                    <h5 class='detail'>Leave of Absence</h5>
 
-                    <div class="box-calendar">
-                        <div class="nav-btn">
-                            <button id="prevBtn"><ion-icon name="chevron-back-outline"></ion-icon></button>
-                            <div class="month-year" id="monthYear"></div>
-                            <button id="nextBtn"><ion-icon name="chevron-forward-outline"></ion-icon></button>
-                        </div>
-
-                        <div class="weekdays" id="weekdays"></div>
+                    <div class="box-num">
+                        <h2 class='num'>2</h2>
                     </div>
+                </div>
 
-                    <div class="event">
-                        <h3>Events</h3>
-                        <ul>
-                            <!-- <li> <a href="">Application for Batch 23</a> </li> -->
-                            <?php activeEvents(); ?>
-                        </ul>
+                <div class="box box-small">
+                    <h5 class='detail'>Dropped</h5>
+
+                    <div class="box-num">
+                        <h2 class='num'>4</h2>
                     </div>
                 </div>
             </div>
@@ -100,21 +136,33 @@
                         <canvas id="myBarChart"></canvas>
                     </div>
                 </div>
-                
-                <div class="box-small">
-                    <h1>Summary</h1>
+            </div>
+        </div>
 
-                    <div class="box-summary">
-                        <?php summaryScholars(); ?>
-                    </div>
+
+        <div class="calendar-container">
+            <div class="box box-large">
+                <h1>Events</h1>
+
+                <div class="event">
+                    <ul>
+                        <?php activeEvents(); ?>
+                    </ul>
+                </div>
+            </div> <br>
+
+            <div class="box box-large">
+                <h1>Recent Submitted Documents</h1>
+
+                <div class="event">
+                    <ul>
+                        <li><a href="">Adriano, Jessica Raye</a></li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
 
-
-    <!-- NOTIFICATION - notif.php -->
-    <?php include 'notif.php'; ?>
 
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
@@ -136,6 +184,7 @@
         document.addEventListener("DOMContentLoaded", function() {
             const monthYearElement = document.getElementById("monthYear");
             const weekdaysElement = document.getElementById("weekdays");
+            const monthDaysElement = document.getElementById("monthDays");
             const prevBtn = document.getElementById("prevBtn");
             const nextBtn = document.getElementById("nextBtn");
 
@@ -143,50 +192,65 @@
 
             let currentDate = new Date();
 
-            function renderWeek(date) {
-                weekdaysElement.innerHTML = "";
+            function renderWeekdays() {
+                weekdaysElement.innerHTML = "";  // Clear previous weekdays
 
-                const firstDayOfWeek = new Date(date.setDate(date.getDate() - date.getDay()));
-                const month = firstDayOfWeek.toLocaleString('default', { month: 'long' });
-                const year = firstDayOfWeek.getFullYear();
+                // Render the days of the week (Mon, Tue, ...)
+                daysOfWeek.forEach(day => {
+                    const weekdayElement = document.createElement("div");
+                    weekdayElement.classList.add("weekday-name");
+                    weekdayElement.textContent = day;
+                    weekdaysElement.appendChild(weekdayElement);
+                });
+            }
 
+            function renderMonth(date) {
+                monthDaysElement.innerHTML = "";  // Clear previous days
+
+                const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+                const lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+                const month = firstDayOfMonth.toLocaleString('default', { month: 'long' });
+                const year = firstDayOfMonth.getFullYear();
                 monthYearElement.textContent = `${month} ${year}`;
 
-                for (let i = 0; i < 7; i++) {
-                    const dayDate = new Date(firstDayOfWeek);
-                    dayDate.setDate(firstDayOfWeek.getDate() + i);
-                    const dayName = daysOfWeek[dayDate.getDay()];
-                    const dayNumber = dayDate.getDate();
+                // Find the day of the week the month starts on
+                let startDay = firstDayOfMonth.getDay();
 
+                // Add empty days before the first day of the month to align days
+                for (let i = 0; i < startDay; i++) {
+                    const emptyDay = document.createElement("div");
+                    monthDaysElement.appendChild(emptyDay);
+                }
+
+                // Render all days of the month (without the day name)
+                for (let day = 1; day <= lastDayOfMonth.getDate(); day++) {
                     const dayElement = document.createElement("div");
-                    dayElement.classList.add("weekday");
-
-                    const dayNameElement = document.createElement("div");
-                    dayNameElement.classList.add("day-name");
-                    dayNameElement.textContent = dayName;
+                    dayElement.classList.add("day");
 
                     const dayNumberElement = document.createElement("div");
                     dayNumberElement.classList.add("day-number");
-                    dayNumberElement.textContent = dayNumber;
+                    dayNumberElement.textContent = day;
 
-                    dayElement.appendChild(dayNameElement);
                     dayElement.appendChild(dayNumberElement);
-                    weekdaysElement.appendChild(dayElement);
+                    monthDaysElement.appendChild(dayElement);
                 }
             }
 
             prevBtn.addEventListener("click", function() {
-                currentDate.setDate(currentDate.getDate() - 7);
-                renderWeek(currentDate);
+                currentDate.setMonth(currentDate.getMonth() - 1);
+                renderMonth(currentDate);
             });
 
             nextBtn.addEventListener("click", function() {
-                currentDate.setDate(currentDate.getDate() + 7);
-                renderWeek(currentDate);
+                currentDate.setMonth(currentDate.getMonth() + 1);
+                renderMonth(currentDate);
             });
 
-            renderWeek(new Date());
+            renderWeekdays();  // Render the weekday names once
+            renderMonth(new Date());  // Render the current month
         });
+
 
 
         //GRAPH

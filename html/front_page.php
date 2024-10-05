@@ -27,10 +27,6 @@
                         <h1>Pio Iskolar</h1>
                     </div>
                 </span>
-                
-                <div class="aboutUs">
-                    <a href="https://valenzuela.gov.ph/drpioscholarship"> About Us </a>
-                </div>
             </div>
         </header> <br> <br>
         
@@ -53,60 +49,49 @@
         </div>
 
 
-        <!-- LOG IN MODAL -->
+        <!-- LOG IN -->
         <div class="logIn">
             <div class="logIn-content"> 
                 <div class="infos1">
                     <h2>Log In</h2>
                 </div>
-                <br><br>
+                <br> <br> <br> <br>
 
-                <form id="loginForm" method="post">
-                    <center> <div class="inner-content1">
-                        <label class="texts1" for="user">Enter Username/Email:</label> <br>
-                        <input class="inputs1" type="text" id="user" name="user" placeholder="Username">
-                    </div>
-                    
-                    <div class="inner-content1">
-                        <label class="texts1" for="pass">Enter Password:</label> <br>
-                        <input class="inputs1" type="password" id="pass" name="pass" placeholder="Password"required>
-                    </div>
-
-                    <div class="rem-container">
-                        <div class="remember">
-                            <input type="checkbox" id="rememberMe">
-                            <label for="rememberMe">Remember me</label>
+                <div class="content">
+                    <form id="loginForm" method="post">
+                        <center> <div class="inner-content1">
+                            <label class="texts1" for="user">Enter Username/Email:</label> <br>
+                            <input class="inputs1" type="text" id="user" name="user" placeholder="Username">
                         </div>
-                        <span class="forgotPass" onclick="openModal('forgotModal')"> Forgot Password?</span>
-                    </div> 
-                
-                    <div id="loginError" style="color: red; display: none; text-align: center;">Invalid Credentials!</div>
-                    </center>
-                    <br> 
+                        
+                        <div class="inner-content2">
+                            <label class="texts1" for="pass">Enter Password:</label> <br>
+                            <input class="inputs1" type="password" id="pass" name="pass" placeholder="Password"required>
+                        </div>
 
-                    <div class="btn1">
-                        <button type="submit" class="logInBtn"> Log In </button>
-                    </div> <br>
-                </form>
-            </div>
-        </div>
+                        <div class="rem-container">
+                            <div class="remember">
+                                <input type="checkbox" id="rememberMe">
+                                <label for="rememberMe">Remember me</label>
+                            </div>
+                            <span class="forgotPass" onclick="openModal('forgotModal')"> Forgot Password?</span>
+                        </div> 
+                    
+                        <div id="loginError" style="color: red; display: none; text-align: center;">Invalid Credentials!</div>
+                        
+                        <br>
 
+                        <div class="btn1">
+                            <button type="submit" class="logInBtn"> Log In </button>
+                        </div></center> <br>
+                    </form> 
+                </div>
 
-        <!-- ANNOUNCEMENT LIST -->
-        <div class="lists">
-            <div class="list">
-                <h2>Announcements Lists</h2>
-                <ul>
-                    <li>
-                        <a href="">Application for Batch 23</a>
-                    </li>
-                    <li>
-                        <a href="">Contract Signing</a>
-                    </li>
-                    <li>
-                        <a href="">Results for Batch 23</a>
-                    </li>
-                </ul>
+                <div class="about">
+                    <p>Visit our website at 
+                        <a href="https://valenzuela.gov.ph/drpioscholarship">Dr. Pio Valenzuela Scholarship Program</a>.
+                    </p>
+                </div>
             </div>
         </div>
     </div>

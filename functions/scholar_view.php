@@ -52,6 +52,7 @@ function scholarList($current_page = 1, $sort_column = 'scholar_id', $sort_order
                     <td>'.$row["last_name"].'</td>
                     <td>'.$row["first_name"].'</td>
                     <td>'.$row["school"].'</td>
+                    <td> </td>
                     <td style="'.$style.'; text-align:center;">'.$row["status"].'</td>
                     <td style="text-align: right;" class="wrap"> 
                         <form style="display:inline" action="ad_skoDetail.php" method="post">
@@ -118,9 +119,9 @@ function scholarDetail() {
                 'School' => $row['school'],
                 'Course' => $row['course'],
                 'Scholar Status' => $row['status'],
-                '' => '',
+                // '' => '',
                 'Address' => $row['_address'],
-                'Contact' => $row['contact'],
+                'Contact Number' => $row['contact'],
                 'Email' => $row['email']
             ];
             echo '
@@ -159,7 +160,7 @@ function scholarDetail() {
                             <option value="DROPPED" '.($value == 'DROPPED' ? 'selected' : '').' style="color: rgb(189, 0, 0);">DROPPED</option>
                             <option value="LOA" '.($value == 'LOA' ? 'selected' : '').' style="color: rgb(255, 219, 88);">LOA</option>
                             <option value="GRADUATED" '.($value == 'GRADUATED' ? 'selected' : '').' style="color: rgb(0,68,255);">GRADUATED</option>
-                          </select>';
+                        </select>';
                 } elseif ($key == 'Batch ID') {
                     echo '<input type="text" name="batch_id" value="'.$value.'" class="input2" style="text-align: left;s" readonly>';
                 } else {

@@ -50,10 +50,6 @@
             </div>
 
             <div class="headerRight">
-                <div class="notif">
-                    <ion-icon name="notifications-outline" onclick="openNotif()"></ion-icon>
-                </div>
-
                 <a class="user" href="ad_settings.php">
                     <img src="images/profile.png" alt="">
                 </a>
@@ -80,7 +76,38 @@
                 </button>
             </div>
 
-            <div class="sort">
+            <div class="sorts">
+                <h4> Filter by:</h4>
+
+                <!-- <div class="sort">
+                    <select id="colSort">
+                        <option value="" disabled selected>Column</option>
+                        <option value="all">All</option>
+                        <option value="docName"> Title </option>
+                        <option value="type">Date</option>
+                    </select>
+                </div>
+
+                <div class="sort">
+                    <select id="dateSort">
+                        <option value="" disabled selected>Date</option>
+                        <option value="all">All</option>
+                        <option value="today">Today</option>
+                        <option value="week">Week Ago</option>
+                        <option value="month">Month Ago</option>
+                        <option value="year">Year Ago</option>
+                    </select>
+                </div>
+
+                <div class="sort">
+                    <select id="statusSort">
+                        <option value="" disabled selected>Status</option>
+                        <option value="all">All</option>
+                        <option value="resolved">Active</option>
+                        <option value="progress">Inactive</option>
+                    </select>
+                </div> -->
+
                 <select id="filter">
                     <option value="" disabled selected>Status</option>
                     <option value="all">All</option>
@@ -98,17 +125,17 @@
             <table>
                 <tr style="font-weight: bold;">
                     <th> <input type="checkbox" id="selectAll" name="selected_rows[]"> </th>
-                    <th style="width:8%"> 
-                <!-- replace class with batchdate-header -->
-                        <div class="startDate-header" id="sortBatch" style="justify-content: center; cursor: pointer;">
-                            Batch No.
-                            <i id="batchSortIcon" class="fa fa-sort"></i>
-                        </div> 
-                    </th>
-                    <th style="width:50%"> 
+                    <th style="width:46%"> 
                         <div class="title-header" id="sortTitle" style="cursor: pointer;">
                             Title
                             <i id="titleSortIcon" class="fa fa-sort"></i>
+                        </div> 
+                    </th>
+                    <th style="width:10%"> 
+                <!-- replace class with batchdate-header -->
+                        <div class="startDate-header" id="sortBatch" style="justify-content: center; cursor: pointer;">
+                            Recipient Batch
+                            <i id="batchSortIcon" class="fa fa-sort"></i>
                         </div> 
                     </th>
                     <th style="width:12%"> 
@@ -124,7 +151,7 @@
                         </div>
                     </th>
                     <th style="width:12%"> Status </th>
-                    <th style="width:5%"> Action </th>
+                    <th style="width:8%"> Action </th>
                 <tbody id="announceTableBody">
                 </tbody>
             </table>
@@ -136,34 +163,36 @@
 
 
     <!-- ADD ANNOUNCEMENTS MODAL -->
-    <div id="announceModal" class="announce">
+    <div id="announceModal" class="addOverlay">
         <form action="" method="post" enctype="multipart/form-data">
-            <div class="announce-content">
+            <div class="add-content">
                 <div class="infos">
                     <h1>Publish Announcement</h1>
-                    <span class="close" onclick="closeModal('announceModal')">&times;</span>
+                    <span class="closeOverlay" onclick="closeModal('announceModal')">&times;</span>
                 </div>
                 <br><br>
 
                 <div class="batch"> 
-                    <h3>Batch</h3>
+                    <h3>Recipient</h3>
                     <form>
-                        <select id="batchDrop" name="batch">
-                            <option value="all">All Batches</option>
-                            <option value="20">Batch 20</option>
-                            <option value="21">Batch 21</option>
-                            <option value="22">Batch 22</option>
-                            <option value="23">Batch 23</option>
-                            <option value="24">Batch 24</option>
-                            <option value="25">Batch 25</option>
-                            <option value="26">Batch 26</option>
-                            <option value="27">Batch 27</option>
-                            <option value="28">Batch 28</option>
-                            <option value="29">Batch 29</option>
-                            <option value="30">Batch 30</option>
-                            <option value="31">Batch 31</option>
-                        </select>
-                    </form>
+                        <div class="dropdown">
+                            <div class="dropdown-button" onclick="toggleDropdown()">Select Batches</div>
+                            <div class="dropdown-content">
+                                <label><input type="checkbox" name="batch" value="all"> All Batches</label>
+                                <label><input type="checkbox" name="batch" value="20"> Batch 20</label>
+                                <label><input type="checkbox" name="batch" value="21"> Batch 21</label>
+                                <label><input type="checkbox" name="batch" value="22"> Batch 22</label>
+                                <label><input type="checkbox" name="batch" value="23"> Batch 23</label>
+                                <label><input type="checkbox" name="batch" value="24"> Batch 24</label>
+                                <label><input type="checkbox" name="batch" value="25"> Batch 25</label>
+                                <label><input type="checkbox" name="batch" value="26"> Batch 26</label>
+                                <label><input type="checkbox" name="batch" value="27"> Batch 27</label>
+                                <label><input type="checkbox" name="batch" value="28"> Batch 28</label>
+                                <label><input type="checkbox" name="batch" value="29"> Batch 29</label>
+                                <label><input type="checkbox" name="batch" value="30"> Batch 30</label>
+                                <label><input type="checkbox" name="batch" value="31"> Batch 31</label>
+                            </div>
+                        </div>
                 </div> <br>
 
                 <div class="announceTitle">
@@ -197,8 +226,8 @@
     </div>
 
     <!-- VIEW MODAL -->
-    <div id="viewModal" class="overlay">
-        <div class="overlay-content">
+    <div id="viewModal" class="viewOverlay">
+        <div class="view-content">
             <h2 id="view-title"> Application for Batch 23 </h2>
             <span class="closeOverlay" onclick="closePrev()">&times;</span>
 
@@ -214,8 +243,8 @@
     </div>
 
     <!-- EDIT MODAL -->
-    <div id="editModal" class="announce">
-        <div class="announce-content">
+    <div id="editModal" class="addOverlay">
+        <div class="add-content">
             <div class="infos">
                 <h1>Edit Announcement</h1>
                 <span class="closeOverlay" onclick="closeEdit()">&times;</span>
@@ -449,7 +478,7 @@
             attachRowCheckboxEvents();
             fetchData(); // Initial fetch on page load
 
-            debugger;
+            // debugger;
             const datePicker = document.querySelectorAll('input[type="date"]').innerHTML;
             datePicker.min = new Date().toISOString().split("T")[0];
         });
@@ -471,7 +500,14 @@
                 inputField.style.display = "none";
             }
         }
+
+
+        // DROPDOWN WITH CHECKBOX
+        function toggleDropdown() {
+            document.querySelector('.dropdown').classList.toggle('active');
+        }
     
+        
         // VIEW
         function openPrev(elem) {
             document.getElementById("view-title").innerText = elem.getAttribute("data-title");

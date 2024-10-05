@@ -51,10 +51,6 @@
             </div>
 
             <div class="headerRight">
-                <div class="notif">
-                    <ion-icon name="notifications-outline" onclick="openNotif()"></ion-icon>
-                </div>
-
                 <a class="user">
                     <img src="images/profile.png" alt="">
                 </a>
@@ -84,7 +80,9 @@
                 </button>
             </div>
 
-            <div class="sort">
+            <div class="sorts">
+                <h4> Filter by:</h4>
+
                 <select id="filter">
                     <option value="" disabled selected>Status</option>
                     <option value="all">All</option>

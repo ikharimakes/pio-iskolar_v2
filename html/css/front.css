@@ -11,19 +11,18 @@
 
 .container {
     display: grid;
-    grid-template-rows: 70px 60% 40%;
-    grid-template-columns: 30% 30% 40%;
-    overflow: hidden;
+    grid-template-rows: 70px 100%;
+    grid-template-columns: 65% 35%;
+    overflow-y: hidden;
 }
 header {
     grid-row: 1 / 2;
-    grid-column: 1 / 4;
+    grid-column: 1 / 3;
     width: 100%;
     min-height: 100vh;
     background-color: transparent;
     transition: 0.5s;
     padding: 10px;
-
     justify-content: space-between;
 }
 .topBar {
@@ -53,33 +52,20 @@ header {
     font-weight: 600;
     color: #2F3787;
 }
-.aboutUs {
-    margin-left: auto;
-    padding-right: 20px;
-    display: flex;
-    align-items: center;
-}
-.aboutUs a {
-    font-size: 18px;
-    font-weight: 400;
-    color: #000;
-    margin: 0;
-    text-decoration: none;
-}
-
 
 
 /*ANNOUNCEMENT*/
 .cards {
-    grid-row: 2 / 4;
-    grid-column: 1 / 3;
-    padding: 50px 20px 80px 40px;
+    grid-row: 2 / 3;
+    grid-column: 1 / 2;
+    padding: 50px 20px 200px 40px;
 }
 .card {
     height: 100%;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: 0.3s;
     text-align: center;
+    position: sticky;
+    top: 0;
 }
 .slideshow {
     padding-top: 10px;
@@ -95,18 +81,19 @@ header {
     display: none;
 }
 .text h2 {
-	font-size: 25px;
+    font-size: 25px;
     color: #2F3787;
     font-weight: 700;
     text-decoration: underline;
     font-family: 'Lexend';
 }
 .text p {
-	font-size: 15px;
-    padding-top: 30px;
+    font-size: 15px;
     color: #000;
     font-weight: 300;
     text-align: justify;
+    max-height: 200px;
+    overflow-y: auto;
 }
 .prev, 
 .next {
@@ -134,6 +121,7 @@ header {
 .prev:hover, 
 .next:hover {
     background-color: rgba(0,0,0,0.8);
+    color: #fff;
 }
 .slideshow .text {
     color: white;
@@ -179,16 +167,21 @@ header {
 /* LOG IN */
 .logIn {    
     grid-row: 2 / 3;
-    grid-column: 3 / 4;
+    grid-column: 2 / 3;
     padding: 50px 40px 0 20px;
     margin-bottom: 0;
+    position: sticky;
+    top: 0;
 }
 .logIn-content {
+    
+    height: 85%;
     border-radius: 15px;
     background-color: #F1F1F1;
+    padding-bottom: 50px;
 }
 .infos1 h2 {
-    padding-top: 40px;
+    padding-top: 100px;
 	font-size: 25px;
     color: #2F3787;
     font-weight: 700;
@@ -197,6 +190,10 @@ header {
     font-family: 'Lexend';
 }
 .inner-content1 {
+    padding-bottom: 30px;
+    width: 60%;
+}
+.inner-content2 {
     padding-bottom: 20px;
     width: 60%;
 }
@@ -225,6 +222,7 @@ header {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+    margin-top: 0;
 }
 .remember {
     display: flex;
@@ -261,53 +259,20 @@ header {
 .logInBtn:hover {
     background-color: #376FB7;
 }
-
-
-/*ANNOUNCEMENT LIST*/
-.lists {
-    grid-row: 3 / 4;
-    grid-column: 3 / 4;
-    padding: 0 40px 0 20px;
-    height: 100%;
-    margin-top: 0;
-}
-.list {
-    border-radius: 15px;
-    background-color: #F1F1F1;
-    overflow-x: auto;
-    height: 300px;
-}
-.list h2 {
-    position: sticky;
-    top: 0;
-    background-color: #F1F1F1;
-    padding-top: 40px;
-    padding-bottom: 10px;
-	font-size: 25px;
-    color: #2F3787;
-    font-weight: 700;
-    text-decoration: underline;
+.about {
+    padding-top: 160px;
     text-align: center;
-    font-family: 'Lexend';
-}
-.list ul {
-    list-style-type: disc; 
-    padding-top: 20px;
-    padding-left: 40px;
-}
-.list li {
-    color: #000;
-    margin-bottom: 15px;
-    text-align: justify;
-}
-.list a {
-    font-weight: 500;
     font-size: 15px;
-    color: #000;
-    text-decoration: none;
 }
-.list a:hover {
+.about p {
+    font-weight: 400;
+    display: inline;
+}
+.about a {
+    color: #2F3787; 
     text-decoration: underline;
+    font-weight: 500;
+    display: inline;
 }
 
 
@@ -385,11 +350,6 @@ header {
     position: absolute;
     right: 10px;
     cursor: pointer;
-}
-.logIn a {
-    padding-left: 450px;
-    text-decoration: none;
-    color: #000;
 }
 .btn {
     text-align: center;
