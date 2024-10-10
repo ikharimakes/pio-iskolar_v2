@@ -70,11 +70,10 @@ function annList($current_page = 1, $sort_column = 'title', $sort_order = 'asc')
 
             echo '   
                 <tr>
-                    <td><input type="checkbox" name="selected_rows[]"></td> 
                     <td>'.$row["title"].'</td>
                     <td style="text-align: center;">'.$batchNoDisplay.'</td>
-                    <td>'.$row["st_date"].'</td>
-                    <td>'.$row["end_date"].'</td>
+                    <td style="text-align: center;">'.$row["st_date"].'</td>
+                    <td style="text-align: center;">'.$row["end_date"].'</td>
                     <td style="'.$style.'; text-align: center;">'.$row["status"].'</td>
                     <td style="text-align: right;" class="wrap"> 
                         <div class="icon">
@@ -101,6 +100,12 @@ function annList($current_page = 1, $sort_column = 'title', $sort_order = 'asc')
                         </div>
 
                         <div class="icon">
+                            <div class="tooltip"> Deactivate </div>
+                            <span> <ion-icon name="close-circle-outline" onclick="openDecline(this)" 
+                                data-id="'.$row["announce_id"].'"></ion-icon> </span>
+                        </div>
+
+                        <div class="icon">
                             <div class="tooltip"> Delete</div>
                             <span> <ion-icon name="trash-outline" onclick="openDelete(this)" 
                                 type="announce" 
@@ -117,30 +122,30 @@ function annList($current_page = 1, $sort_column = 'title', $sort_order = 'asc')
 }
 
 
-    function getTotalRecords() {
-        global $conn;
-    
-        $search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
-        $filter = isset($_GET['filter']) ? $conn->real_escape_string($_GET['filter']) : '';
-    
-        // Base condition to ensure WHERE clause is valid
-        $conditions = "1=1";
-    
-        // Add search conditions
-        if ($search !== '') {
-            $conditions .= " AND (title LIKE '%$search%' OR status LIKE '%$search%' OR st_date LIKE '%$search%' OR end_date LIKE '%$search%')";
-        }
-    
-        // Add filter conditions
-        if ($filter !== '' && $filter !== 'all') {
-            $conditions .= " AND status = '$filter'";
-        }
-    
-        // Final query to count the records
-        $countQuery = "SELECT COUNT(*) as total FROM announcements WHERE $conditions";
-        $result = $conn->query($countQuery);
-        return $result->fetch_assoc()['total'];
-    }    
+function getTotalRecords() {
+    global $conn;
+
+    $search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
+    $filter = isset($_GET['filter']) ? $conn->real_escape_string($_GET['filter']) : '';
+
+    // Base condition to ensure WHERE clause is valid
+    $conditions = "1=1";
+
+    // Add search conditions
+    if ($search !== '') {
+        $conditions .= " AND (title LIKE '%$search%' OR status LIKE '%$search%' OR st_date LIKE '%$search%' OR end_date LIKE '%$search%')";
+    }
+
+    // Add filter conditions
+    if ($filter !== '' && $filter !== 'all') {
+        $conditions .= " AND status = '$filter'";
+    }
+
+    // Final query to count the records
+    $countQuery = "SELECT COUNT(*) as total FROM announcements WHERE $conditions";
+    $result = $conn->query($countQuery);
+    return $result->fetch_assoc()['total'];
+}
 
 // Dashboard Announcements
 // For Scholars -- add eval logic later
@@ -151,7 +156,7 @@ function annDisplay() {
                 FROM announcements 
                 WHERE status = 'ACTIVE' 
                 AND (batch_no = 0 OR batch_no = $batch_no) 
-                ORDER BY st_date DESC, announce_id DESC";
+                ORDER BY st_date ASC, announce_id DESC";
     $result = $conn->query($display);
 
     if ($result->num_rows > 0) {

@@ -77,12 +77,6 @@
                 </form>
             </div>
 
-            <div class="actions" style="display: none;">
-                <button id="downloadBtn" class="action-btn" onclick="downloadSelected()">
-                    <ion-icon name="download-outline"></ion-icon>
-                </button>
-            </div>
-
             <div class="sort">
                 <select id="filter">
                     <option value="" disabled selected>Status</option>
@@ -99,7 +93,6 @@
         <div class="tables">
             <table>
                 <tr style="font-weight: bold;">
-                    <th> <input type="checkbox" id="selectAll" name="selected_rows[]"> </th>
                     <th style="width:10%">
                         <div class="date-header" id="sortDate" style="justify-content: center; cursor: pointer;">
                             Date
@@ -292,32 +285,6 @@
                 fetchData();
             });
 
-            const toggleActionButtons = () => {
-                const anyChecked = Array.from(individualCheckboxes).some(checkbox => checkbox.checked);
-                actionButtons.style.display = anyChecked ? 'block' : 'none';
-            };
-
-            selectAllCheckbox.addEventListener('change', () => {
-                const isChecked = selectAllCheckbox.checked;
-                individualCheckboxes.forEach(checkbox => {
-                    checkbox.checked = isChecked;
-                });
-                toggleActionButtons();
-            });
-
-            const attachRowCheckboxEvents = () => {
-                const newCheckboxes = document.querySelectorAll('input[name="selected_rows[]"]');
-                newCheckboxes.forEach(checkbox => {
-                    checkbox.addEventListener('change', () => {
-                        if (!checkbox.checked) {
-                            selectAllCheckbox.checked = false;
-                        }
-                        toggleActionButtons();
-                    });
-                });
-            };
-
-            attachRowCheckboxEvents();
             fetchData(); // Initial fetch on page load
         });
 

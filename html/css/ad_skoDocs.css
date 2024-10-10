@@ -342,3 +342,11 @@ a.nostyle:visited {
     color: inherit;
     cursor: auto;
 }
+
+.icon.disabled {
+    cursor: not-allowed;
+}
+
+.icon.disabled .disabled-tooltip {
+    display: none; /* Hide tooltip for disabled actions */
+}

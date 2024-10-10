@@ -1,11 +1,11 @@
 <?php
     include_once('../functions/general.php');
-    include('../functions/scholar_view.php');
-    include('../functions/scholar_fx.php');
+    include('../functions/school_view.php');
+    // include('../functions/school_fx.php');
     include('../functions/page.php');
     $sourceFile = 'ad_school.php';
 
-    $sort_column = isset($_GET['sort_column']) ? $_GET['sort_column'] : 'scholar_id';
+    $sort_column = isset($_GET['sort_column']) ? $_GET['sort_column'] : 'school_name';
     $sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'asc';
     $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 
@@ -14,14 +14,14 @@
     $records_per_page = 15;
     $total_page = ceil($total_records / $records_per_page);
 
-    // if (isset($_GET['ajax'])) {
-    //     if ($_GET['ajax'] === 'table') {
-    //         scholarList($current_page, $sort_column, $sort_order);
-    //     } elseif ($_GET['ajax'] === 'pagination') {
-    //         renderPagination($current_page, $records_per_page, $total_records, $total_page, $sourceFile);
-    //     }
-    //     exit;
-    // }
+    if (isset($_GET['ajax'])) {
+        if ($_GET['ajax'] === 'table') {
+            schoolList($current_page, $sort_column, $sort_order);
+        } elseif ($_GET['ajax'] === 'pagination') {
+            renderPagination($current_page, $records_per_page, $total_records, $total_page, $sourceFile);
+        }
+        exit;
+    }
 ?>
 
 <!DOCTYPE html>
@@ -39,7 +39,6 @@
 <body>
     <!-- SIDEBAR - ad_nav.php -->
     <?php include 'ad_navbar.php'; ?>
-    
 
     <!-- TOP BAR -->
     <div class="main">
@@ -78,32 +77,11 @@
                 </button>
             </div>
 
-            <!-- <div class="sorts">
+            <div class="sorts">
                 <h4> Filter by:</h4>
 
-                <div class="sort">
-                    <select id="colSort">
-                        <option value="" disabled selected>Column</option>
-                        <option value="all">All</option>
-                        <option value="lName">Last Name</option>
-                        <option value="school">School</option>
-                    </select>
-                </div>
-
-                <div class="sort">
-                    <select id="statusSort">
-                        <option value="" disabled selected>Status</option>
-                        <option value="all">All</option>
-                        <option value="active">Active</option>
-                        <option value="probation">Probation</option>
-                        <option value="dropped">Dropped</option>
-                        <option value="loa">LOA</option>
-                        <option value="graduated">Graduated</option>
-                    </select>
-                </div>
-
                 <select id="filter">
-                    <option value="" disabled selected>Status</option>
+                    <option value="" disabled selected>SEMESTER</option>
                     <option value="all">All</option>
                     <option value="ACTIVE">ACTIVE</option>
                     <option value="PROBATION">PROBATION</option>
@@ -111,7 +89,7 @@
                     <option value="LOA">LOA</option>
                     <option value="GRADUATE">GRADUATE</option>
                 </select>
-            </div> -->
+            </div>
 
             <button type="button" class="btnAdd" style="margin-right: 1vh;" onclick="openAdd()"> Add School</button>
         </div> <br>
@@ -119,136 +97,103 @@
         <div class="tables">
             <table>
             <tr style="font-weight: bold;">
-                    <th> <input type="checkbox" id="selectAll" name="selected_rows[]"> </th>
                     <th style="width:35%">
                         <div class="school-header" id="sortSchool" style="cursor: pointer;">
                             School Name
-                            <i id=schoolSortIcon" class="fa fa-sort"></i>
+                            <i id="schoolSortIcon" class="fa fa-sort"></i>
                         </div>
                     </th>
-                    <th style="width:35%">
-                        <div class="address-header" id="sortAddress" style="cursor: pointer;">
+                    <th style="width:45%">
+                        <div class="school-header" id="sortAddress" style="cursor: pointer;">
                             Address
                             <i id="addressSortIcon" class="fa fa-sort"></i>
                         </div>
                     </th>
-                    <th style="width:10%">
-                        <div class="acad-header" id="sortAcad" style="justify-content: center; cursor: pointer;">
-                            Academic Year
-                            <i id="acadSortIcon" class="fa fa-sort"></i>
-                        </div>
-                    </th>
-                    <th style="width:10%">
-                        <div class="sem-header" id="sortSem" style="justify-content: center; cursor: pointer;">
-                            Semester
-                            <i id="semSortIcon" class="fa fa-sort"></i>
-                        </div>
-                    </th>
-                    <th style="width:12%"> Action </th>
+                    <th style="width:10%; justify-content: center; cursor: pointer;"> Academic Year </th>
+                    <th style="width:10%; justify-content: center; cursor: pointer;"> Semester </th>
+                    <th style="width:5%"> Action </th>
                 </tr>
                 <tbody id="schoolTableBody">
                 </tbody>
             </table>
         </div>
+
+        <?php renderPagination($current_page, $records_per_page, $total_records, $total_page, $sourceFile); ?>
+
     </div>
     
 
     <!-- ADD SCHOLAR MODAL -->    
     <div id="addModal" class="addOverlay">
-        <form id="addScholarForm" method="post" action="">
+        <form id="addSchoolForm" method="post" action="">
             <div class="add-content">
-                <h2>Add Individual Scholar</h2>
+                <h2>Add School/University</h2>
                 <span class="closeOverlay" onclick="closeAdd()">&times;</span>
                 <br> <br>
                 
                 <table>
                     <tr>
-                        <td class="details">SCHOLAR ID</td>
-                        <td><input type="text" class="input" name="scholar_id" maxlength="5" pattern="\d{5}" placeholder="29001" required></td>
-                    </tr>
-                    <tr>
-                        <td class="details">LAST NAME</td>
-                        <td><input type="text" class="input" name="last_name" placeholder="Last Name" required></td>
-                    </tr>
-                    <tr>
-                        <td class="details">FIRST NAME</td>
-                        <td><input type="text" class="input" name="first_name" placeholder="First Name" required></td>
-                    </tr>
-                    <tr>
-                        <td class="details">MIDDLE NAME</td>
-                        <td><input type="text" class="input" name="middle_name" placeholder="Middle Name"></td>
-                    </tr>
-                    <tr>
-                        <td class="details">SCHOOL</td>
+                        <td class="details">SCHOOL/UNIVERSITY NAME</td>
                         <td>
                             <input list="school" class="input" name="school" required>
                         </td>
                     </tr>
                     <tr>
-                        <td class="details">COURSE</td>
+                        <td class="details">ADDRESS</td>
                         <td>
-                            <input list="course" class="input" name="course" required>
+                            <input class="input" name="address" required>
                         </td>
                     </tr>
                     <tr>
-                        <td class="details">ADDRESS</td>
-                        <td><input type="text" class="input" name="address" required></td>
-                    </tr>
-                    <tr>
-                        <td class="details">CONTACT</td>
-                        <td><input type="text" class="input" name="contact" pattern="\+63\d{10}" placeholder="+639012345678" value="+63" required></td>
-                    </tr>
-                    <tr>
-                        <td class="details">EMAIL</td>
-                        <td><input type="email" class="input" name="email" placeholder="example.email@gmail.com" required></td>
+                        <td class="details">SEMESTERS PER ACADEMIC YEAR</td>
+                        <td><input type="text" class="input" name="semester" pattern="\+63\d{10}" placeholder="+639012345678" value="+63" required></td>
                     </tr>
                 </table>
                 
                 <br>
                 <center> <div class="button-container">
+                    <button class="discard" onclick="closeAdd()">Discard</button>
                     <button name="individual" type="submit" class="save">Save</button>
-                    <button name="individual" type="submit" class="discard">Discard</button>
                 </div> <center>
+            </div>
         </form>
     </div>
 
-    <!-- BATCH UPLOAD MODAL -->
-    <div id="batchModal" class="batchOverlay">
-        <div class="batch-content">
-            <div class="infos">
-                <h2>Batch Creation</h2>
-                <span class="closeBatch" onclick="closeBatch()">&times;</span>
+    <!-- EDIT SCHOOL MODAL -->    
+    <div id="editModal" class="addOverlay">
+        <form id="editSchoolForm" method="post" action="">
+            <div class="add-content">
+                <h2>Edit School/University</h2>
+                <span class="closeOverlay" onclick="closeEdit()">&times;</span>
+                <br> <br>
+
+                <input type="hidden" id="edit-id" name="id">
+                <table>
+                    <tr>
+                        <td class="details">SCHOOL/UNIVERSITY NAME</td>
+                        <td>
+                            <input id="edit-name" list="school" class="input" name="school" required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="details">ADDRESS</td>
+                        <td>
+                            <input id="edit-address" class="input" name="address" required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="details">SEMESTERS PER ACADEMIC YEAR</td>
+                        <td><input id="edit-sem" type="text" class="input" name="semester" pattern="\d{1}" required></td>
+                    </tr>
+                </table>
+                
+                <br>
+                <center> <div class="button-container">
+                    <button class="discard" onclick="closeEdit()">Discard</button>
+                    <button name="edit" type="submit" class="save">Save</button>
+                </div> <center>
             </div>
-            <br><br>
-
-            <div class="step">
-                <h4>Step 1: Download CSV Template</h4>
-                <a href="../assets/SCHOLAR TEMPLATE.csv" download="SCHOLAR TEMPLATE" class="dl-button"> 
-                    <ion-icon name="download-outline"></ion-icon>CSV Template
-                </a>
-            </div> <br>
-
-            <div class="step">
-                <h4>Step 2: Fill out the Template</h4>
-            </div> <br>
-
-            <form action="" method="post" enctype="multipart/form-data">
-                <div class="step">
-                    <h4>Step 3: Batch Number</h4>
-                    <input type="number" id="textInput" name="batch_id" required>
-                </div> <br>
-
-                <div class="step">
-                    <h4>Step 4: Upload here </h4>
-                    <label type="button" class="lblAdd" for="upload"> 
-                        <ion-icon name="share-outline"> </ion-icon>
-                        Batch Creation
-                        <input type="file" name="csv" accept=".csv" id="upload" onchange="form.submit()" hidden/>
-                    </label>
-                </div>
-            </form>
-            <br> <br>
-        </div>
+        </form>
     </div>
 
     <!-- DELETE MODAL - confirm.php -->
@@ -262,25 +207,18 @@
         document.addEventListener('DOMContentLoaded', () => {
             const searchInput = document.querySelector('input[name="search"]');
             const filter = document.getElementById('filter');
-            const selectAllCheckbox = document.getElementById('selectAll');
-            const individualCheckboxes = document.querySelectorAll('input[name="selected_rows[]"]');
-            const actionButtons = document.querySelector('.actions');
-            const tableBody = document.getElementById('scholarTableBody');
+            const tableBody = document.getElementById('schoolTableBody');
             const pagination = document.getElementById('pagination');
 
             let sortStates = {
-                'scholar_id': 'neutral',
-                'last_name': 'neutral',
-                'first_name': 'neutral',
-                'school': 'neutral'
+                'school_name': 'neutral',
+                'address': 'neutral'
             };
 
             const updateSortIcons = () => {
                 const icons = {
-                    'scholar_id': document.getElementById('scholarSortIcon'),
-                    'last_name': document.getElementById('lastSortIcon'),
-                    'first_name': document.getElementById('firstSortIcon'),
-                    'school': document.getElementById('schoolSortIcon')
+                    'school_name': document.getElementById('schoolSortIcon'),
+                    'address': document.getElementById('addressSortIcon')
                 };
 
                 for (const [column, icon] of Object.entries(icons)) {
@@ -320,10 +258,8 @@
                 });
             };
 
-            handleSort('sortScholar', 'scholar_id');
-            handleSort('sortLastName', 'last_name');
-            handleSort('sortFirstName', 'first_name');
-            handleSort('sortSchool', 'school');
+            handleSort('sortSchool', 'school_name');
+            handleSort('sortAddress', 'address');
             updateSortIcons();
 
             const fetchData = (page = 1) => {
@@ -376,7 +312,6 @@
                     .then(response => response.text())
                     .then(html => {
                         tableBody.innerHTML = html;
-                        attachRowCheckboxEvents();
                     })
                     .catch(error => console.error('Error fetching table data:', error));
 
@@ -409,33 +344,6 @@
             filter.addEventListener('change', () => {
                 fetchData();
             });
-
-            const toggleActionButtons = () => {
-                const anyChecked = Array.from(individualCheckboxes).some(checkbox => checkbox.checked);
-                actionButtons.style.display = anyChecked ? 'block' : 'none';
-            };
-
-            selectAllCheckbox.addEventListener('change', () => {
-                const isChecked = selectAllCheckbox.checked;
-                individualCheckboxes.forEach(checkbox => {
-                    checkbox.checked = isChecked;
-                });
-                toggleActionButtons();
-            });
-
-            const attachRowCheckboxEvents = () => {
-                const newCheckboxes = document.querySelectorAll('input[name="selected_rows[]"]');
-                newCheckboxes.forEach(checkbox => {
-                    checkbox.addEventListener('change', () => {
-                        if (!checkbox.checked) {
-                            selectAllCheckbox.checked = false;
-                        }
-                        toggleActionButtons();
-                    });
-                });
-            };
-
-            attachRowCheckboxEvents();
             fetchData(); // Initial fetch on page load
         });
 
@@ -444,21 +352,24 @@
             document.getElementById("addModal").style.display = "block";
         }
         function closeAdd() {
+            document.getElementById("addSchoolForm").reset();  // Reset the form fields
             document.getElementById("addModal").style.display = "none";
         }
         function submitForm() {
             closeAdd();
         }
 
-        //BATCH UPLOAD
-        function openBatch() {
-            document.getElementById("batchModal").style.display = "block";
+        //EDIT
+        function openEdit(elem) {
+            document.getElementById("edit-id").value = elem.getAttribute("data-id");
+            document.getElementById("edit-name").value = elem.getAttribute("data-name");
+            document.getElementById("edit-address").value = elem.getAttribute("data-address");
+            document.getElementById("edit-sem").value = elem.getAttribute("data-sem");
+            document.getElementById("editModal").style.display = "block";
         }
-        function closeBatch() {
-            document.getElementById("batchModal").style.display = "none";
-        }
-        function submitForm() {
-            closeBatch();
+        function closeEdit() {
+            document.getElementById("editSchoolForm").reset();  // Reset the form fields
+            document.getElementById("editModal").style.display = "none";
         }
     </script>
 </body>

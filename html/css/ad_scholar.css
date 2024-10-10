@@ -86,10 +86,8 @@
     font-size: 13px;
     font-weight: 400;
 }
-#colSort,
-#dateSort,
-#statusSort,
-#filter {
+#filter,
+#category {
     padding: 5px;
     font-size: 13px;
     border-radius: 10px;
@@ -269,7 +267,7 @@ a {
     background-color: #F1F1F1;
 }
 .addOverlay table td {
-    border: 1px solid black;
+    border: none;
 }
 .addOverlay td {
     padding: 8px;
@@ -289,6 +287,7 @@ textarea {
 .input {
     flex: 1;
     border: none;
+    border-bottom: 1px solid;
     outline: none;
     padding: 3px;
     background-color: transparent;
@@ -474,4 +473,12 @@ textarea {
 }
 .enter-button:hover {
     background-color: #376FB7;
+}
+
+.icon.disabled {
+    cursor: not-allowed;
+}
+
+.icon.disabled .disabled-tooltip {
+    display: none; /* Hide tooltip for disabled actions */
 }

@@ -71,15 +71,6 @@
                 </form>
             </div>
 
-            <div class="actions" style="display: none;">
-                <button id="downloadBtn" class="action-btn" onclick="downloadSelected()">
-                    <ion-icon name="download-outline"></ion-icon>
-                </button>
-                <button id="deleteBtn" class="action-btn" onclick="deleteSelected()">
-                    <ion-icon name="trash-outline"></ion-icon>
-                </button>
-            </div>
-
             <div class="sorts">
                 <h4> Filter by:</h4>
 
@@ -102,7 +93,6 @@
         <div class="tables">
             <table>
                 <tr style="font-weight: bold;">
-                    <th> <input type="checkbox" id="selectAll" name="selected_rows[]"> </th>
                     <th style="width:10%"> 
                         <div class="batch-header" id="sortBatch" style="justify-content: center; cursor: pointer;">
                             Batch No.
@@ -141,7 +131,7 @@
                 <h1>Generate Reports</h1>
                 <span class="closeEdit" onclick="closeCreate()">&times;</span>
             </div>
-            <form action="" method="post">
+            <form id="createReport" action="" method="post">
                 <div class="scholar">
                     <label for="report">Choose Report Type:</label> <br>
                     <select id="reportScholar" name="report">
@@ -157,6 +147,7 @@
                         </div>
                 </div>
                 <div class="btn">
+                    <button class="discard" onclick="closeCreate()">Discard</button>
                     <button id="submitBtn" type="submit" name="generate" class="generate-button"> Generate </button>
                 </div> 
             </form> <br>
@@ -193,8 +184,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             const searchInput = document.querySelector('input[name="search"]');
             const filter = document.getElementById('filter');
-            const selectAllCheckbox = document.getElementById('selectAll');
-            const individualCheckboxes = document.querySelectorAll('input[name="selected_rows[]"]');
             const actionButtons = document.querySelector('.actions');
             const tableBody = document.getElementById('reportTableBody');
             const pagination = document.getElementById('pagination');
@@ -338,32 +327,6 @@
                 fetchData();
             });
 
-            const toggleActionButtons = () => {
-                const anyChecked = Array.from(individualCheckboxes).some(checkbox => checkbox.checked);
-                actionButtons.style.display = anyChecked ? 'block' : 'none';
-            };
-
-            selectAllCheckbox.addEventListener('change', () => {
-                const isChecked = selectAllCheckbox.checked;
-                individualCheckboxes.forEach(checkbox => {
-                    checkbox.checked = isChecked;
-                });
-                toggleActionButtons();
-            });
-
-            const attachRowCheckboxEvents = () => {
-                const newCheckboxes = document.querySelectorAll('input[name="selected_rows[]"]');
-                newCheckboxes.forEach(checkbox => {
-                    checkbox.addEventListener('change', () => {
-                        if (!checkbox.checked) {
-                            selectAllCheckbox.checked = false;
-                        }
-                        toggleActionButtons();
-                    });
-                });
-            };
-
-            attachRowCheckboxEvents();
             fetchData(); // Initial fetch on page load
         });
     
@@ -373,6 +336,7 @@
             document.getElementById("createModal").style.display = "block";
         }
         function closeCreate() {
+            document.getElementById("createReport").reset();  // Reset the form fields
             document.getElementById("createModal").style.display = "none";
         }
 

@@ -31,20 +31,11 @@ function reportDisplay($current_page = 1, $sort_column = 'title', $sort_order = 
 
     if ($result && $result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            // $style = match ($row["status"]) {
-            //     "COMPLETED" => "color: rgb(0, 136, 0); font-weight: 600;",
-            //     "PENDING" => "color: rgb(255,148,0); font-weight: 600;",
-            //     "OVERDUE" => "color: rgb(189, 0, 0); font-weight: 600;",
-            //     default => "",
-            // };
-
             echo '
                 <tr>
-                    <td><input type="checkbox" name="selected_rows[]"></td> 
                     <td style="text-align: center;"> Batch '.$row["batch_no"].'</td>
                     <td>'.$row["title"].'</td>
                     <td>'.$row["creation_date"].'</td>';
-                    //<td style="'.$style.'">'.$row["status"].'</td>
             echo '
                     <td style="text-align: right;" class="wrap"> 
                         <div class="icon">

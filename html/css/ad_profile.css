@@ -141,3 +141,11 @@
 .enter-button:hover {
     background-color: #376FB7;
 }
+
+.icon.disabled {
+    cursor: not-allowed;
+}
+
+.icon.disabled .disabled-tooltip {
+    display: none; /* Hide tooltip for disabled actions */
+}

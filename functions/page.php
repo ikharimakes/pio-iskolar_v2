@@ -35,6 +35,7 @@ function renderPagination($current_page, $records_per_page, $total_records, $tot
     function navigatePage(page, sourceFile) {
         const searchInput = document.querySelector('input[name="search"]').value.trim();
         const selectedFilter = document.getElementById('filter').value;
+        const categorySelect = document.getElementById('category').value;
         const tableBody = document.getElementById('docTableBody');
         const pagination = document.getElementById('pagination');
 
@@ -56,8 +57,11 @@ function renderPagination($current_page, $records_per_page, $total_records, $tot
             params.set('search', searchInput);
         }
 
-        if (selectedFilter && selectedFilter !== 'default') {
-            params.set('filter', selectedFilter);
+        if (selectedCategory) {
+            params.set('category', selectedCategory);
+            if (selectedFilter) {
+                params.set('filter', selectedFilter);
+            }
         }
 
         if (sortColumn && sortOrder) {
@@ -71,7 +75,6 @@ function renderPagination($current_page, $records_per_page, $total_records, $tot
             .then(response => response.text())
             .then(html => {
                 tableBody.innerHTML = html;
-                attachRowCheckboxEvents();
             })
             .catch(error => console.error('Error fetching table data:', error));
 

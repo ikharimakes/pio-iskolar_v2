@@ -469,3 +469,11 @@ form {
     border-bottom: 1px solid #000;
     text-align-last: right;
 }
+
+.icon.disabled {
+    cursor: not-allowed;
+}
+
+.icon.disabled .disabled-tooltip {
+    display: none; /* Hide tooltip for disabled actions */
+}

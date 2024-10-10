@@ -42,7 +42,7 @@
             <?php scholarFull(); ?>
         </center></div>
 
-        <?php scholarDetail();?>
+        <?php scholarView();?>
     </div>
 
 

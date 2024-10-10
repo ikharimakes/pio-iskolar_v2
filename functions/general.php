@@ -223,7 +223,6 @@ function js_debug_log($message) {
             }
         }
     }
-    
 
     $year = academic();
     $sem = semester();

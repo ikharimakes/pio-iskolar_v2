@@ -569,3 +569,11 @@ a {
     border: 1px solid #888;
     width: 80%;
 }
+
+.icon.disabled {
+    cursor: not-allowed;
+}
+
+.icon.disabled .disabled-tooltip {
+    display: none; /* Hide tooltip for disabled actions */
+}

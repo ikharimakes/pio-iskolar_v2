@@ -465,3 +465,11 @@ a {
     color: rgb(112, 112, 112);
     background-color: #ffffff;
 }
+
+.icon.disabled {
+    cursor: not-allowed;
+}
+
+.icon.disabled .disabled-tooltip {
+    display: none; /* Hide tooltip for disabled actions */
+}

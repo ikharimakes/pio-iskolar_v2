@@ -70,43 +70,8 @@
                 </form>
             </div>
 
-            <div class="actions" style="display: none;">
-                <button id="deleteBtn" class="action-btn" onclick="deleteSelected()">
-                    <ion-icon name="trash-outline"></ion-icon>
-                </button>
-            </div>
-
             <div class="sorts">
                 <h4> Filter by:</h4>
-
-                <!-- <div class="sort">
-                    <select id="colSort">
-                        <option value="" disabled selected>Column</option>
-                        <option value="all">All</option>
-                        <option value="docName"> Title </option>
-                        <option value="type">Date</option>
-                    </select>
-                </div>
-
-                <div class="sort">
-                    <select id="dateSort">
-                        <option value="" disabled selected>Date</option>
-                        <option value="all">All</option>
-                        <option value="today">Today</option>
-                        <option value="week">Week Ago</option>
-                        <option value="month">Month Ago</option>
-                        <option value="year">Year Ago</option>
-                    </select>
-                </div>
-
-                <div class="sort">
-                    <select id="statusSort">
-                        <option value="" disabled selected>Status</option>
-                        <option value="all">All</option>
-                        <option value="resolved">Active</option>
-                        <option value="progress">Inactive</option>
-                    </select>
-                </div> -->
 
                 <select id="filter">
                     <option value="" disabled selected>Status</option>
@@ -124,7 +89,6 @@
         <div class="tables">
             <table>
                 <tr style="font-weight: bold;">
-                    <th> <input type="checkbox" id="selectAll" name="selected_rows[]"> </th>
                     <th style="width:46%"> 
                         <div class="title-header" id="sortTitle" style="cursor: pointer;">
                             Title
@@ -139,13 +103,13 @@
                         </div> 
                     </th>
                     <th style="width:12%"> 
-                        <div class="startDate-header" id="sortStart" style="cursor: pointer;">
+                        <div class="startDate-header" id="sortStart" style="justify-content: center; cursor: pointer;">
                             Start Date
                             <i id="startSortIcon" class="fa fa-sort"></i>
                         </div> 
                     </th>
                     <th style="width:12%"> 
-                        <div class="endDate-header" id="sortEnd" style="cursor: pointer;">
+                        <div class="endDate-header" id="sortEnd" style="justify-content: center; cursor: pointer;">
                             End Date
                             <i id="endSortIcon" class="fa fa-sort"></i>
                         </div>
@@ -164,7 +128,7 @@
 
     <!-- ADD ANNOUNCEMENTS MODAL -->
     <div id="announceModal" class="addOverlay">
-        <form action="" method="post" enctype="multipart/form-data">
+        <form id="createAnnounce" action="" method="post" enctype="multipart/form-data">
             <div class="add-content">
                 <div class="infos">
                     <h1>Publish Announcement</h1>
@@ -174,17 +138,10 @@
 
                 <div class="batch"> 
                     <h3>Recipient</h3>
-                    <form>
                         <div class="dropdown">
                             <div class="dropdown-button" onclick="toggleDropdown()">Select Batches</div>
                             <div class="dropdown-content">
                                 <label><input type="checkbox" name="batch" value="all"> All Batches</label>
-                                <label><input type="checkbox" name="batch" value="20"> Batch 20</label>
-                                <label><input type="checkbox" name="batch" value="21"> Batch 21</label>
-                                <label><input type="checkbox" name="batch" value="22"> Batch 22</label>
-                                <label><input type="checkbox" name="batch" value="23"> Batch 23</label>
-                                <label><input type="checkbox" name="batch" value="24"> Batch 24</label>
-                                <label><input type="checkbox" name="batch" value="25"> Batch 25</label>
                                 <label><input type="checkbox" name="batch" value="26"> Batch 26</label>
                                 <label><input type="checkbox" name="batch" value="27"> Batch 27</label>
                                 <label><input type="checkbox" name="batch" value="28"> Batch 28</label>
@@ -219,6 +176,7 @@
                 </div> <br>
 
                 <div class="btn">
+                <button class="discard" onclick="closeModal('announceModal')">Discard</button>
                     <button type="submit" name="add_ann" class="publish-button"> Publish </button>
                 </div> <br>
             </div>
@@ -251,7 +209,7 @@
             </div>
             <br><br>
 
-            <form action="" method="post" enctype="multipart/form-data">
+            <form id="editAnnounce" action="" method="post" enctype="multipart/form-data">
                 <input type="hidden" id="edit-id" name="id">
                 <div class="announceTitle">
                     <h3>Announcement Title</h3>
@@ -281,6 +239,7 @@
                 </div>
 
                 <div class="btn">
+                    <button class="discard" onclick="closeEdit()">Discard</button>
                     <button type="submit" name="update_ann" class="publish-button"> Save </button>
                 </div> <br>
             </form>
@@ -301,8 +260,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             const searchInput = document.querySelector('input[name="search"]');
             const filter = document.getElementById('filter');
-            const selectAllCheckbox = document.getElementById('selectAll');
-            const individualCheckboxes = document.querySelectorAll('input[name="selected_rows[]"]');
             const actionButtons = document.querySelector('.actions');
             const tableBody = document.getElementById('announceTableBody');
             const pagination = document.getElementById('pagination');
@@ -449,36 +406,8 @@
             filter.addEventListener('change', () => {
                 fetchData();
             });
-
-            const toggleActionButtons = () => {
-                const anyChecked = Array.from(individualCheckboxes).some(checkbox => checkbox.checked);
-                actionButtons.style.display = anyChecked ? 'block' : 'none';
-            };
-
-            selectAllCheckbox.addEventListener('change', () => {
-                const isChecked = selectAllCheckbox.checked;
-                individualCheckboxes.forEach(checkbox => {
-                    checkbox.checked = isChecked;
-                });
-                toggleActionButtons();
-            });
-
-            const attachRowCheckboxEvents = () => {
-                const newCheckboxes = document.querySelectorAll('input[name="selected_rows[]"]');
-                newCheckboxes.forEach(checkbox => {
-                    checkbox.addEventListener('change', () => {
-                        if (!checkbox.checked) {
-                            selectAllCheckbox.checked = false;
-                        }
-                        toggleActionButtons();
-                    });
-                });
-            };
-
-            attachRowCheckboxEvents();
             fetchData(); // Initial fetch on page load
 
-            // debugger;
             const datePicker = document.querySelectorAll('input[type="date"]').innerHTML;
             datePicker.min = new Date().toISOString().split("T")[0];
         });
@@ -489,6 +418,7 @@
             modal.style.display = "block";
         }
         function closeModal(announceModal) {
+            document.getElementById("createAnnounce").reset();  // Reset the form fields
             var modal = document.getElementById(announceModal);
             modal.style.display = "none";
         }
@@ -529,6 +459,7 @@
             document.getElementById("editModal").style.display = "block";
         }
         function closeEdit() {
+            document.getElementById("editAnnounce").reset();  // Reset the form fields
             document.getElementById("editModal").style.display = "none";
         }
 

@@ -206,3 +206,10 @@ a {
     color: #2F3787;
 }
 
+.icon.disabled {
+    cursor: not-allowed;
+}
+
+.icon.disabled .disabled-tooltip {
+    display: none; /* Hide tooltip for disabled actions */
+}

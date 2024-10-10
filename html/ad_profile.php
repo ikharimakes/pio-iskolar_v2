@@ -24,16 +24,9 @@
             <div class="headerName">
                 <h1>My Profile</h1>
             </div>
-
-            <div class="headerRight">
-                <div class="notifs">
-                    <ion-icon name="notifications-outline" onclick="openOverlay()"></ion-icon>
-                </div>
-            </div>
         </div>
 
         <div class="line"></div>
-
 
         <!-- MY PROFILE-->
         <div class="info">

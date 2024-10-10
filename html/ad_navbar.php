@@ -32,12 +32,12 @@
                     <span class="text"> Scholars </span> 
                 </a> </li>
 
-                <li class="navLink"> <a href="ad_docs.php" onclick="activateLink(this)">
+                <!-- <li class="navLink"> <a href="ad_docs.php" onclick="activateLink(this)">
                     <span class="icon">
                         <ion-icon name="document-outline"></ion-icon>
                     </span>
                     <span class="text"> Pending Documents</span> 
-                </a> </li>
+                </a> </li> -->
 
                 <li class="navLink"> <a href="ad_school.php" onclick="activateLink(this)">
                     <span class="icon">
@@ -74,12 +74,12 @@
                     <span class="text"> Inbox </span> 
                 </a> </li> -->
 
-                <li class="navLink"><a href="ad_faq.php">
+                <!-- <li class="navLink"><a href="ad_faq.php">
                     <span class="icon">
                         <ion-icon name="help-circle-outline"></ion-icon>
                     </span>
                     <span class="text"> FAQ PLACEHOLDER</span>
-                </a></li>
+                </a></li> -->
             </ul>
         </div> 
 

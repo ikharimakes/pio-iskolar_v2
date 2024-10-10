@@ -243,3 +243,11 @@ a {
 .closeView:hover {
     color: #000;
 }
+
+.icon.disabled {
+    cursor: not-allowed;
+}
+
+.icon.disabled .disabled-tooltip {
+    display: none; /* Hide tooltip for disabled actions */
+}

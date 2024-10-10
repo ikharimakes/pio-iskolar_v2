@@ -218,7 +218,7 @@ if (isset($_POST['save'])) {
     $course = strtoupper($conn->real_escape_string($_POST['course']));
     $scholar_status = strtoupper($conn->real_escape_string($_POST['scholar_status']));
     $address = strtoupper($conn->real_escape_string($_POST['address']));
-    $contact = strtoupper($conn->real_escape_string($_POST['contact']));
+    $contact = strtoupper($conn->real_escape_string($_POST['contact_number']));
     $email = $conn->real_escape_string($_POST['email']);
 
     $id = $_SESSION['sid'];
