@@ -3,6 +3,20 @@
     include_once('../functions/dashboard_view.php');
     include_once('../functions/announce_view.php');
     updateStatus();
+    
+    $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : (isset($_COOKIE['user_role']) ? $_COOKIE['user_role'] : null);
+
+    if ($user_role == "3") {
+    } elseif ($user_role == "1") {
+        header("Location: ad_dashboard.php");
+        exit();
+    } elseif ($user_role == "2") {
+        header("Location: dashboard.php");
+        exit();
+    } else {
+        header("Location: front_page.php");
+        exit();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -54,7 +68,6 @@
 
                     <div class="box-pending">
                         <table>
-                            <?php pendingFiles();?>
                         </table>
                     </div>
                 </div>
@@ -64,7 +77,6 @@
 
                     <div class="box-batch">
                         <ul>
-                            <?php existingFiles();?>
                         </ul>
                     </div>
                 </div>

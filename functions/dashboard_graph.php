@@ -2,54 +2,43 @@
 include_once('../functions/general.php');
 global $conn, $sem;
 
-// Enable error reporting for debugging
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 // Force JSON output, even for errors
 header('Content-Type: application/json');
 
-// Debugging helper function to log and output errors
-function debug_log($message) {
-    error_log($message);
-    echo json_encode(["error" => $message]);
-    exit;
-}
-
-// Check if database connection is established
-if (!$conn) {
-    debug_log("Database connection failed: " . mysqli_connect_error());
-}
-
 // Get selected batches from the query parameters
 $batches = isset($_GET['batches']) ? $_GET['batches'] : 'ALL';
-$batchCondition = "";
-
-// If specific batches are selected, filter by those batches
-if ($batches !== 'ALL') {
-    // Convert the batches into a comma-separated string of quoted batch numbers
-    $batchesArray = explode(',', $batches);
-    $batchCondition = "WHERE batch_no IN ('" . implode("','", array_map('intval', $batchesArray)) . "')";
-}
-
-// Debug: log batch condition and request
-error_log("Batches: " . json_encode($batches));
-error_log("Batch Condition: $batchCondition");
 
 // Prepare the data structure
 $batch_data = [];
 
-// Fetch total scholars per batch
-$query = "SELECT batch_no, COUNT(scholar_id) AS scholar_count FROM scholar $batchCondition GROUP BY batch_no";
-error_log("Query: $query");
+// Initialize base condition
+$conditions = "1=1"; // Default base condition (true)
 
-$result = mysqli_query($conn, $query);
-
-if (!$result) {
-    debug_log("Query failed: " . mysqli_error($conn));
+// Handle batch filtering dynamically
+if ($batches !== 'ALL') {
+    $batchesArray = explode(',', $batches);
+    $conditions .= " AND (";
+    
+    // Loop through each batch to create conditions like: batch_no = 31 OR batch_no = 32
+    foreach ($batchesArray as $index => $batch_no) {
+        $batch_no = intval($batch_no);  // Sanitize batch number
+        if ($index > 0) {
+            $conditions .= " OR ";
+        }
+        $conditions .= "batch_no = $batch_no";
+    }
+    
+    $conditions .= ")";
 }
 
+// Debug the constructed WHERE clause
+error_log("Final WHERE conditions: $conditions");
+
+// Query for total scholars per batch
+$query = "SELECT batch_no, COUNT(scholar_id) AS scholar_count FROM scholar WHERE $conditions GROUP BY batch_no";
+$result = mysqli_query($conn, $query);
+
+// Process the result
 while ($row = mysqli_fetch_assoc($result)) {
     $batch_no = $row['batch_no'];
     $batch_data[$batch_no] = [
@@ -63,15 +52,9 @@ while ($row = mysqli_fetch_assoc($result)) {
     ];
 }
 
-// Fetch ACTIVE scholars
-$query = "SELECT batch_no, COUNT(scholar_id) AS active_scholar_count FROM scholar WHERE status = 'ACTIVE' $batchCondition GROUP BY batch_no";
-error_log("Query: $query");
-
-$result = mysqli_query($conn, $query);
-
-if (!$result) {
-    debug_log("Query failed: " . mysqli_error($conn));
-}
+// Query for ACTIVE scholars
+$active_query = "SELECT batch_no, COUNT(scholar_id) AS active_scholar_count FROM scholar WHERE $conditions AND status = 'ACTIVE' GROUP BY batch_no";
+$result = mysqli_query($conn, $active_query);
 
 while ($row = mysqli_fetch_assoc($result)) {
     $batch_no = $row['batch_no'];
@@ -80,15 +63,9 @@ while ($row = mysqli_fetch_assoc($result)) {
     }
 }
 
-// Fetch PROBATION scholars
-$query = "SELECT batch_no, COUNT(scholar_id) AS probation_scholar_count FROM scholar WHERE status = 'PROBATION' $batchCondition GROUP BY batch_no";
-error_log("Query: $query");
-
-$result = mysqli_query($conn, $query);
-
-if (!$result) {
-    debug_log("Query failed: " . mysqli_error($conn));
-}
+// Query for PROBATION scholars
+$probation_query = "SELECT batch_no, COUNT(scholar_id) AS probation_scholar_count FROM scholar WHERE $conditions AND status = 'PROBATION' GROUP BY batch_no";
+$result = mysqli_query($conn, $probation_query);
 
 while ($row = mysqli_fetch_assoc($result)) {
     $batch_no = $row['batch_no'];
@@ -97,15 +74,9 @@ while ($row = mysqli_fetch_assoc($result)) {
     }
 }
 
-// Fetch LOA scholars
-$query = "SELECT batch_no, COUNT(scholar_id) AS loa_scholar_count FROM scholar WHERE status = 'LOA' $batchCondition GROUP BY batch_no";
-error_log("Query: $query");
-
-$result = mysqli_query($conn, $query);
-
-if (!$result) {
-    debug_log("Query failed: " . mysqli_error($conn));
-}
+// Query for LOA scholars
+$loa_query = "SELECT batch_no, COUNT(scholar_id) AS loa_scholar_count FROM scholar WHERE $conditions AND status = 'LOA' GROUP BY batch_no";
+$result = mysqli_query($conn, $loa_query);
 
 while ($row = mysqli_fetch_assoc($result)) {
     $batch_no = $row['batch_no'];
@@ -114,15 +85,9 @@ while ($row = mysqli_fetch_assoc($result)) {
     }
 }
 
-// Fetch DROPPED scholars
-$query = "SELECT batch_no, COUNT(scholar_id) AS dropped_scholar_count FROM scholar WHERE status = 'DROPPED' $batchCondition GROUP BY batch_no";
-error_log("Query: $query");
-
-$result = mysqli_query($conn, $query);
-
-if (!$result) {
-    debug_log("Query failed: " . mysqli_error($conn));
-}
+// Query for DROPPED scholars
+$dropped_query = "SELECT batch_no, COUNT(scholar_id) AS dropped_scholar_count FROM scholar WHERE $conditions AND status = 'DROPPED' GROUP BY batch_no";
+$result = mysqli_query($conn, $dropped_query);
 
 while ($row = mysqli_fetch_assoc($result)) {
     $batch_no = $row['batch_no'];
@@ -131,15 +96,9 @@ while ($row = mysqli_fetch_assoc($result)) {
     }
 }
 
-// Fetch GRADUATED scholars
-$query = "SELECT batch_no, COUNT(scholar_id) AS graduated_scholar_count FROM scholar WHERE status = 'GRADUATED' $batchCondition GROUP BY batch_no";
-error_log("Query: $query");
-
-$result = mysqli_query($conn, $query);
-
-if (!$result) {
-    debug_log("Query failed: " . mysqli_error($conn));
-}
+// Query for GRADUATED scholars
+$graduated_query = "SELECT batch_no, COUNT(scholar_id) AS graduated_scholar_count FROM scholar WHERE $conditions AND status = 'GRADUATED' GROUP BY batch_no";
+$result = mysqli_query($conn, $graduated_query);
 
 while ($row = mysqli_fetch_assoc($result)) {
     $batch_no = $row['batch_no'];
@@ -161,7 +120,4 @@ $response = [
 
 // Output the final JSON response
 echo json_encode($response);
-
-// Debug: Log final response
-error_log("Final JSON response: " . json_encode($response));
 ?>

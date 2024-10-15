@@ -5,6 +5,17 @@
     include('../functions/page.php');
     $sourceFile = 'ad_reports.php';
 
+    $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : (isset($_COOKIE['user_role']) ? $_COOKIE['user_role'] : null);
+
+    if ($user_role == "1") {
+    } elseif ($user_role == "2") {
+        header("Location: dashboard.php");
+    } elseif ($user_role == "3") {
+        header("Location: eval_dashboard.php");
+    } else {
+        header("Location: front_page.php");
+    }
+
     $sort_column = isset($_GET['sort_column']) ? $_GET['sort_column'] : 'title';
     $sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'asc';
     $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;

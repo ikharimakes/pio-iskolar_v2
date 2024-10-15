@@ -462,9 +462,19 @@ function docxAdmin($id, $sort_column = 'sub_date', $sort_order = 'asc') {
 
                         <div class="icon ' . ($disabledActions['upload'] ? 'disabled' : '') . '" style="opacity: ' . ($disabledActions['upload'] ? '0.5' : '1') . ';">
                             <div class="tooltip ' . ($disabledActions['upload'] ? 'disabled-tooltip' : '') . '">Upload</div>
-                            <span> <ion-icon name="cloud-upload-outline" 
-                                onclick="triggerUpload(this, \'' . $docType . '\')"></ion-icon> </span>
-                            <input name="' . $docType . '" type="file" accept=".pdf" style="display: none;" onchange="autoSubmit(this)" />
+                            <span> 
+                                <label for="' . $docType . '_' . $year . '_' . $docType . '">
+                                <ion-icon name="cloud-upload-outline"></ion-icon>
+                                </label> 
+                            </span>
+                            <input 
+                                id="' . $docType . '_' . $year . '_' . $docType . '" 
+                                name="' . $docType . '_' . $year . '_' . $docType . '" 
+                                type="file" 
+                                accept=".pdf" 
+                                style="display: none;" 
+                                onchange="autoSubmit(this)" 
+                            />
                         </div>
 
                         <div class="icon ' . ($disabledActions['approve'] ? 'disabled' : '') . '" style="opacity: ' . ($disabledActions['approve'] ? '0.5' : '1') . ';">

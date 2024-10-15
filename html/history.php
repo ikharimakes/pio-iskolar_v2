@@ -3,6 +3,17 @@
     include('../functions/document_view.php');
     include('../functions/page.php');
     $sourceFile = 'history.php';
+    
+    $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : (isset($_COOKIE['user_role']) ? $_COOKIE['user_role'] : null);
+
+    if ($user_role == "2") {
+    } elseif ($user_role == "1") {
+        header("Location: ad_dashboard.php");
+    } elseif ($user_role == "3") {
+        header("Location: eval_dashboard.php");
+    } else {
+        header("Location: front_page.php");
+    }
 
     $sort_column = isset($_GET['sort_column']) ? $_GET['sort_column'] : 'sub_date';
     $sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'asc';

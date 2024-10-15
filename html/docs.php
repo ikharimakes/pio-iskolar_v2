@@ -1,10 +1,19 @@
 <?php 
     include('../functions/general.php');
     include('../functions/document_upload.php');
+    
+    $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : (isset($_COOKIE['user_role']) ? $_COOKIE['user_role'] : null);
 
-    // Assume $scholar_id is set from the session or another reliable source
-    //$scholar_id = $_SESSION['sid'];
-    $scholar_id = "197";
+    if ($user_role == "2") {
+    } elseif ($user_role == "1") {
+        header("Location: ad_dashboard.php");
+    } elseif ($user_role == "3") {
+        header("Location: eval_dashboard.php");
+    } else {
+        header("Location: front_page.php");
+    }
+
+    $scholar_id = $_SESSION['sid'];
     global $year, $sem;
 
     function getUploadButtonHtml($scholar_id, $doc_type, $year, $sem) {

@@ -1,6 +1,17 @@
 <?php 
     include_once('../functions/general.php'); 
     include('../functions/announce_view.php');
+    
+    $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : (isset($_COOKIE['user_role']) ? $_COOKIE['user_role'] : null);
+
+    if ($user_role == "2") {
+    } elseif ($user_role == "1") {
+        header("Location: ad_dashboard.php");
+    } elseif ($user_role == "3") {
+        header("Location: eval_dashboard.php");
+    } else {
+        header("Location: front_page.php");
+    }
 ?>
 
 <!DOCTYPE html>

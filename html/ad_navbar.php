@@ -84,7 +84,7 @@
         </div> 
 
         <div class="bottom-content">
-            <li class="navLink"><a href="front_page.php">
+            <li class="navLink"><a href="../functions/logout.php">
                 <span class="icon">
                     <ion-icon name="log-out-outline"></ion-icon>
                 </span>

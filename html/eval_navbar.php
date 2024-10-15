@@ -17,7 +17,7 @@
 
         <div class="navBar">
             <ul class="navLinks">
-                <li class="navLink"> <a href="eval_dash.php" onclick="activateLink(this)"> 
+                <li class="navLink"> <a href="eval_dashboard.php" onclick="activateLink(this)"> 
                     <span class="icon">
                         <ion-icon name="grid-outline"></ion-icon>
                     </span>
@@ -55,7 +55,7 @@
         </div> 
 
         <div class="bottom-content">
-            <li class="navLink"><a href="front_page.php">
+            <li class="navLink"><a href="logout.php">
                 <span class="icon">
                     <ion-icon name="log-out-outline"></ion-icon>
                 </span>
