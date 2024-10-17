@@ -38,9 +38,13 @@
             </div>
 
             <div class="headerRight">
-                <div class="notifs">
-                    <ion-icon name="notifications-outline" onclick="openNotif()"></ion-icon>
+                <div class="notif">
+                    <ion-icon name="notifications-outline" onclick="openOverlay()"></ion-icon>
                 </div>
+
+                <a class="user" href="profile.php">
+                    <img src="images/profile.png" alt="">
+                </a>
             </div>
         </div>
 
@@ -55,7 +59,52 @@
         </div>
 
 
-        <!-- CALENDAR -->
+        <div class="box-container">
+            <div class="box-row">
+                <div class="box box-small">
+                    <h5 class='detail'>Total Submitted Documents</h5>
+
+                    <div class="box-num">
+                        <h2 class='num'>8</h2>
+                    </div>
+                </div>
+
+                <div class="box box-small">
+                    <h5 class='detail'>Approved Documents</h5>
+
+                    <div class="box-num">
+                        <h2 class='num'>8</h2>
+                    </div>
+                </div>
+
+                <div class="box box-small">
+                    <h5 class='detail'>Declined Documents</h5>
+
+                    <div class="box-num">
+                        <h2 class='num'>0</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box-row">
+                <div class="box-small-big">
+                    <h1>Requirements</h1>
+                    <h5> <?php echo 'A.Y. '.$year.', Semester '.$sem?> </h5>
+
+                    <div class="event">
+                        <ul>
+                            <li>Photocopy of Certificate of Registration</li> <hr>
+                            <li>Photocopy of Grades/Transcript of Records</li> <hr>
+                            <li>Social Service Monitoring Record with complete 40 hours</li> <hr>
+                            <li>Diploma</li> <hr>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- CALENDAR 
         <div class="calendar">
             <div class="month">
                 <div class="prev">&#10094;</div>
@@ -78,7 +127,7 @@
             </div> <br>
 
             <div class="days" id="days"></div>
-        </div>
+        </div>-->
         
 
         <!-- ANNOUNCEMENT -->
@@ -90,7 +139,7 @@
 
 
     <!-- VIEW MODAL -->
-    <div id="viewOverlay" class="overlay">
+    <div id="viewOverlay" class="viewOverlay">
         <div class="overlay-content">
             <span class="closeOverlay" onclick="closeView()">&times;</span>
             <br>
@@ -116,57 +165,6 @@
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script>
-        //CALENDAR
-        const monthNames = ["January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"];
-
-        const today = new Date();
-        let currentMonth = today.getMonth();
-        let currentYear = today.getFullYear();
-
-        function generateCalendar() {
-            const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-            const startingDay = firstDayOfMonth.getDay();
-
-            document.getElementById("month").innerHTML = monthNames[currentMonth] + " " + currentYear;
-
-            let calendarDays = document.getElementById("days");
-            calendarDays.innerHTML = "";
-
-            for (let i = 0; i < startingDay; i++) {
-                let day = document.createElement("div");
-                calendarDays.appendChild(day);
-            }
-
-            for (let i = 1; i <= daysInMonth; i++) {
-                let day = document.createElement("div");
-                day.textContent = i;
-                calendarDays.appendChild(day);
-            }
-        }
-
-        document.querySelector(".prev").addEventListener("click", () => {
-            currentMonth -= 1;
-            if (currentMonth < 0) {
-                currentMonth = 11;
-                currentYear -= 1;
-            }
-            generateCalendar();
-        });
-
-        document.querySelector(".next").addEventListener("click", () => {
-            currentMonth += 1;
-            if (currentMonth > 11) {
-                currentMonth = 0;
-                currentYear += 1;
-            }
-            generateCalendar();
-        });
-
-        generateCalendar();
-
-
         // VIEW
         function openView(img, title, content, date) {
             // Display the modal
