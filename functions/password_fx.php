@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $userID = $_SESSION['uid'];
 
                 // Verify the current password
-                $sql = "SELECT password FROM user WHERE user_id = ?";
+                $sql = "SELECT passhash FROM user WHERE user_id = ?";
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param('i', $userID);
                 $stmt->execute();
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 if ($storedPassword === $oldPassword) {
                     // Update the password in the database
-                    $sql = "UPDATE user SET password = ? WHERE user_id = ?";
+                    $sql = "UPDATE user SET passhash = ? WHERE user_id = ?";
                     $stmt = $conn->prepare($sql);
                     $stmt->bind_param('si', $newPassword, $userID);
 
