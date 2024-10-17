@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $confirmPassword = $_POST['confirmPassword'];
 
         if ($newPassword !== $confirmPassword) {
-            $response['message'] = 'New passwords do not match.';
+            // $response['message'] = 'New passwords do not match.';
         } else {
             // Assuming you have user identification logic
             if (isset($_SESSION['uid'])) {
@@ -33,22 +33,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     if ($stmt->execute()) {
                         $response['success'] = true;
-                        $response['message'] = 'Password reset successfully';
+                        // $response['message'] = 'Password reset successfully';
                     } else {
-                        $response['message'] = 'Error resetting password';
+                        // $response['message'] = 'Error resetting password';
                     }
 
                     $stmt->close();
                 } else {
-                    $response['message'] = 'Current password is incorrect.';
+                    // $response['message'] = 'Current password is incorrect.';
                 }
                 $conn->close();
             } else {
-                $response['message'] = 'User ID not set in session.';
+                // $response['message'] = 'User ID not set in session.';
             }
         }
     } else {
-        $response['message'] = 'Invalid request';
+        // $response['message'] = 'Invalid request';
     }
 
     echo json_encode($response);
