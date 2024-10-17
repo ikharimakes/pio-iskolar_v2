@@ -239,4 +239,101 @@ if (isset($_POST['save'])) {
     } else {
     }
 }
+
+function exportScholarListToCSV($sort_column = 'scholar_id', $sort_order = 'asc') {
+    global $conn, $year, $sem;
+
+    $valid_columns = ['scholar_id', 'last_name', 'first_name', 'school', 'status'];
+    if (!in_array($sort_column, $valid_columns)) {
+        $sort_column = 'scholar_id';
+    }
+
+    $sort_order = strtolower($sort_order) === 'desc' ? 'desc' : 'asc';
+
+    $search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
+    $filter = isset($_GET['filter']) ? $conn->real_escape_string($_GET['filter']) : '';
+    $category = isset($_GET['category']) ? $conn->real_escape_string($_GET['category']) : '';
+    $conditions = "1=1"; // Base condition
+
+    // Search conditions
+    if ($search !== '') {
+        $conditions .= " AND (batch_no LIKE '%$search%' OR scholar_id LIKE '%$search%' OR last_name LIKE '%$search%' OR first_name LIKE '%$search%' OR middle_name LIKE '%$search%' OR school LIKE '%$search%')";
+    }
+
+    // Filter by the dynamic category if both category and filter are provided
+    if ($category !== 'all' && $filter !== 'all') {
+        $valid_filter_columns = ['batch_no', 'status', 'school'];
+        if (in_array($category, $valid_filter_columns)) {
+            $conditions .= " AND $category = '" . $conn->real_escape_string($filter) . "'";
+        }
+    }
+
+    // Query without the offset to fetch all records
+    $query = "SELECT scholar_id, last_name, first_name, school, status FROM scholar WHERE $conditions ORDER BY $sort_column $sort_order";
+    $result = $conn->query($query);
+
+    if ($result && $result->num_rows > 0) {
+        // Set headers for CSV download
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="scholar_list.csv"');
+
+        // Open file stream
+        $output = fopen('php://output', 'w');
+        
+        // Output column headers
+        fputcsv($output, ['Scholar ID', 'Last Name', 'First Name', 'School', 'Status', 'Document Status']);
+
+        while ($row = $result->fetch_assoc()) {
+            $scholar_id = $row['scholar_id'];
+
+            // Check document submission status for COR, GRADES, SOCIAL
+            $doc_status_query = "
+                SELECT doc_type, doc_status 
+                FROM submission 
+                WHERE scholar_id = '$scholar_id' 
+                AND acad_year = '$year' 
+                AND sem = '$sem' 
+                AND doc_type IN ('COR', 'GRADES', 'SOCIAL')";
+            $doc_result = $conn->query($doc_status_query);
+
+            $required_docs = ['COR' => false, 'GRADES' => false, 'SOCIAL' => false];
+            $overall_status = 'COMPLETE'; // Assume complete unless found otherwise
+
+            // Check each document status
+            if ($doc_result && $doc_result->num_rows > 0) {
+                while ($doc_row = $doc_result->fetch_assoc()) {
+                    $doc_status = $doc_row['doc_status'];
+
+                    // If any required document is pending, declined, or missing, mark as incomplete
+                    if (in_array($doc_status, ['PENDING', 'DECLINED'])) {
+                        $overall_status = 'INCOMPLETE';
+                    }
+                    $required_docs[$doc_row['doc_type']] = true; // Mark document as submitted
+                }
+            }
+
+            // If any required document is missing, set status as INCOMPLETE
+            if (in_array(false, $required_docs)) {
+                $overall_status = 'INCOMPLETE';
+            }
+
+            // Output each row to CSV
+            fputcsv($output, [
+                $row['scholar_id'], 
+                $row['last_name'], 
+                $row['first_name'], 
+                $row['school'], 
+                $overall_status, 
+                $row['status']
+            ]);
+        }
+
+        fclose($output);
+        exit();
+    } else {
+        echo "No records found.";
+    }
+}
+
+
 ?>

@@ -1,6 +1,7 @@
 <?php 
     include_once('../functions/general.php');
     include_once('../functions/announce_view.php');
+    include('../functions/password_fx.php');
     updateStatus();
 
     $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : (isset($_COOKIE['user_role']) ? $_COOKIE['user_role'] : null);
@@ -142,19 +143,22 @@
                 <span class="close" onclick="closeModal('passModal')">&times;</span>
             </div>
             <br><br>
+            
+                <form action="" method="POST">
+                <div class="inner-content">
+                    <label class="texts" for="newPassword">Enter New Password:</label> <br>
+                    <input class="inputs" type="password" id="newPassword" name="newPassword" placeholder="New Password">
+                </div>
+                <div class="inner-content">
+                    <label class="texts" for="confirmPassword">Confirm Password:</label> <br>
+                    <input class="inputs" type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password">
+                </div>
 
-            <div class="inner-content">
-                <label class="texts" for="newPassword">Enter New Password:</label> <br>
-                <input class="inputs" type="password" id="newPassword" name="newPassword" placeholder="New Password">
-            </div>
-            <div class="inner-content">
-                <label class="texts" for="confirmPassword">Confirm Password:</label> <br>
-                <input class="inputs" type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password">
-            </div>
-
-            <div class="btn">
-                <button class="logIn-button"> Log In </button>
-            </div> <br>
+                <div class="btn">
+                    <button class="logIn-button" type="submit" name="reset"> Reset Password </button>
+                </div> 
+                <form action="" method="POST">
+            <br>
         </div>
     </div>
 

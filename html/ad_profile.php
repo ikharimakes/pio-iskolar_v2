@@ -80,10 +80,10 @@
                         <th> <a href="#" onclick="openPass()"> Change Password </a></th>
                         <td></td>
                     </tr>
-                    <tr style="height: 40px;">
+                    <!-- <tr style="height: 40px;">
                         <th> Download Profile </th>
                         <td></td>
-                    </tr>
+                    </tr> -->
                 </table>
             </div>
         </div>
@@ -116,7 +116,7 @@
                 </div> <br>
 
                 <div class="enter-button-container">
-                    <button class="enter-button" type="submit"> Enter </button>
+                    <button class="enter-button" type="submit" name="change"> Enter </button>
                 </div>
             </form> <br>
         </div> 
