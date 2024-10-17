@@ -1,5 +1,6 @@
 <?php 
     include_once('../functions/general.php'); 
+    include ('../functions/password_fx.php');
 
     $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : (isset($_COOKIE['user_role']) ? $_COOKIE['user_role'] : null);
 

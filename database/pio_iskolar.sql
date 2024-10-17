@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3308
--- Generation Time: Sep 14, 2024 at 12:22 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.0.28
+-- Generation Time: Oct 17, 2024 at 04:25 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -35,25 +35,25 @@ CREATE TABLE `announcements` (
   `img_name` varchar(100) NOT NULL,
   `title` varchar(150) NOT NULL,
   `content` text NOT NULL,
-  `_status` varchar(10) NOT NULL
+  `status` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `announcements`
 --
 
-INSERT INTO `announcements` (`announce_id`, `batch_no`, `st_date`, `end_date`, `img_name`, `title`, `content`, `_status`) VALUES
-(3, 0, '2024-06-02', '2024-10-05', 'pic2.jpg', 'Contract Signing', 'City Mayor REX Gatchalian graces the orientation and contract signing of 212 recipients of the Dr. Pio Valenzuela Scholarship program at the Pamantasan ng Lungsod ng Valenzuela (#PLV) Qualified Grantees are required to report at the Scholarship Office at PLV Maysan Campus, 2nd floor on December 10 to 16, 2023 (except Saturday and Sunday) 8:00 AM to 5:00 PM. Look for Ms. Miko Tongco regarding Contract Signing and Orientation. Thank you! ', 'ACTIVE'),
+INSERT INTO `announcements` (`announce_id`, `batch_no`, `st_date`, `end_date`, `img_name`, `title`, `content`, `status`) VALUES
+(3, 0, '2024-06-02', '2024-10-05', 'pic2.jpg', 'Contract Signing', 'City Mayor REX Gatchalian graces the orientation and contract signing of 212 recipients of the Dr. Pio Valenzuela Scholarship program at the Pamantasan ng Lungsod ng Valenzuela (#PLV) Qualified Grantees are required to report at the Scholarship Office at PLV Maysan Campus, 2nd floor on December 10 to 16, 2023 (except Saturday and Sunday) 8:00 AM to 5:00 PM. Look for Ms. Miko Tongco regarding Contract Signing and Orientation. Thank you! \r\n\"But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it? But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure?\"', 'INACTIVE'),
 (6, 0, '2024-05-21', '2024-10-26', 'pic3.jpg', 'Results for Batch 27', ' The results of the Dr. Pio Valenzuela Scholarship Program will be released on Dr. Pio\'s 154th Birth Anniversary on December 11, 2023. \r\n\r\nRightfully deserving of the grant, they are currently getting to know more about their future college journeys as Dr. Pio Valenzuela scholars. \r\n\r\nCongratulations and make us proud, dear students! ', 'ACTIVE'),
-(16, 0, '2024-05-29', '2024-09-20', 'image.png', 'Test Announcement', ' This is a test announcement', 'ACTIVE'),
+(16, 0, '2024-05-29', '2024-09-20', 'image.png', 'Test Announcement', ' This is a test announcement', 'INACTIVE'),
 (17, 0, '2024-05-29', '2024-11-14', 'pio-museo.jpg', 'Test', ' Placeholder', 'ACTIVE'),
 (19, 0, '2024-09-03', '2024-09-05', '454825879_981451210335064_3584102443445305743_n.jpg', 'ohhhh', ' halfway', 'INACTIVE'),
 (37, 0, '2024-09-03', '2024-09-06', '449189555_773571168273027_1948298230391781972_n.jpg', 'wheee', ' oho', 'INACTIVE'),
 (41, 0, '2024-09-05', '2024-09-08', 'testing_Batch- (1).png', 'testing', ' aaaaaaaaaa', 'INACTIVE'),
-(42, 20, '2024-09-05', '2024-09-15', 'batch-loaf_Batch-20.png', 'batch-loaf', ' www', 'ACTIVE'),
-(43, 31, '2024-09-13', '2024-09-15', 'test announce_Batch-31.jpg', 'test announce', ' testing', 'ACTIVE'),
-(46, 31, '2024-09-13', '2024-09-16', 'test_Batch-31.jpg', 'test', ' ohhhhhh', 'ACTIVE'),
-(49, 31, '2024-09-13', '2024-09-30', 'Test_Batch-31 (1).jpg', 'Test', ' Testing', 'ACTIVE');
+(42, 20, '2024-09-05', '2024-09-15', 'batch-loaf_Batch-20.png', 'batch-loaf', ' www', 'INACTIVE'),
+(43, 31, '2024-09-13', '2024-09-15', 'test announce_Batch-31.jpg', 'test announce', ' testing', 'INACTIVE'),
+(46, 31, '2024-09-13', '2024-09-16', 'test_Batch-31.jpg', 'test', ' ohhhhhh', 'INACTIVE'),
+(49, 31, '2024-09-13', '2024-09-30', 'Test_Batch-31 (1).jpg', 'Test', ' Testing', 'INACTIVE');
 
 -- --------------------------------------------------------
 
@@ -112,19 +112,22 @@ CREATE TABLE `notification` (
   `user_id` int(11) NOT NULL,
   `date` date NOT NULL,
   `title` varchar(100) NOT NULL,
-  `content` text NOT NULL
+  `content` text NOT NULL,
+  `viewed` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `notification`
 --
 
-INSERT INTO `notification` (`notif_id`, `user_id`, `date`, `title`, `content`) VALUES
-(74, 1, '2024-09-04', '30001-test DOCUMENT SUBMISSION', 'Documents submitted: <br><br>test_123_456_Year0_Sem1_COR.pdf<br>test_123_456_Year0_Sem1_GRADES.pdf<br>test_123_456_Year0_Sem1_SOCIAL.pdf<br>test_123_456_Year0_Sem1_DIPLOMA.pdf'),
-(75, 1, '2024-09-13', '31001-HAVENFIELD DOCUMENT SUBMISSION', 'Documents submitted: <br><br>HAVENFIELD_RAISSEILLE__Year1_Sem1_COR.pdf<br>HAVENFIELD_RAISSEILLE__Year1_Sem1_GRADES.pdf<br>HAVENFIELD_RAISSEILLE__Year1_Sem1_SOCIAL.pdf<br>HAVENFIELD_RAISSEILLE__Year1_Sem1_DIPLOMA.pdf'),
-(76, 1, '2024-09-13', '32001-CASPAR DOCUMENT SUBMISSION', 'Documents submitted: <br><br>CASPAR_NAVIA__Year1_Sem1_COR.pdf<br>CASPAR_NAVIA__Year1_Sem1_GRADES.pdf<br>CASPAR_NAVIA__Year1_Sem1_SOCIAL.pdf<br>CASPAR_NAVIA__Year1_Sem1_DIPLOMA.pdf'),
-(77, 1, '2024-09-13', '30005-CRUZ DOCUMENT SUBMISSION', 'Documents submitted: <br><br>CRUZ_MATTEO ANTONIO_Dela Cruz_Year1_Sem1_COR.pdf<br>CRUZ_MATTEO ANTONIO_Dela Cruz_Year1_Sem1_GRADES.pdf<br>CRUZ_MATTEO ANTONIO_Dela Cruz_Year1_Sem1_SOCIAL.pdf<br>CRUZ_MATTEO ANTONIO_Dela Cruz_Year1_Sem1_DIPLOMA.pdf'),
-(78, 1, '2024-09-13', '29005-Garcia DOCUMENT SUBMISSION', 'Documents submitted: <br><br>Garcia_Mark_Dela Rosa_Year1_Sem1_COR.pdf<br>Garcia_Mark_Dela Rosa_Year1_Sem1_GRADES.pdf<br>Garcia_Mark_Dela Rosa_Year1_Sem1_SOCIAL.pdf<br>Garcia_Mark_Dela Rosa_Year1_Sem1_DIPLOMA.pdf');
+INSERT INTO `notification` (`notif_id`, `user_id`, `date`, `title`, `content`, `viewed`) VALUES
+(74, 1, '2024-09-04', '30001-test DOCUMENT SUBMISSION', 'Documents submitted: <br><br>test_123_456_Year0_Sem1_COR.pdf<br>test_123_456_Year0_Sem1_GRADES.pdf<br>test_123_456_Year0_Sem1_SOCIAL.pdf<br>test_123_456_Year0_Sem1_DIPLOMA.pdf', 0),
+(75, 1, '2024-09-13', '31001-HAVENFIELD DOCUMENT SUBMISSION', 'Documents submitted: <br><br>HAVENFIELD_RAISSEILLE__Year1_Sem1_COR.pdf<br>HAVENFIELD_RAISSEILLE__Year1_Sem1_GRADES.pdf<br>HAVENFIELD_RAISSEILLE__Year1_Sem1_SOCIAL.pdf<br>HAVENFIELD_RAISSEILLE__Year1_Sem1_DIPLOMA.pdf', 0),
+(76, 1, '2024-09-13', '32001-CASPAR DOCUMENT SUBMISSION', 'Documents submitted: <br><br>CASPAR_NAVIA__Year1_Sem1_COR.pdf<br>CASPAR_NAVIA__Year1_Sem1_GRADES.pdf<br>CASPAR_NAVIA__Year1_Sem1_SOCIAL.pdf<br>CASPAR_NAVIA__Year1_Sem1_DIPLOMA.pdf', 0),
+(77, 1, '2024-09-13', '30005-CRUZ DOCUMENT SUBMISSION', 'Documents submitted: <br><br>CRUZ_MATTEO ANTONIO_Dela Cruz_Year1_Sem1_COR.pdf<br>CRUZ_MATTEO ANTONIO_Dela Cruz_Year1_Sem1_GRADES.pdf<br>CRUZ_MATTEO ANTONIO_Dela Cruz_Year1_Sem1_SOCIAL.pdf<br>CRUZ_MATTEO ANTONIO_Dela Cruz_Year1_Sem1_DIPLOMA.pdf', 0),
+(78, 1, '2024-09-13', '29005-Garcia DOCUMENT SUBMISSION', 'Documents submitted: <br><br>Garcia_Mark_Dela Rosa_Year1_Sem1_COR.pdf<br>Garcia_Mark_Dela Rosa_Year1_Sem1_GRADES.pdf<br>Garcia_Mark_Dela Rosa_Year1_Sem1_SOCIAL.pdf<br>Garcia_Mark_Dela Rosa_Year1_Sem1_DIPLOMA.pdf', 0),
+(79, 545, '2024-10-01', '145-HAVENFIELD DOCUMENT APPROVAL', 'Document has been approved.', 0),
+(80, 528, '2024-10-10', '157-Garcia DOCUMENT APPROVAL', 'Document has been approved.', 0);
 
 -- --------------------------------------------------------
 
@@ -149,19 +152,15 @@ CREATE TABLE `reports` (
 --
 
 INSERT INTO `reports` (`report_id`, `batch_no`, `title`, `report_type`, `creation_date`, `acad_year`, `sem`, `file_name`, `summary`) VALUES
-(8, 27, 'Scholar Status Report for Batch 27 - S.Y. 2024-2025', 'status', '2024-05-26', 2024, 0, '', '\r\n                <h3>DR. PIO VALENZUELA SCHOLARSHIP PROGRAM <br>\r\n                SCHOLAR STATUS REPORT<br>\r\n                S.Y. 2024-2025</h3> <br>\r\n                    \r\n                Batch Number: <strong>27</strong>\r\n\r\n                <p> This report provides an overview of the current status of scholars under the Dr. Pio Valenzuela Scholarship Program for the school year <strong>2024-2025</strong>. As of <strong>2024-05-26</strong>, there are a total of <strong>26</strong> scholars enrolled in the program for Batch Number <strong>27</strong>. The table below presents the current status of scholars under the Dr. Pio Valenzuela Scholarship Program, along with the total number of scholars based on their status: </p>\r\n                <br>\r\n                Total Active Scholars: <strong>26</strong> <br>\r\n                Total Dropped Scholars: <strong>0</strong> <br>\r\n                Total Scholars on Leave of Absence: <strong>0</strong> <br>\r\n                Total Graduated Scholars: <strong>0</strong> <br>\r\n                '),
-(9, 25, 'Scholar Profile and Requirements Report for Batch 25 - 2 Semester of S.Y. 2024-2025', 'profile', '2024-05-26', 2024, 0, '', '\r\n                <h3>DR. PIO VALENZUELA SCHOLARSHIP PROGRAM <br>\r\n                SCHOLAR PROFILE AND REQUIREMENTS REPORT<br>\r\n                2 Semester of S.Y. 2024-2025</h3><br>\r\n        \r\n                Batch Number: <strong>25</strong>\r\n        \r\n                <p> This report provides a comprehensive overview of the profile and current requirement status of scholars under the Dr. Pio Valenzuela Scholarship Program for the <strong>2</strong> Semester of S.Y. <strong>2024-2025</strong>. As of <strong>2024-05-26</strong>, there are a total of <strong>0</strong> scholars enrolled in the program for Batch Number <strong>25</strong>. The table below presents the profile of scholars and the current status of their requirements, along with the total number of scholars who have completed their requirements, and the number of scholars with missing requirements. This report is crucial for monitoring the progress of scholars and ensuring that they meet the program\'s criteria and obligation. </p>\r\n                <br>\r\n                    \r\n                Total Number of Scholars: <strong>0</strong> <br>\r\n                Total Number of Scholars with Complete Requirements: <strong>0</strong> <br>\r\n                Total Number of Scholars with Missing Requirements: <strong>0</strong> <br> <br>\r\n                '),
-(10, 27, 'Scholar Profile and Requirements Report for Batch 27 - 2 Semester of S.Y. 2024-2025', 'profile', '2024-05-26', 2024, 0, '', '\r\n                <h3>DR. PIO VALENZUELA SCHOLARSHIP PROGRAM <br>\r\n                SCHOLAR PROFILE AND REQUIREMENTS REPORT<br>\r\n                2 Semester of S.Y. 2024-2025</h3><br>\r\n        \r\n                Batch Number: <strong>27</strong>\r\n        \r\n                <p> This report provides a comprehensive overview of the profile and current requirement status of scholars under the Dr. Pio Valenzuela Scholarship Program for the <strong>2</strong> Semester of S.Y. <strong>2024-2025</strong>. As of <strong>2024-05-26</strong>, there are a total of <strong>20</strong> scholars enrolled in the program for Batch Number <strong>27</strong>. The table below presents the profile of scholars and the current status of their requirements, along with the total number of scholars who have completed their requirements, and the number of scholars with missing requirements. This report is crucial for monitoring the progress of scholars and ensuring that they meet the program\'s criteria and obligation. </p>\r\n                <br>\r\n                    \r\n                Total Number of Scholars: <strong>20</strong> <br>\r\n                Total Number of Scholars with Complete Requirements: <strong>0</strong> <br>\r\n                Total Number of Scholars with Missing Requirements: <strong>2</strong> <br> <br>\r\n                '),
-(11, 22, 'Scholar Profile and Requirements Report for Batch 22 - 2 Semester of S.Y. 2024-2025', 'profile', '2024-05-28', 2024, 0, '', '\r\n                <h3>DR. PIO VALENZUELA SCHOLARSHIP PROGRAM <br>\r\n                SCHOLAR PROFILE AND REQUIREMENTS REPORT<br>\r\n                2 Semester of S.Y. 2024-2025</h3><br>\r\n        \r\n                Batch Number: <strong>22</strong>\r\n        \r\n                <p> This report provides a comprehensive overview of the profile and current requirement status of scholars under the Dr. Pio Valenzuela Scholarship Program for the <strong>2</strong> Semester of S.Y. <strong>2024-2025</strong>. As of <strong>2024-05-28</strong>, there are a total of <strong>0</strong> scholars enrolled in the program for Batch Number <strong>22</strong>. The table below presents the profile of scholars and the current status of their requirements, along with the total number of scholars who have completed their requirements, and the number of scholars with missing requirements. This report is crucial for monitoring the progress of scholars and ensuring that they meet the program\'s criteria and obligation. </p>\r\n                <br>\r\n                    \r\n                Total Number of Scholars: <strong>0</strong> <br>\r\n                Total Number of Scholars with Complete Requirements: <strong>0</strong> <br>\r\n                Total Number of Scholars with Missing Requirements: <strong>0</strong> <br> <br>\r\n                '),
-(13, 29, 'Scholar Profile and Requirements Report for Batch 29 - 2 Semester of S.Y. 2024-2025', 'profile', '2024-05-30', 2024, 0, '', '\r\n                <h3>DR. PIO VALENZUELA SCHOLARSHIP PROGRAM <br>\r\n                SCHOLAR PROFILE AND REQUIREMENTS REPORT<br>\r\n                2 Semester of S.Y. 2024-2025</h3><br>\r\n        \r\n                Batch Number: <strong>29</strong>\r\n        \r\n                <p> This report provides a comprehensive overview of the profile and current requirement status of scholars under the Dr. Pio Valenzuela Scholarship Program for the <strong>2</strong> Semester of S.Y. <strong>2024-2025</strong>. As of <strong>2024-05-30</strong>, there are a total of <strong>21</strong> scholars enrolled in the program for Batch Number <strong>29</strong>. The table below presents the profile of scholars and the current status of their requirements, along with the total number of scholars who have completed their requirements, and the number of scholars with missing requirements. This report is crucial for monitoring the progress of scholars and ensuring that they meet the program\'s criteria and obligation. </p>\r\n                <br>\r\n                    \r\n                Total Number of Scholars: <strong>21</strong> <br>\r\n                Total Number of Scholars with Complete Requirements: <strong>0</strong> <br>\r\n                Total Number of Scholars with Missing Requirements: <strong>0</strong> <br> <br>\r\n                '),
-(14, 28, 'Scholar Status Report for Batch 28 - S.Y. 2024-2025', 'status', '2024-05-30', 2024, 0, '', '\r\n                <h3>DR. PIO VALENZUELA SCHOLARSHIP PROGRAM <br>\r\n                SCHOLAR STATUS REPORT<br>\r\n                S.Y. 2024-2025</h3> <br>\r\n                    \r\n                Batch Number: <strong>28</strong>\r\n\r\n                <p> This report provides an overview of the current status of scholars under the Dr. Pio Valenzuela Scholarship Program for the school year <strong>2024-2025</strong>. As of <strong>2024-05-30</strong>, there are a total of <strong>1</strong> scholars enrolled in the program for Batch Number <strong>28</strong>. The table below presents the current status of scholars under the Dr. Pio Valenzuela Scholarship Program, along with the total number of scholars based on their status: </p>\r\n                <br>\r\n                Total Active Scholars: <strong>1</strong> <br>\r\n                Total Dropped Scholars: <strong>0</strong> <br>\r\n                Total Scholars on Leave of Absence: <strong>0</strong> <br>\r\n                Total Graduated Scholars: <strong>0</strong> <br>\r\n                '),
 (38, 30, 'Scholar Status Report for Batch 30 - A.Y. 2024-2025 - Semester 1', 'status', '2024-09-05', 2024, 1, 'Scholar-Status-Report_Batch-30_Year-2024-2025_Sem-1.pdf', '\r\n                <h3>DR. PIO VALENZUELA SCHOLARSHIP PROGRAM <br>\r\n                SCHOLAR STATUS REPORT<br>\r\n                A.Y. 2024-2025 Semester 1 </h3><br>\r\n                    \r\n                Batch Number: <strong>30</strong>\r\n\r\n                <p> This report provides an overview of the current status of scholars under the Dr. Pio Valenzuela Scholarship Program for the school year <strong>2024-2025</strong>. As of <strong>2024-09-05</strong>, there are a total of <strong>3</strong> scholars enrolled in the program for Batch Number <strong>30</strong>. This report presents the current status of scholars under the Dr. Pio Valenzuela Scholarship Program, along with the total number of scholars based on their status: </p>\r\n                <br>\r\n                Total Active Scholars: <strong>1</strong> <br>\r\n                Total Dropped Scholars: <strong>1</strong> <br>\r\n                Total Dropped Scholars: <strong>0</strong> <br>\r\n                Total Scholars on Leave of Absence: <strong>1</strong> <br>\r\n                Total Graduated Scholars: <strong>0</strong> <br>\r\n            '),
-(39, 30, 'Scholar Profile and Requirements Report for Batch 30 - A.Y. 2024-2025 - Semester 1', 'requirement', '2024-09-05', 2024, 1, 'Profile-Requirement-Report_Batch-30_Year-2024-2025_Sem-1.pdf', '\r\n                <h3>DR. PIO VALENZUELA SCHOLARSHIP PROGRAM <br>\r\n                SCHOLAR PROFILE AND REQUIREMENTS REPORT<br>\r\n                A.Y. 2024-2025 Semester 1 </h3><br>\r\n\r\n                Batch Number: <strong> 30 </strong>\r\n\r\n                <p> This report provides a comprehensive overview of the profile and current requirement status of scholars under the Dr. Pio Valenzuela Scholarship Program for Semester <strong> 1 </strong> of S.Y. <strong> 2024-2025 </strong>. As of <strong>2024-09-05</strong>, there are a total of <strong>3</strong> scholars enrolled in the program for Batch Number <strong>30</strong>. The full report presents the profile of scholars and the current status of their requirements, along with the total number of scholars who have completed their requirements, and the number of scholars with missing requirements. This report is crucial for monitoring the progress of scholars and ensuring that they meet the program\'s criteria and obligation. </p>\r\n                <br>\r\n                    \r\n                Total Number of Scholars: <strong>3</strong> <br>\r\n                Total Number of Scholars with Complete Requirements: <strong>0</strong> <br>\r\n                Total Number of Scholars with Missing Requirements: <strong>3</strong> <br> <br>\r\n            '),
 (40, 30, 'Scholar Status Report for Batch 30 - A.Y. 2024-2025 - Semester 1', 'status', '2024-09-12', 2024, 1, 'Scholar-Status-Report_Batch-30_Year-2024-2025_Sem-1.pdf', '\r\n                <h3>DR. PIO VALENZUELA SCHOLARSHIP PROGRAM <br>\r\n                SCHOLAR STATUS REPORT<br>\r\n                A.Y. 2024-2025 Semester 1 </h3><br>\r\n                    \r\n                Batch Number: <strong>30</strong>\r\n\r\n                <p> This report provides an overview of the current status of scholars under the Dr. Pio Valenzuela Scholarship Program for the school year <strong>2024-2025</strong>. As of <strong>2024-09-12</strong>, there are a total of <strong>3</strong> scholars enrolled in the program for Batch Number <strong>30</strong>. This report presents the current status of scholars under the Dr. Pio Valenzuela Scholarship Program, along with the total number of scholars based on their status: </p>\r\n                <br>\r\n                Total Active Scholars: <strong>1</strong> <br>\r\n                Total Dropped Scholars: <strong>1</strong> <br>\r\n                Total Dropped Scholars: <strong>0</strong> <br>\r\n                Total Scholars on Leave of Absence: <strong>1</strong> <br>\r\n                Total Graduated Scholars: <strong>0</strong> <br>\r\n            '),
-(41, 30, 'Scholar Status Report for Batch 30 - A.Y. 2024-2025 - Semester 1', 'status', '2024-09-13', 2024, 1, 'Scholar-Status-Report_Batch-30_Year-2024-2025_Sem-1.pdf', '\r\n                <h3>DR. PIO VALENZUELA SCHOLARSHIP PROGRAM <br>\r\n                SCHOLAR STATUS REPORT<br>\r\n                A.Y. 2024-2025 Semester 1 </h3><br>\r\n                    \r\n                Batch Number: <strong>30</strong>\r\n\r\n                <p> This report provides an overview of the current status of scholars under the Dr. Pio Valenzuela Scholarship Program for the school year <strong>2024-2025</strong>. As of <strong>2024-09-13</strong>, there are a total of <strong>11</strong> scholars enrolled in the program for Batch Number <strong>30</strong>. This report presents the current status of scholars under the Dr. Pio Valenzuela Scholarship Program, along with the total number of scholars based on their status: </p>\r\n                <br>\r\n                Total Active Scholars: <strong>11</strong> <br>\r\n                Total Dropped Scholars: <strong>0</strong> <br>\r\n                Total Dropped Scholars: <strong>0</strong> <br>\r\n                Total Scholars on Leave of Absence: <strong>0</strong> <br>\r\n                Total Graduated Scholars: <strong>0</strong> <br>\r\n            '),
 (42, 30, 'Scholar Profile and Requirements Report for Batch 30 - A.Y. 2024-2025 - Semester 1', 'requirement', '2024-09-13', 2024, 1, 'Profile-Requirement-Report_Batch-30_Year-2024-2025_Sem-1.pdf', '\r\n                <h3>DR. PIO VALENZUELA SCHOLARSHIP PROGRAM <br>\r\n                SCHOLAR PROFILE AND REQUIREMENTS REPORT<br>\r\n                A.Y. 2024-2025 Semester 1 </h3><br>\r\n\r\n                Batch Number: <strong> 30 </strong>\r\n\r\n                <p> This report provides a comprehensive overview of the profile and current requirement status of scholars under the Dr. Pio Valenzuela Scholarship Program for Semester <strong> 1 </strong> of S.Y. <strong> 2024-2025 </strong>. As of <strong>2024-09-13</strong>, there are a total of <strong>11</strong> scholars enrolled in the program for Batch Number <strong>30</strong>. The full report presents the profile of scholars and the current status of their requirements, along with the total number of scholars who have completed their requirements, and the number of scholars with missing requirements. This report is crucial for monitoring the progress of scholars and ensuring that they meet the program\'s criteria and obligation. </p>\r\n                <br>\r\n                    \r\n                Total Number of Scholars: <strong>11</strong> <br>\r\n                Total Number of Scholars with Complete Requirements: <strong>0</strong> <br>\r\n                Total Number of Scholars with Missing Requirements: <strong>1</strong> <br> <br>\r\n            '),
 (43, 30, 'Scholar Profile and Requirements Report for Batch 30 - A.Y. 2024-2025 - Semester 1', 'requirement', '2024-09-13', 2024, 1, 'Profile-Requirement-Report_Batch-30_Year-2024-2025_Sem-1.pdf', '\r\n                <h3>DR. PIO VALENZUELA SCHOLARSHIP PROGRAM <br>\r\n                SCHOLAR PROFILE AND REQUIREMENTS REPORT<br>\r\n                A.Y. 2024-2025 Semester 1 </h3><br>\r\n\r\n                Batch Number: <strong> 30 </strong>\r\n\r\n                <p> This report provides a comprehensive overview of the profile and current requirement status of scholars under the Dr. Pio Valenzuela Scholarship Program for Semester <strong> 1 </strong> of S.Y. <strong> 2024-2025 </strong>. As of <strong>2024-09-13</strong>, there are a total of <strong>11</strong> scholars enrolled in the program for Batch Number <strong>30</strong>. The full report presents the profile of scholars and the current status of their requirements, along with the total number of scholars who have completed their requirements, and the number of scholars with missing requirements. This report is crucial for monitoring the progress of scholars and ensuring that they meet the program\'s criteria and obligation. </p>\r\n                <br>\r\n                    \r\n                Total Number of Scholars: <strong>11</strong> <br>\r\n                Total Number of Scholars with Complete Requirements: <strong>0</strong> <br>\r\n                Total Number of Scholars with Missing Requirements: <strong>1</strong> <br> <br>\r\n            '),
-(44, 29, 'Scholar Status Report for Batch 29 - A.Y. 2024-2025 - Semester 1', 'status', '2024-09-13', 2024, 1, 'Scholar-Status-Report_Batch-29_Year-2024-2025_Sem-1.pdf', '\r\n                <h3>DR. PIO VALENZUELA SCHOLARSHIP PROGRAM <br>\r\n                SCHOLAR STATUS REPORT<br>\r\n                A.Y. 2024-2025 Semester 1 </h3><br>\r\n                    \r\n                Batch Number: <strong>29</strong>\r\n\r\n                <p> This report provides an overview of the current status of scholars under the Dr. Pio Valenzuela Scholarship Program for the school year <strong>2024-2025</strong>. As of <strong>2024-09-13</strong>, there are a total of <strong>10</strong> scholars enrolled in the program for Batch Number <strong>29</strong>. This report presents the current status of scholars under the Dr. Pio Valenzuela Scholarship Program, along with the total number of scholars based on their status: </p>\r\n                <br>\r\n                Total Active Scholars: <strong>6</strong> <br>\r\n                Total Dropped Scholars: <strong>1</strong> <br>\r\n                Total Dropped Scholars: <strong>2</strong> <br>\r\n                Total Scholars on Leave of Absence: <strong>1</strong> <br>\r\n                Total Graduated Scholars: <strong>0</strong> <br>\r\n            ');
+(44, 29, 'Scholar Status Report for Batch 29 - A.Y. 2024-2025 - Semester 1', 'status', '2024-09-13', 2024, 1, 'Scholar-Status-Report_Batch-29_Year-2024-2025_Sem-1.pdf', '\r\n                <h3>DR. PIO VALENZUELA SCHOLARSHIP PROGRAM <br>\r\n                SCHOLAR STATUS REPORT<br>\r\n                A.Y. 2024-2025 Semester 1 </h3><br>\r\n                    \r\n                Batch Number: <strong>29</strong>\r\n\r\n                <p> This report provides an overview of the current status of scholars under the Dr. Pio Valenzuela Scholarship Program for the school year <strong>2024-2025</strong>. As of <strong>2024-09-13</strong>, there are a total of <strong>10</strong> scholars enrolled in the program for Batch Number <strong>29</strong>. This report presents the current status of scholars under the Dr. Pio Valenzuela Scholarship Program, along with the total number of scholars based on their status: </p>\r\n                <br>\r\n                Total Active Scholars: <strong>6</strong> <br>\r\n                Total Dropped Scholars: <strong>1</strong> <br>\r\n                Total Dropped Scholars: <strong>2</strong> <br>\r\n                Total Scholars on Leave of Absence: <strong>1</strong> <br>\r\n                Total Graduated Scholars: <strong>0</strong> <br>\r\n            '),
+(45, 30, 'Scholar Status Report for Batch 30 - A.Y. 2024-2025 - Semester 1', 'status', '2024-10-01', 2024, 1, 'Scholar-Status-Report_Batch-30_Year-2024-2025_Sem-1.pdf', '\r\n                <h3>DR. PIO VALENZUELA SCHOLARSHIP PROGRAM <br>\r\n                SCHOLAR STATUS REPORT<br>\r\n                A.Y. 2024-2025 Semester 1 </h3><br>\r\n                    \r\n                Batch Number: <strong>30</strong>\r\n\r\n                <p> This report provides an overview of the current status of scholars under the Dr. Pio Valenzuela Scholarship Program for the school year <strong>2024-2025</strong>. As of <strong>2024-10-01</strong>, there are a total of <strong>11</strong> scholars enrolled in the program for Batch Number <strong>30</strong>. This report presents the current status of scholars under the Dr. Pio Valenzuela Scholarship Program, along with the total number of scholars based on their status: </p>\r\n                <br>\r\n                Total Active Scholars: <strong>11</strong> <br>\r\n                Total Dropped Scholars: <strong>0</strong> <br>\r\n                Total Dropped Scholars: <strong>0</strong> <br>\r\n                Total Scholars on Leave of Absence: <strong>0</strong> <br>\r\n                Total Graduated Scholars: <strong>0</strong> <br>\r\n            '),
+(46, 30, 'Scholar Status Report for Batch 30 - A.Y. 2024-2025 - Semester 1', 'status', '2024-10-05', 2024, 1, 'Scholar-Status-Report_Batch-30_Year-2024-2025_Sem-1.pdf', '\r\n                <h3>DR. PIO VALENZUELA SCHOLARSHIP PROGRAM <br>\r\n                SCHOLAR STATUS REPORT<br>\r\n                A.Y. 2024-2025 Semester 1 </h3><br>\r\n                    \r\n                Batch Number: <strong>30</strong>\r\n\r\n                <p> This report provides an overview of the current status of scholars under the Dr. Pio Valenzuela Scholarship Program for the school year <strong>2024-2025</strong>. As of <strong>2024-10-05</strong>, there are a total of <strong>11</strong> scholars enrolled in the program for Batch Number <strong>30</strong>. This report presents the current status of scholars under the Dr. Pio Valenzuela Scholarship Program, along with the total number of scholars based on their status: </p>\r\n                <br>\r\n                Total Active Scholars: <strong>11</strong> <br>\r\n                Total Dropped Scholars: <strong>0</strong> <br>\r\n                Total Dropped Scholars: <strong>0</strong> <br>\r\n                Total Scholars on Leave of Absence: <strong>0</strong> <br>\r\n                Total Graduated Scholars: <strong>0</strong> <br>\r\n            '),
+(47, 30, 'Scholar Status Report for Batch 30 - A.Y. 2024-2025 - Semester 1', 'status', '2024-10-08', 2024, 1, 'Scholar-Status-Report_Batch-30_Year-2024-2025_Sem-1.pdf', '\r\n                <h3>DR. PIO VALENZUELA SCHOLARSHIP PROGRAM <br>\r\n                SCHOLAR STATUS REPORT<br>\r\n                A.Y. 2024-2025 Semester 1 </h3><br>\r\n                    \r\n                Batch Number: <strong>30</strong>\r\n\r\n                <p> This report provides an overview of the current status of scholars under the Dr. Pio Valenzuela Scholarship Program for the school year <strong>2024-2025</strong>. As of <strong>2024-10-08</strong>, there are a total of <strong>11</strong> scholars enrolled in the program for Batch Number <strong>30</strong>. This report presents the current status of scholars under the Dr. Pio Valenzuela Scholarship Program, along with the total number of scholars based on their status: </p>\r\n                <br>\r\n                Total Active Scholars: <strong>11</strong> <br>\r\n                Total Dropped Scholars: <strong>0</strong> <br>\r\n                Total Dropped Scholars: <strong>0</strong> <br>\r\n                Total Scholars on Leave of Absence: <strong>0</strong> <br>\r\n                Total Graduated Scholars: <strong>0</strong> <br>\r\n            '),
+(48, 29, 'Scholar Status Report for Batch 29 - A.Y. 2024-2025 - Semester 1', 'status', '2024-10-08', 2024, 1, 'Scholar-Status-Report_Batch-29_Year-2024-2025_Sem-1.pdf', '\r\n                <h3>DR. PIO VALENZUELA SCHOLARSHIP PROGRAM <br>\r\n                SCHOLAR STATUS REPORT<br>\r\n                A.Y. 2024-2025 Semester 1 </h3><br>\r\n                    \r\n                Batch Number: <strong>29</strong>\r\n\r\n                <p> This report provides an overview of the current status of scholars under the Dr. Pio Valenzuela Scholarship Program for the school year <strong>2024-2025</strong>. As of <strong>2024-10-08</strong>, there are a total of <strong>10</strong> scholars enrolled in the program for Batch Number <strong>29</strong>. This report presents the current status of scholars under the Dr. Pio Valenzuela Scholarship Program, along with the total number of scholars based on their status: </p>\r\n                <br>\r\n                Total Active Scholars: <strong>4</strong> <br>\r\n                Total Dropped Scholars: <strong>2</strong> <br>\r\n                Total Dropped Scholars: <strong>2</strong> <br>\r\n                Total Scholars on Leave of Absence: <strong>2</strong> <br>\r\n                Total Graduated Scholars: <strong>0</strong> <br>\r\n            ');
 
 -- --------------------------------------------------------
 
@@ -198,7 +197,7 @@ CREATE TABLE `scholar` (
   `last_name` varchar(30) NOT NULL COMMENT 'CAPS LOCK',
   `first_name` varchar(100) NOT NULL COMMENT 'CAPS LOCK',
   `middle_name` varchar(20) DEFAULT NULL COMMENT 'CAPS LOCK',
-  `school` varchar(100) NOT NULL COMMENT 'CAPS LOCK',
+  `school` varchar(150) NOT NULL COMMENT 'CAPS LOCK',
   `course` varchar(150) NOT NULL COMMENT 'CAPS LOCK',
   `_address` text NOT NULL COMMENT 'CAPS LOCK',
   `contact` varchar(20) NOT NULL COMMENT 'phone number',
@@ -211,11 +210,11 @@ CREATE TABLE `scholar` (
 --
 
 INSERT INTO `scholar` (`scholar_id`, `batch_no`, `user_id`, `status`, `last_name`, `first_name`, `middle_name`, `school`, `course`, `_address`, `contact`, `email`, `remarks`) VALUES
-(29001, 29, 524, 'ACTIVE', 'Dela Cruz', 'Juan', 'Santos', 'University of the Philippines Diliman', 'Bachelor of Science in Computer Science', '7322 Elpidio Quirino Avenue, Barangay Talon, Las Pi?as City, Metro Manila', '+639174827635', 'email@email.com', NULL),
+(29001, 29, 524, 'PROBATION', 'Dela Cruz', 'Juan', 'Santos', 'UNIVERSITY OF SANTO TOMAS', 'BACHELOR OF SCIENCE IN COMPUTER SCIENCE', '7322 ELPIDIO QUIRINO AVENUE, BARANGAY TALON, LAS PI?AS CITY, METRO MANILA', '+63968078392', 'email@email.com', NULL),
 (29002, 29, 525, 'LOA', 'Reyes', 'Maria', 'Gonzales', 'Ateneo de Manila University', 'Bachelor of Arts in Economics', '218 Mariano Marcos Street, Barangay Sumilang, Pasig City, Metro Manila', '+639982153874', 'abcde@gmail.com', NULL),
 (29003, 29, 526, 'ACTIVE', 'Santos', 'Carlos', 'Ramirez', 'De La Salle University', 'Bachelor of Science in Chemical Engineering', '5839 Gregorio Araneta Avenue, Barangay Tandang Sora, Quezon City, Metro Manila', '+639324689127', 'abcde@gmail.com', NULL),
 (29004, 29, 527, 'ACTIVE', 'Cruz', 'Ana', 'Reyes', 'University of Santo Tomas', 'Bachelor of Science in Pharmacy', '1342 Juan Luna Street, Barangay Tondo, Manila City, Metro Manila', '+639567438291', 'abcde@gmail.com', NULL),
-(29005, 29, 528, 'ACTIVE', 'Garcia', 'Mark', 'Dela Rosa', 'Map?a University', 'Bachelor of Science in Electronics Engineering', '4175 E. Rodriguez Sr. Avenue, Barangay Marilag, Quezon City, Metro Manila', '+6309083746258', 'abcde@gmail.com', NULL),
+(29005, 29, 528, 'LOA', 'Garcia', 'Mark', 'Dela Rosa', 'POLYTECHNIC UNIVERSITY OF THE PHILIPPINES', 'BACHELOR OF SCIENCE IN ARCHITECTURE', '4175 E. RODRIGUEZ SR. AVENUE, BARANGAY MARILAG, QUEZON CITY, METRO MANILA', '+6309083746257', 'garcia@gmail.com', NULL),
 (29006, 29, 529, 'ACTIVE', 'Bautista', 'Jose', 'Mendoza', 'Far Eastern University', 'Bachelor of Science in Accountancy', '9219 A. Mabini Street, Barangay San Isidro, Para?aque City, Metro Manila', '+639196512437', 'abcde@gmail.com', NULL),
 (29007, 29, 530, 'DROPPED', 'Mendoza', 'Clara', 'Bautista', 'Polytechnic University of the Philippines', 'Bachelor of Science in Architecture', '3546 J.P. Rizal Avenue, Barangay Olympia, Makati City, Metro Manila', '+639458391752', 'abcde@gmail.com', NULL),
 (29008, 29, 531, 'PROBATION', 'Ramos', 'Vicente', 'Pascual', 'Adamson University', 'Bachelor of Science in Nursing', '5671 P. Burgos Street, Barangay San Miguel, Mandaluyong City, Metro Manila', '+639275716483', 'abcde@gmail.com', NULL),
@@ -260,6 +259,7 @@ CREATE TABLE `submission` (
   `sub_date` date NOT NULL,
   `doc_name` varchar(150) NOT NULL,
   `doc_type` varchar(50) NOT NULL,
+  `school` varchar(150) NOT NULL,
   `acad_year` varchar(10) NOT NULL,
   `sem` int(1) NOT NULL,
   `doc_status` varchar(10) NOT NULL,
@@ -270,23 +270,41 @@ CREATE TABLE `submission` (
 -- Dumping data for table `submission`
 --
 
-INSERT INTO `submission` (`submit_id`, `scholar_id`, `sub_date`, `doc_name`, `doc_type`, `acad_year`, `sem`, `doc_status`, `reason`) VALUES
-(145, 31001, '2024-09-13', 'HAVENFIELD_RAISSEILLE__Year1_Sem1_COR.pdf', 'COR', '2024-2025', 1, 'PENDING', ''),
-(146, 31001, '2024-09-13', 'HAVENFIELD_RAISSEILLE__Year1_Sem1_GRADES.pdf', 'GRADES', '2024-2025', 1, 'PENDING', ''),
-(147, 31001, '2024-09-13', 'HAVENFIELD_RAISSEILLE__Year1_Sem1_SOCIAL.pdf', 'SOCIAL', '2024-2025', 1, 'PENDING', ''),
-(148, 31001, '2024-09-13', 'HAVENFIELD_RAISSEILLE__Year1_Sem1_DIPLOMA.pdf', 'DIPLOMA', '2024-2025', 1, 'PENDING', ''),
-(149, 32001, '2024-09-13', 'CASPAR_NAVIA__Year1_Sem1_COR.pdf', 'COR', '2024-2025', 1, 'PENDING', ''),
-(150, 32001, '2024-09-13', 'CASPAR_NAVIA__Year1_Sem1_GRADES.pdf', 'GRADES', '2024-2025', 1, 'PENDING', ''),
-(151, 32001, '2024-09-13', 'CASPAR_NAVIA__Year1_Sem1_SOCIAL.pdf', 'SOCIAL', '2024-2025', 1, 'PENDING', ''),
-(152, 32001, '2024-09-13', 'CASPAR_NAVIA__Year1_Sem1_DIPLOMA.pdf', 'DIPLOMA', '2024-2025', 1, 'PENDING', ''),
-(153, 30005, '2024-09-13', 'CRUZ_MATTEO ANTONIO_Dela Cruz_Year1_Sem1_COR.pdf', 'COR', '2024-2025', 1, 'PENDING', ''),
-(154, 30005, '2024-09-13', 'CRUZ_MATTEO ANTONIO_Dela Cruz_Year1_Sem1_GRADES.pdf', 'GRADES', '2024-2025', 1, 'PENDING', ''),
-(155, 30005, '2024-09-13', 'CRUZ_MATTEO ANTONIO_Dela Cruz_Year1_Sem1_SOCIAL.pdf', 'SOCIAL', '2024-2025', 1, 'PENDING', ''),
-(156, 30005, '2024-09-13', 'CRUZ_MATTEO ANTONIO_Dela Cruz_Year1_Sem1_DIPLOMA.pdf', 'DIPLOMA', '2024-2025', 1, 'PENDING', ''),
-(157, 29005, '2024-09-13', 'Garcia_Mark_Dela Rosa_Year1_Sem1_COR.pdf', 'COR', '2024-2025', 1, 'PENDING', ''),
-(158, 29005, '2024-09-13', 'Garcia_Mark_Dela Rosa_Year1_Sem1_GRADES.pdf', 'GRADES', '2024-2025', 1, 'PENDING', ''),
-(159, 29005, '2024-09-13', 'Garcia_Mark_Dela Rosa_Year1_Sem1_SOCIAL.pdf', 'SOCIAL', '2024-2025', 1, 'PENDING', ''),
-(160, 29005, '2024-09-13', 'Garcia_Mark_Dela Rosa_Year1_Sem1_DIPLOMA.pdf', 'DIPLOMA', '2024-2025', 1, 'PENDING', '');
+INSERT INTO `submission` (`submit_id`, `scholar_id`, `sub_date`, `doc_name`, `doc_type`, `school`, `acad_year`, `sem`, `doc_status`, `reason`) VALUES
+(145, 31001, '2024-09-13', 'HAVENFIELD_RAISSEILLE__Year1_Sem1_COR.pdf', 'COR', '0', '2024-2025', 1, 'APPROVED', ''),
+(146, 31001, '2024-09-13', 'HAVENFIELD_RAISSEILLE__Year1_Sem1_GRADES.pdf', 'GRADES', '0', '2024-2025', 1, 'PENDING', ''),
+(148, 31001, '2024-09-13', 'HAVENFIELD_RAISSEILLE__Year1_Sem1_DIPLOMA.pdf', 'DIPLOMA', '0', '2024-2025', 1, 'PENDING', ''),
+(149, 32001, '2024-09-13', 'CASPAR_NAVIA__Year1_Sem1_COR.pdf', 'COR', '0', '2024-2025', 1, 'PENDING', ''),
+(150, 32001, '2024-09-13', 'CASPAR_NAVIA__Year1_Sem1_GRADES.pdf', 'GRADES', '0', '2024-2025', 1, 'PENDING', ''),
+(152, 32001, '2024-09-13', 'CASPAR_NAVIA__Year1_Sem1_DIPLOMA.pdf', 'DIPLOMA', '0', '2024-2025', 1, 'PENDING', ''),
+(153, 30005, '2024-09-13', 'CRUZ_MATTEO ANTONIO_Dela Cruz_Year1_Sem1_COR.pdf', 'COR', '0', '2024-2025', 1, 'PENDING', ''),
+(154, 30005, '2024-09-13', 'CRUZ_MATTEO ANTONIO_Dela Cruz_Year1_Sem1_GRADES.pdf', 'GRADES', '0', '2024-2025', 1, 'PENDING', ''),
+(155, 30005, '2024-09-13', 'CRUZ_MATTEO ANTONIO_Dela Cruz_Year1_Sem1_SOCIAL.pdf', 'SOCIAL', '0', '2024-2025', 1, 'PENDING', ''),
+(156, 30005, '2024-09-13', 'CRUZ_MATTEO ANTONIO_Dela Cruz_Year1_Sem1_DIPLOMA.pdf', 'DIPLOMA', '0', '2024-2025', 1, 'PENDING', ''),
+(157, 29005, '2024-09-13', 'Garcia_Mark_Dela Rosa_Year1_Sem1_COR.pdf', 'COR', 'POLYTECHNIC UNIVERSITY OF THE PHILIPPINES', '2024-2025', 1, 'APPROVED', ''),
+(159, 29005, '2024-09-13', 'Garcia_Mark_Dela Rosa_Year1_Sem1_SOCIAL.pdf', 'SOCIAL', 'POLYTECHNIC UNIVERSITY OF THE PHILIPPINES', '2024-2025', 1, 'PENDING', ''),
+(160, 29005, '2024-09-13', 'Garcia_Mark_Dela Rosa_Year1_Sem1_DIPLOMA.pdf', 'DIPLOMA', 'POLYTECHNIC UNIVERSITY OF THE PHILIPPINES', '2024-2025', 1, 'PENDING', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `university`
+--
+
+CREATE TABLE `university` (
+  `school_id` int(11) NOT NULL,
+  `school_name` varchar(150) NOT NULL,
+  `address` varchar(250) NOT NULL,
+  `acad_year` varchar(10) NOT NULL,
+  `sem_count` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `university`
+--
+
+INSERT INTO `university` (`school_id`, `school_name`, `address`, `acad_year`, `sem_count`) VALUES
+(1, 'PAMANTASAN NG LUNGSOD NG VALENZUELA', 'MXV9+GJF, Maysan Rd, Valenzuela, Metro Manila', '2024-2025', 2);
 
 -- --------------------------------------------------------
 
@@ -299,42 +317,47 @@ CREATE TABLE `user` (
   `role_id` int(11) NOT NULL,
   `username` varchar(100) NOT NULL,
   `email` varchar(320) NOT NULL,
-  `passhash` varchar(255) NOT NULL
+  `passhash` varchar(255) NOT NULL,
+  `reset_code` varchar(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`user_id`, `role_id`, `username`, `email`, `passhash`) VALUES
-(1, 1, 'admin', '', 'admin'),
-(2, 3, 'evaluator', '', 'eval'),
-(3, 2, 'test', '', 'testing'),
-(524, 2, '29-001', '', 'Dela Cruz'),
-(525, 2, '29-002', '', 'Reyes'),
-(526, 2, '29-003', '', 'Santos'),
-(527, 2, '29-004', '', 'Cruz'),
-(528, 2, '29-005', '', 'Garcia'),
-(529, 2, '29-006', '', 'Bautista'),
-(530, 2, '29-007', '', 'Mendoza'),
-(531, 2, '29-008', '', 'Ramos'),
-(532, 2, '29-009', '', 'Perez'),
-(533, 2, '29-010', '', 'Morales'),
-(534, 2, '30-001', '', 'JACINTO'),
-(535, 2, '30-002', '', 'REYES'),
-(536, 2, '30-003', '', 'SANTOS'),
-(537, 2, '30-004', '', 'MERCADO'),
-(538, 2, '30-005', '', 'CRUZ'),
-(539, 2, '30-006', '', 'BAUTISTA'),
-(540, 2, '30-007', '', 'DOMINGO'),
-(541, 2, '30-008', '', 'VILLEGAS'),
-(542, 2, '30-009', '', 'FERNANDEZ'),
-(543, 2, '30-010', '', 'RAMOS'),
-(544, 2, '30-011', '', 'DE GUZMAN'),
-(545, 2, '31-001', '', 'HAVENFIELD'),
-(546, 2, '31-001', '', 'HAVENFIELD'),
-(547, 2, '31-001', '', 'HAVENFIELD'),
-(548, 2, '32-001', '', 'CASPAR');
+INSERT INTO `user` (`user_id`, `role_id`, `username`, `email`, `passhash`, `reset_code`) VALUES
+(1, 1, 'admin', '', 'admin', ''),
+(2, 3, 'evaluator', '', 'eval', ''),
+(3, 2, 'test', '', 'testing', ''),
+(524, 2, '29-001', '', 'Dela Cruz', ''),
+(525, 2, '29-002', '', 'Reyes', ''),
+(526, 2, '29-003', '', 'Santos', ''),
+(527, 2, '29-004', '', 'Cruz', ''),
+(528, 2, '29-005', '', 'Garcia', ''),
+(529, 2, '29-006', '', 'Bautista', ''),
+(530, 2, '29-007', '', 'Mendoza', ''),
+(531, 2, '29-008', '', 'Ramos', ''),
+(532, 2, '29-009', '', 'Perez', ''),
+(533, 2, '29-010', '', 'Morales', ''),
+(534, 2, '30-001', '', 'JACINTO', ''),
+(535, 2, '30-002', '', 'REYES', ''),
+(536, 2, '30-003', '', 'SANTOS', ''),
+(537, 2, '30-004', '', 'MERCADO', ''),
+(538, 2, '30-005', '', 'CRUZ', ''),
+(539, 2, '30-006', '', 'BAUTISTA', ''),
+(540, 2, '30-007', '', 'DOMINGO', ''),
+(541, 2, '30-008', '', 'VILLEGAS', ''),
+(542, 2, '30-009', '', 'FERNANDEZ', ''),
+(543, 2, '30-010', '', 'RAMOS', ''),
+(544, 2, '30-011', '', 'DE GUZMAN', ''),
+(545, 2, '31-001', '', 'HAVENFIELD', ''),
+(546, 2, '31-001', '', 'HAVENFIELD', ''),
+(547, 2, '31-001', '', 'HAVENFIELD', ''),
+(548, 2, '32-001', '', 'CASPAR', ''),
+(551, 2, '28-002', '', 'A', ''),
+(558, 2, '27-003', '', 'B', ''),
+(561, 2, '23-001', '', 'B', ''),
+(562, 2, '23-002', '', 'B', '');
 
 --
 -- Indexes for dumped tables
@@ -345,7 +368,7 @@ INSERT INTO `user` (`user_id`, `role_id`, `username`, `email`, `passhash`) VALUE
 --
 ALTER TABLE `announcements`
   ADD PRIMARY KEY (`announce_id`),
-  ADD KEY `status` (`_status`);
+  ADD KEY `status` (`status`);
 
 --
 -- Indexes for table `batch_year`
@@ -395,6 +418,12 @@ ALTER TABLE `submission`
   ADD KEY `submission-scholar` (`scholar_id`);
 
 --
+-- Indexes for table `university`
+--
+ALTER TABLE `university`
+  ADD PRIMARY KEY (`school_id`);
+
+--
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
@@ -415,13 +444,13 @@ ALTER TABLE `announcements`
 -- AUTO_INCREMENT for table `notification`
 --
 ALTER TABLE `notification`
-  MODIFY `notif_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
+  MODIFY `notif_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 
 --
 -- AUTO_INCREMENT for table `reports`
 --
 ALTER TABLE `reports`
-  MODIFY `report_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `report_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `role`
@@ -436,10 +465,16 @@ ALTER TABLE `submission`
   MODIFY `submit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=161;
 
 --
+-- AUTO_INCREMENT for table `university`
+--
+ALTER TABLE `university`
+  MODIFY `school_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=549;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=563;
 
 --
 -- Constraints for dumped tables
