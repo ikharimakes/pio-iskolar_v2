@@ -90,119 +90,6 @@ function docxPending($current_page = 1, $sort_column = 'scholar_id', $sort_order
 
 //* DOCUMENT DISPLAY - ADMIN-SIDE *//
 // function docxAdmin($id, $sort_column = 'sub_date', $sort_order = 'asc') {
-//     global $conn, $year, $sem, $batch;
-//     $valid_columns = ['doc_name', 'sub_date', 'doc_type', 'doc_status'];
-    
-//     if (!in_array($sort_column, $valid_columns)) {
-//         $sort_column = 'sub_date';
-//     }
-    
-//     $sort_order = strtolower($sort_order) === 'desc' ? 'desc' : 'asc';
-//     $conditions = "WHERE scholar_id = '$id' AND acad_year = '$year' AND sem = '$sem'";
-    
-//     $displayQuery = "SELECT * FROM submission $conditions ORDER BY $sort_column $sort_order";
-//     $result = $conn->query($displayQuery);
-
-//     // Predefined document types to load initially
-//     $docTypes = ['COR', 'GRADES', 'SOCIAL'];
-//     $submissions = [];
-
-//     // Fetch all submissions and organize by document type
-//     if ($result && $result->num_rows > 0) {
-//         while ($row = $result->fetch_assoc()) {
-//             $submissions[$row['doc_type']] = $row;
-//         }
-//     }
-
-//     // Loop through each document type and check if submission exists
-//     foreach ($docTypes as $docType) {
-//         $row = isset($submissions[$docType]) ? $submissions[$docType] : null;
-
-//         // Handle missing documents
-//         if (!$row) {
-//             $row = [
-//                 'doc_name' => '',
-//                 'doc_status' => 'MISSING',
-//                 'sub_date' => '',
-//                 'submit_id' => '',
-//                 'reason' => ''
-//             ];
-//         }
-
-//         $status = $row['doc_status'];
-//         $style = match ($status) {
-//             'MISSING' => 'color: rgb(100, 100, 100); font-weight: 600;',
-//             'PENDING' => 'color: rgb(212, 120, 0); font-weight: 600;',
-//             'APPROVED' => 'color: rgb(0, 136, 0); font-weight: 600;',
-//             'DECLINED' => 'color: rgb(189, 0, 0); font-weight: 600;',
-//             default => '',
-//         };
-
-//         // Disable actions based on status
-//         $disabledActions = [
-//             'view' => ($status === 'MISSING'),
-//             'approve' => ($status === 'MISSING' || $status === 'APPROVED' || $status === 'DECLINED'),
-//             'decline' => ($status === 'MISSING' || $status === 'APPROVED' || $status === 'DECLINED'),
-//             'upload' => ($status === 'PENDING' || $status === 'APPROVED' || $status === 'DECLINED'),
-//             'download' => ($status === 'MISSING'),
-//             'delete' => ($status === 'MISSING')
-//         ];
-
-//         echo '
-//             <tr>
-//                 <td style="text-align:center">' . $docType . '</td>
-//                 <td>' . $row['doc_name'] . '</td>
-//                 <td style="text-align:center;' . $style . '">' . $status . '</td>
-//                 <td style="text-align:center">' . $row['sub_date'] . '</td>
-//                 <td style="float: right;" class="wrap"> 
-//                     <div class="icon ' . ($disabledActions['view'] ? 'disabled' : '') . '">
-//                         <div class="tooltip">View</div>
-//                         <span> <ion-icon name="eye-outline" onclick="openPrev(this)"
-//                             data-id="' . $row['submit_id'] . '"  
-//                             data-doc_name="' . $row['doc_name'] . '" 
-//                             data-doc_status="' . $row['doc_status'] . '"
-//                             data-doc_reason="' . $row['reason'] . '"></ion-icon> </span>
-//                     </div>
-
-//                     <div class="icon ' . ($disabledActions['upload'] ? 'disabled' : '') . '">
-//                         <div class="tooltip">Upload</div>
-//                         <span> <ion-icon name="cloud-upload-outline" 
-//                             data-id="' . $row['submit_id'] . '"></ion-icon> </span>
-//                     </div>
-
-//                     <div class="icon ' . ($disabledActions['approve'] ? 'disabled' : '') . '">
-//                         <div class="tooltip">Approve</div>
-//                         <span> <ion-icon name="checkmark-circle-outline" onclick="openApprove(this)" 
-//                             data-id="' . $row['submit_id'] . '"></ion-icon> </span>
-//                     </div>
-
-//                     <div class="icon ' . ($disabledActions['decline'] ? 'disabled' : '') . '">
-//                         <div class="tooltip">Decline</div>
-//                         <span> <ion-icon name="close-circle-outline" onclick="openDecline(this)" 
-//                             data-id="' . $row['submit_id'] . '"></ion-icon> </span>
-//                     </div>
-
-//                     <div class="icon ' . ($disabledActions['download'] ? 'disabled' : '') . '">
-//                         <div class="tooltip">Download</div>
-//                         <a href="../assets/' . $row['doc_name'] . '" download="' . $row['doc_name'] . '">
-//                             <span> <ion-icon name="download-outline"></ion-icon> </span>
-//                         </a>
-//                     </div>
-
-//                     <div class="icon ' . ($disabledActions['delete'] ? 'disabled' : '') . '">
-//                         <div class="tooltip">Delete</div>
-//                         <span> <ion-icon name="trash-outline" onclick="openDelete(this)" 
-//                             type="submission" 
-//                             data-id="' . $row['submit_id'] . '" 
-//                             data-name="' . $row['doc_name'] . '"></ion-icon> </span>
-//                     </div>
-//                 </td>
-//             </tr>
-//         ';
-//     }
-// }
-
-// function docxAdmin($id, $sort_column = 'sub_date', $sort_order = 'asc') {
 //     global $conn, $year, $sem;
 //     $valid_columns = ['doc_name', 'sub_date', 'doc_type', 'doc_status'];
 
@@ -539,7 +426,7 @@ function docxScholar($id, $current_page = 1, $sort_column = 'sub_date', $sort_or
         $conditions .= " AND (doc_name LIKE '%$search%' OR doc_type LIKE '%$search%')";
     }
     if ($filter !== '' && $filter !== 'all') {
-        $conditions .= " AND doc_type = '$filter'";
+        $conditions .= " AND doc_status = '$filter'";
     }
 
     $displayQuery = "SELECT * FROM submission $conditions 

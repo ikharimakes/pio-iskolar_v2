@@ -92,9 +92,9 @@
                 <select id="filter">
                     <option value="" disabled selected>Status</option>
                     <option value="all">All</option>
-                    <option value="Approved">Approved</option>
-                    <option value="Pending">Pending</option>
-                    <option value="Declined">Declined</option>
+                    <option value="APPROVED">Approved</option>
+                    <option value="PENDING">Pending</option>
+                    <option value="DECLINED">Declined</option>
                 </select>
             </div>
         </div>
@@ -262,7 +262,6 @@
                     .then(response => response.text())
                     .then(html => {
                         tableBody.innerHTML = html;
-                        attachRowCheckboxEvents();
                     })
                     .catch(error => console.error('Error fetching table data:', error));
 

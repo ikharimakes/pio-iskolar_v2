@@ -58,14 +58,14 @@
                 <p> How can we help? </p>
             </div> <br>
 
-            <div class="search">
+            <!-- <div class="search">
                 <form action="" method="get">
                     <label>
                         <input type="text" name="search" placeholder="Search here">
                         <ion-icon name="search-outline"></ion-icon>
                     </label>
                 </form>
-            </div>
+            </div> -->
         </div>
 
 

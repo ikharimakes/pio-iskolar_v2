@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change'])) {
 
     echo json_encode($response);
 } else {
-    echo json_encode(array('success' => false, 'message' => 'Invalid request method or button not clicked.'));
+    // echo json_encode(array('success' => false, 'message' => 'Invalid request method or button not clicked.'));
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reset'])) {
@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reset'])) {
         $confirmPassword = $_POST['confirmPassword'];
 
         if ($newPassword !== $confirmPassword) {
-            $response['message'] = 'New passwords do not match.';
+            // $response['message'] = 'New passwords do not match.';
         } else {
             // Assuming the user is identified via session or a token from a password reset link
             session_start();
@@ -76,23 +76,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reset'])) {
 
                 if ($stmt->execute()) {
                     $response['success'] = true;
-                    $response['message'] = 'Password updated successfully.';
+                    // $response['message'] = 'Password updated successfully.';
                 } else {
-                    $response['message'] = 'Failed to update password.';
+                    // $response['message'] = 'Failed to update password.';
                 }
 
                 $stmt->close();
                 $conn->close();
             } else {
-                $response['message'] = 'User not logged in.';
+                // $response['message'] = 'User not logged in.';
             }
         }
     } else {
-        $response['message'] = 'Please fill all the required fields.';
+        // $response['message'] = 'Please fill all the required fields.';
     }
 
     echo json_encode($response);
 } else {
-    echo json_encode(array('success' => false, 'message' => 'Invalid request method or button not clicked.'));
+    // echo json_encode(array('success' => false, 'message' => 'Invalid request method or button not clicked.'));
 }
 ?>
