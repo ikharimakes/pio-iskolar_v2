@@ -281,7 +281,7 @@ function exportScholarListToCSV($sort_column = 'scholar_id', $sort_order = 'asc'
         $output = fopen('php://output', 'w');
         
         // Output column headers
-        fputcsv($output, ['Scholar ID', 'Last Name', 'First Name', 'School', 'Status', 'Document Status']);
+        fputcsv($output, ['Scholar ID', 'Last Name', 'First Name', 'School', 'Document Status', 'Status']);
 
         while ($row = $result->fetch_assoc()) {
             $scholar_id = $row['scholar_id'];
@@ -335,5 +335,9 @@ function exportScholarListToCSV($sort_column = 'scholar_id', $sort_order = 'asc'
     }
 }
 
+if (isset($_POST['export_csv'])) {
+    exportScholarListToCSV();
+    exit; // Make sure no further output is generated after CSV export
+}
 
 ?>

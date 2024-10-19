@@ -232,6 +232,31 @@
         });
                 
         fetchChartData();
+        
+        function redirectScholar(category = '', filter = '') {
+            const form = document.createElement('form');
+            form.method = 'POST'; // Using POST to avoid appending params to the URL
+            form.action = 'ad_scholar.php';
+
+            if (category) {
+                const categoryInput = document.createElement('input');
+                categoryInput.type = 'hidden';
+                categoryInput.name = 'category';
+                categoryInput.value = category;
+                form.appendChild(categoryInput);
+            }
+
+            if (filter) {
+                const filterInput = document.createElement('input');
+                filterInput.type = 'hidden';
+                filterInput.name = 'filter';
+                filterInput.value = filter;
+                form.appendChild(filterInput);
+            }
+
+            document.body.appendChild(form);
+            form.submit();
+        }
     </script>
 </body>
 </html>

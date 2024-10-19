@@ -1,6 +1,7 @@
 <?php 
     include_once('../functions/general.php'); 
     include('../functions/scholar_view.php');
+    include ('../functions/password_fx.php');
     
     $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : (isset($_COOKIE['user_role']) ? $_COOKIE['user_role'] : null);
 
@@ -23,7 +24,7 @@
     <link rel="icon" type="image/x-icon" href="images/pio-logo.png">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="css/ad_skoDetail.css">
-    <!-- <link rel="stylesheet" href="css/profile.css"> -->
+    <link rel="stylesheet" href="css/profile.css"> 
     <link rel="stylesheet" href="css/confirm.css">
 </head>
 <body>
@@ -54,6 +55,8 @@
         </center></div>
 
         <?php scholarView();?>
+
+        <a href="#" onclick="openPass()"> Change Password </a>
     </div>
 
 
@@ -83,7 +86,7 @@
                 </div> <br>
 
                 <div class="enter-button-container">
-                    <button class="enter-button" type="submit"> Enter </button>
+                    <button class="enter-button" type="submit" name="change"> Enter </button>
                 </div>
             </form> <br>
         </div> 

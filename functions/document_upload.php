@@ -17,13 +17,14 @@
         foreach($file_fields as $field) {
             if(!empty($_FILES[$field]['tmp_name']) && is_uploaded_file($_FILES[$field]['tmp_name'])) {
                 if (!$scholar_info) {
-                    $query = "SELECT batch_no, last_name, first_name, middle_name FROM scholar WHERE scholar_id = '$id'";
+                    $query = "SELECT batch_no, last_name, first_name, middle_name, school FROM scholar WHERE scholar_id = '$id'";
                     $result = $conn->query($query);
                     $scholar_info = $result->fetch_assoc();
                     $level = ($batch - $scholar_info['batch_no']) + 1;
                 }
 
                 $name = $scholar_info['last_name'].'_'.$scholar_info['first_name'].'_'.$scholar_info['middle_name'].'_Year'.$level.'_Sem'.$sem.'_'.$field.'.pdf';
+                $school = $scholar_info['school'];
                 
                 $upload_temp = $_FILES[$field]['tmp_name'];
                 move_uploaded_file($upload_temp, "../assets/$name");
@@ -36,7 +37,7 @@
                     $execute = $conn->query($update);
                 } else {
                     // Insert a new document record
-                    $insert = "INSERT INTO submission (submit_id, scholar_id, sub_date, doc_name, doc_type, acad_year, sem, doc_status) VALUES (NULL, '$id', '$date', '$name', '$field', '$year', '$sem', 'PENDING')";
+                    $insert = "INSERT INTO submission (submit_id, scholar_id, sub_date, doc_name, doc_type, acad_year, sem, doc_status, school) VALUES (NULL, '$id', '$date', '$name', '$field', '$year', '$sem', 'PENDING', $school)";
                     $execute = $conn->query($insert);
                 }
                 
@@ -63,6 +64,65 @@
         header('Location: ./history.php');
         die;
     }
+
+//* DOCUMENT SUBMISSION - ADMIN *//
+    if(isset($_POST['upload'])) {
+        global $sem;
+        global $year;
+        $batch = '32'; //!TEMPORARY
+        $id = $_SESSION['sid'];
+        $date = date("Y-m-d");
+        $type = $_POST['type'];
+
+        $scholar_info = null;
+
+        if(!empty($_FILES[$type]['tmp_name']) && is_uploaded_file($_FILES[$type]['tmp_name'])) {
+            if (!$scholar_info) {
+                $query = "SELECT batch_no, last_name, first_name, middle_name, school FROM scholar WHERE scholar_id = '$id'";
+                $result = $conn->query($query);
+                $scholar_info = $result->fetch_assoc();
+                $level = ($batch - $scholar_info['batch_no']) + 1;
+            }
+
+            $name = $scholar_info['last_name'].'_'.$scholar_info['first_name'].'_'.$scholar_info['middle_name'].'_Year'.$level.'_Sem'.$sem.'_'.$type.'.pdf';
+            $school = $scholar_info['school'];
+            
+            $upload_temp = $_FILES[$type]['tmp_name'];
+            move_uploaded_file($upload_temp, "../assets/$name");
+
+            // // Check if a declined document exists
+            // $declined_doc = getDocumentDetails($id, $field, $year, $sem);
+            // if ($declined_doc && $declined_doc['doc_status'] === 'DECLINED') {
+            //     // Update the existing declined document record
+            //     $update = "UPDATE submission SET sub_date = '$date', doc_name = '$name', doc_status = 'PENDING' WHERE scholar_id = '$id' AND doc_type = '$field' AND acad_year = '$year' AND sem = '$sem'";
+            //     $execute = $conn->query($update);
+            // } else {
+                // Insert a new document record
+                $insert = "INSERT INTO submission (submit_id, scholar_id, sub_date, doc_name, doc_type, acad_year, sem, doc_status, school) VALUES (NULL, '$id', '$date', '$name', '$type', '$year', '$sem', 'PENDING', '$school')";
+                $execute = $conn->query($insert);
+            // }
+            
+            if (!$execute) {
+                die(mysqli_error($conn));
+            }
+        }
+
+        // Generate notification
+        // if (!empty($submitted_docs)) {
+        //     $admin_id = 1; // Assuming the admin user_id is 1
+        //     $title = "{$id}-{$scholar_info['last_name']} DOCUMENT SUBMISSION";
+        //     $content = "Documents submitted: <br><br>" . implode('<br>', $submitted_docs);
+        //     $notif_insert = "INSERT INTO notification (user_id, date, title, content) VALUES ('$admin_id', '$date', '$title', '$content')";
+        //     $notif_execute = $conn->query($notif_insert);
+        //     if (!$notif_execute) {
+        //         die(mysqli_error($conn));
+        //     }
+        // }
+
+        header('Location: '.$_SERVER['PHP_SELF']);
+        die;
+    }
+    
 
 //* PENDING OR APPROVED DOCUMENTS *//
 function hasPendingDocument($scholar_id, $doc_type, $year, $sem) {
@@ -94,7 +154,6 @@ function getDocumentDetails($scholar_id, $doc_type, $year, $sem) {
         return null;
     }
 }
-
 
 //* DOCUMENT UPDATE *//
 if (isset($_POST['update'])) {
@@ -137,7 +196,7 @@ if (isset($_POST['update'])) {
         die(mysqli_error($conn));
     }
 
-    header('Location: ad_skoDocs.php');
+    header('Location: ad_skoDetail.php');
     die;
 }
 ?>

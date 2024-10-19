@@ -199,7 +199,7 @@ function scholarDetail() {
                         </div>
 
                         <div class="profile-info">
-                            <div class="button-container">
+                            <div class="detail-container">
                                 <button type="button" class="edit" id="editButton">
                                     <h3> Edit </h3>
                                 </button>

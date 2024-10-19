@@ -89,146 +89,6 @@ function docxPending($current_page = 1, $sort_column = 'scholar_id', $sort_order
 }
 
 //* DOCUMENT DISPLAY - ADMIN-SIDE *//
-// function docxAdmin($id, $sort_column = 'sub_date', $sort_order = 'asc') {
-//     global $conn, $year, $sem;
-//     $valid_columns = ['doc_name', 'sub_date', 'doc_type', 'doc_status'];
-
-//     if (!in_array($sort_column, $valid_columns)) {
-//         $sort_column = 'sub_date';
-//     }
-    
-//     $sort_order = strtolower($sort_order) === 'desc' ? 'desc' : 'asc';
-//     $conditions = "WHERE scholar_id = '$id'";
-    
-//     $displayQuery = "SELECT * FROM submission $conditions ORDER BY school, acad_year, sem, $sort_column $sort_order";
-//     $result = $conn->query($displayQuery);
-
-//     $docTypes = ['COR', 'GRADES', 'SOCIAL'];
-//     $groupedSubmissions = [];
-
-//     if ($result && $result->num_rows > 0) {
-//         while ($row = $result->fetch_assoc()) {
-//             $groupKey = $row['school'] . ', A.Y. ' . $row['acad_year'] . ', SEMESTER ' . $row['sem'];
-//             if (!isset($groupedSubmissions[$groupKey])) {
-//                 $groupedSubmissions[$groupKey] = [];
-//             }
-//             $groupedSubmissions[$groupKey][] = $row;
-//         }
-//     }
-
-//     foreach ($groupedSubmissions as $groupKey => $submissions) {
-//         echo '
-//         <div class="table">
-//             <button class="tblTitle active">
-//                 <span>' . $groupKey . '</span>
-//                 <ion-icon name="chevron-down-outline"></ion-icon>
-//             </button>
-//             <div class="tblContent" style="display:block;">
-//                 <table>
-//                     <tr style="font-weight: bold;">
-//                         <th style="width:10%"> Type </th>
-//                         <th style="width:65%"> Document Name </th>
-//                         <th style="width:10%"> Status </th>
-//                         <th style="width:10%"> Date </th>
-//                         <th style="width:5%"> Action </th>
-//                     </tr>';
-
-//         foreach ($docTypes as $docType) {
-//             $row = null;
-//             foreach ($submissions as $submission) {
-//                 if ($submission['doc_type'] === $docType) {
-//                     $row = $submission;
-//                     break;
-//                 }
-//             }
-
-//             if (!$row) {
-//                 $row = [
-//                     'doc_name' => '',
-//                     'doc_status' => 'MISSING',
-//                     'sub_date' => '',
-//                     'submit_id' => '',
-//                     'reason' => ''
-//                 ];
-//             }
-
-//             $status = $row['doc_status'];
-//             $style = match ($status) {
-//                 'MISSING' => 'color: rgb(100, 100, 100); font-weight: 600;',
-//                 'PENDING' => 'color: rgb(212, 120, 0); font-weight: 600;',
-//                 'APPROVED' => 'color: rgb(0, 136, 0); font-weight: 600;',
-//                 'DECLINED' => 'color: rgb(189, 0, 0); font-weight: 600;',
-//                 default => '',
-//             };
-
-//             $disabledActions = [
-//                 'view' => ($status === 'MISSING'),
-//                 'approve' => ($status === 'MISSING' || $status === 'APPROVED' || $status === 'DECLINED'),
-//                 'decline' => ($status === 'MISSING' || $status === 'APPROVED' || $status === 'DECLINED'),
-//                 'upload' => ($status === 'PENDING' || $status === 'APPROVED' || $status === 'DECLINED'),
-//                 'download' => ($status === 'MISSING'),
-//                 'delete' => ($status === 'MISSING')
-//             ];
-
-//             echo '
-//                 <tr>
-//                     <td style="text-align:center">' . $docType . '</td>
-//                     <td>' . $row['doc_name'] . '</td>
-//                     <td style="text-align:center;' . $style . '">' . $status . '</td>
-//                     <td style="text-align:center">' . $row['sub_date'] . '</td>
-//                     <td style="float: right;" class="wrap"> 
-//                         <div class="icon ' . ($disabledActions['view'] ? 'disabled' : '') . '" style="opacity: ' . ($disabledActions['view'] ? '0.5' : '1') . ';">
-//                             <div class="tooltip ' . ($disabledActions['view'] ? 'disabled-tooltip' : '') . '">View</div>
-//                             <span> <ion-icon name="eye-outline" onclick="openPrev(this)"
-//                                 data-id="' . $row['submit_id'] . '"  
-//                                 data-doc_name="' . $row['doc_name'] . '" 
-//                                 data-doc_status="' . $row['doc_status'] . '"
-//                                 data-doc_reason="' . $row['reason'] . '"></ion-icon> </span>
-//                         </div>
-
-//                         <div class="icon ' . ($disabledActions['upload'] ? 'disabled' : '') . '" style="opacity: ' . ($disabledActions['upload'] ? '0.5' : '1') . ';">
-//                             <div class="tooltip ' . ($disabledActions['upload'] ? 'disabled-tooltip' : '') . '">Upload</div>
-//                             <span> <ion-icon name="cloud-upload-outline" 
-//                                 onclick="triggerUpload(this, \'' . $docType . '\')"></ion-icon> </span>
-//                             <input name="' . $docType . '" type="file" accept=".pdf" style="display: none;" onchange="autoSubmit(this)" />
-//                         </div>
-
-//                         <div class="icon ' . ($disabledActions['approve'] ? 'disabled' : '') . '" style="opacity: ' . ($disabledActions['approve'] ? '0.5' : '1') . ';">
-//                             <div class="tooltip ' . ($disabledActions['approve'] ? 'disabled-tooltip' : '') . '">Approve</div>
-//                             <span> <ion-icon name="checkmark-circle-outline" onclick="openApprove(this)" 
-//                                 data-id="' . $row['submit_id'] . '"></ion-icon> </span>
-//                         </div>
-
-//                         <div class="icon ' . ($disabledActions['decline'] ? 'disabled' : '') . '" style="opacity: ' . ($disabledActions['decline'] ? '0.5' : '1') . ';">
-//                             <div class="tooltip ' . ($disabledActions['decline'] ? 'disabled-tooltip' : '') . '">Decline</div>
-//                             <span> <ion-icon name="close-circle-outline" onclick="openDecline(this)" 
-//                                 data-id="' . $row['submit_id'] . '"></ion-icon> </span>
-//                         </div>
-
-//                         <div class="icon ' . ($disabledActions['download'] ? 'disabled' : '') . '" style="opacity: ' . ($disabledActions['download'] ? '0.5' : '1') . ';">
-//                             <div class="tooltip ' . ($disabledActions['download'] ? 'disabled-tooltip' : '') . '">Download</div>
-//                             <a href="../assets/' . $row['doc_name'] . '" download="' . $row['doc_name'] . '">
-//                                 <span> <ion-icon name="download-outline"></ion-icon> </span>
-//                             </a>
-//                         </div>
-
-//                         <div class="icon ' . ($disabledActions['delete'] ? 'disabled' : '') . '" style="opacity: ' . ($disabledActions['delete'] ? '0.5' : '1') . ';">
-//                             <div class="tooltip ' . ($disabledActions['delete'] ? 'disabled-tooltip' : '') . '">Delete</div>
-//                             <span> <ion-icon name="trash-outline" onclick="openDelete(this)" 
-//                                 type="submission" 
-//                                 data-id="' . $row['submit_id'] . '" 
-//                                 data-name="' . $row['doc_name'] . '"></ion-icon> </span>
-//                         </div>
-//                     </td>
-//                 </tr>';
-//         }
-        
-//         echo '</table>
-//             </div>
-//         </div>';
-//     }
-// }
-
 function docxAdmin($id, $sort_column = 'sub_date', $sort_order = 'asc') {
     global $conn, $year, $sem;
     $valid_columns = ['doc_name', 'sub_date', 'doc_type', 'doc_status'];
@@ -349,19 +209,23 @@ function docxAdmin($id, $sort_column = 'sub_date', $sort_order = 'asc') {
 
                         <div class="icon ' . ($disabledActions['upload'] ? 'disabled' : '') . '" style="opacity: ' . ($disabledActions['upload'] ? '0.5' : '1') . ';">
                             <div class="tooltip ' . ($disabledActions['upload'] ? 'disabled-tooltip' : '') . '">Upload</div>
-                            <span> 
-                                <label for="' . $docType . '_' . $year . '_' . $docType . '">
-                                <ion-icon name="cloud-upload-outline"></ion-icon>
-                                </label> 
-                            </span>
-                            <input 
-                                id="' . $docType . '_' . $year . '_' . $docType . '" 
-                                name="' . $docType . '_' . $year . '_' . $docType . '" 
-                                type="file" 
-                                accept=".pdf" 
-                                style="display: none;" 
-                                onchange="autoSubmit(this)" 
-                            />
+                            <form action="" method="post" enctype="multipart/form-data">
+                                <span> 
+                                    <label for="' . $docType . '_' . $year . '_' . $sem . '">
+                                    <ion-icon name="cloud-upload-outline"></ion-icon>
+                                    </label> 
+                                </span>
+                                <input 
+                                    id="' . $docType . '_' . $year . '_' . $sem . '" 
+                                    name="' . $docType . '" 
+                                    type="file" 
+                                    accept=".pdf" 
+                                    style="display: none;" 
+                                    onchange="form.submit()" 
+                                />
+                                <input type="hidden" name="type" value="' . $docType . '">
+                                <input type="hidden" name="upload" value="true">
+                            </form>
                         </div>
 
                         <div class="icon ' . ($disabledActions['approve'] ? 'disabled' : '') . '" style="opacity: ' . ($disabledActions['approve'] ? '0.5' : '1') . ';">

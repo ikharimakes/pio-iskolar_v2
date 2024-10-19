@@ -80,7 +80,7 @@
     <!-- TOP BAR -->
     <div class="main2">
         <div class="topBar">
-            <a href="./ad_scholar.php" style="text-decoration:none">
+            <a href="ad_scholar.php" style="text-decoration:none">
             <button class="headerBack" id="clickableIcon">
                 <ion-icon name="chevron-back-outline"></ion-icon>
                 <h1>Back</h1>
@@ -266,91 +266,91 @@
         });
 
         // FETCH API SEARCH/SORT/FILTER AND PAGINATION
-        document.addEventListener('DOMContentLoaded', () => {
-            const tableBody = document.getElementById('docTableBody');
+        // document.addEventListener('DOMContentLoaded', () => {
+        //     const tableBody = document.getElementById('docTableBody');
 
-            let sortStates = {
-                'doc_name': 'neutral',
-                'sub_date': 'neutral'
-            };
+        //     let sortStates = {
+        //         'doc_name': 'neutral',
+        //         'sub_date': 'neutral'
+        //     };
 
-            const updateSortIcons = () => {
-                const icons = {
-                    'doc_name': document.getElementById('docNameSortIcon'),
-                    'sub_date': document.getElementById('dateSortIcon'),
-                };
+        //     const updateSortIcons = () => {
+        //         const icons = {
+        //             'doc_name': document.getElementById('docNameSortIcon'),
+        //             'sub_date': document.getElementById('dateSortIcon'),
+        //         };
 
-                for (const [column, icon] of Object.entries(icons)) {
-                    const state = sortStates[column];
-                    if (state === 'neutral') {
-                        icon.className = 'fa fa-sort';
-                    } else if (state === 'asc') {
-                        icon.className = 'fa fa-sort-up';
-                    } else if (state === 'desc') {
-                        icon.className = 'fa fa-sort-down';
-                    }
-                }
-            };
+        //         for (const [column, icon] of Object.entries(icons)) {
+        //             const state = sortStates[column];
+        //             if (state === 'neutral') {
+        //                 icon.className = 'fa fa-sort';
+        //             } else if (state === 'asc') {
+        //                 icon.className = 'fa fa-sort-up';
+        //             } else if (state === 'desc') {
+        //                 icon.className = 'fa fa-sort-down';
+        //             }
+        //         }
+        //     };
 
-            const handleSort = (headerId, sortKey) => {
-                const header = document.getElementById(headerId);
-                header.addEventListener('click', () => {
-                    const currentState = sortStates[sortKey];
-                    let nextState;
-                    if (currentState === 'neutral') {
-                        nextState = 'asc';
-                    } else if (currentState === 'asc') {
-                        nextState = 'desc';
-                    } else {
-                        nextState = 'neutral';
-                    }
-                    sortStates[sortKey] = nextState;
+        //     const handleSort = (headerId, sortKey) => {
+        //         const header = document.getElementById(headerId);
+        //         header.addEventListener('click', () => {
+        //             const currentState = sortStates[sortKey];
+        //             let nextState;
+        //             if (currentState === 'neutral') {
+        //                 nextState = 'asc';
+        //             } else if (currentState === 'asc') {
+        //                 nextState = 'desc';
+        //             } else {
+        //                 nextState = 'neutral';
+        //             }
+        //             sortStates[sortKey] = nextState;
 
-                    for (const key in sortStates) {
-                        if (key !== sortKey) {
-                            sortStates[key] = 'neutral';
-                        }
-                    }
+        //             for (const key in sortStates) {
+        //                 if (key !== sortKey) {
+        //                     sortStates[key] = 'neutral';
+        //                 }
+        //             }
 
-                    updateSortIcons();
-                    fetchData();
-                });
-            };
+        //             updateSortIcons();
+        //             fetchData();
+        //         });
+        //     };
 
-            handleSort('sortDocName', 'doc_name');
-            handleSort('sortDate', 'sub_date');
-            updateSortIcons();
+        //     handleSort('sortDocName', 'doc_name');
+        //     handleSort('sortDate', 'sub_date');
+        //     updateSortIcons();
 
-            const fetchData = (page = 1) => {
-                const params = new URLSearchParams(window.location.search);
-                params.set('page', page);
-                for (const [column, state] of Object.entries(sortStates)) {
-                    if (state !== 'neutral') {
-                        params.set('sort_column', column);
-                        params.set('sort_order', state);
-                    }
-                }
-            };
+        //     const fetchData = (page = 1) => {
+        //         const params = new URLSearchParams(window.location.search);
+        //         params.set('page', page);
+        //         for (const [column, state] of Object.entries(sortStates)) {
+        //             if (state !== 'neutral') {
+        //                 params.set('sort_column', column);
+        //                 params.set('sort_order', state);
+        //             }
+        //         }
+        //     };
 
-            const navigatePage = (page, sourceFile) => {
-                const sortColumn = Object.keys(sortStates).find(column => sortStates[column] !== 'neutral');
-                if (sortColumn) {
-                    params.set('sort_column', sortColumn);
-                    params.set('sort_order', sortStates[sortColumn]);
-                }
+        //     const navigatePage = (page, sourceFile) => {
+        //         const sortColumn = Object.keys(sortStates).find(column => sortStates[column] !== 'neutral');
+        //         if (sortColumn) {
+        //             params.set('sort_column', sortColumn);
+        //             params.set('sort_order', sortStates[sortColumn]);
+        //         }
 
-                // Fetch table data
-                params.set('ajax', 'table');
-                fetch(`${sourceFile}?${params.toString()}`)
-                    .then(response => response.text())
-                    .then(html => {
-                        tableBody.innerHTML = html;
-                    })
-                    .catch(error => console.error('Error fetching table data:', error));
-            };
+        //         // Fetch table data
+        //         params.set('ajax', 'table');
+        //         fetch(`${sourceFile}?${params.toString()}`)
+        //             .then(response => response.text())
+        //             .then(html => {
+        //                 tableBody.innerHTML = html;
+        //             })
+        //             .catch(error => console.error('Error fetching table data:', error));
+        //     };
 
-            fetchData(); // Initial fetch on page load
-        });
+        //     fetchData(); // Initial fetch on page load
+        // });
 
         // VIEW MODAL
         function openPrev(elem) {
@@ -432,15 +432,15 @@
             });
         }
 
-        $(document).ready(function () {
-            // Select all input elements with class 'custom-file-upload'
-            $('input[type=file]').change(function () {
-                var file = $(this)[0].files[0].name;
-                // Find the corresponding label by its 'for' attribute
-                var labelFor = $(this).attr('id');
-                $('label[for=' + labelFor + ']').text(file);
-            });
-        });
+        // $(document).ready(function () {
+        //     // Select all input elements with class 'custom-file-upload'
+        //     $('input[type=file]').change(function () {
+        //         var file = $(this)[0].files[0].name;
+        //         // Find the corresponding label by its 'for' attribute
+        //         var labelFor = $(this).attr('id');
+        //         $('label[for=' + labelFor + ']').text(file);
+        //     });
+        // });
     </script>
 </body>
 </html>
