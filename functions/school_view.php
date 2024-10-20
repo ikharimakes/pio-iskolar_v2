@@ -23,7 +23,7 @@
         // Build the search query
         $conditions = $search !== '' ? "WHERE school_name LIKE '%$search%' OR address LIKE '%$search%'" : "";
         if ($filter !== '' && $filter !== 'all') {
-            $conditions .= $conditions === '' ? "WHERE status = '$filter'" : " AND status = '$filter'";
+            $conditions .= $conditions === '' ? "WHERE sem_count = '$filter'" : " AND sem_count = '$filter'";
         }
     
         // Build the main query
@@ -53,7 +53,7 @@
                             <div class="icon">
                                 <div class="tooltip"> Delete</div>
                                 <span> <ion-icon name="trash-outline" onclick="openDelete(this)" 
-                                    type="announce" 
+                                    type="university" 
                                     data-id="'.$row["school_id"].'"></ion-icon> </span>
                             </div>
                         </td>
@@ -77,12 +77,12 @@
     
         // Add search conditions
         if ($search !== '') {
-            $conditions .= " AND (school_name LIKE '%$search%' OR status LIKE '%$search%' OR address LIKE '%$search%')";
+            $conditions .= " AND (school_name LIKE '%$search%' OR address LIKE '%$search%')";
         }
     
         // Add filter conditions
         if ($filter !== '' && $filter !== 'all') {
-            $conditions .= " AND status = '$filter'";
+            $conditions .= " AND sem_count = '$filter'";
         }
     
         // Final query to count the records

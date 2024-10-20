@@ -33,6 +33,20 @@
         }
         exit;
     }
+
+    function getBatchNumbers() {
+    global $conn;
+        $query = "SELECT DISTINCT batch_no FROM reports ORDER BY batch_no";
+        $result = mysqli_query($conn, $query);
+        $batch_numbers = [];
+        if ($result) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                $batch_numbers[] = $row['batch_no'];
+            }
+        }
+        return $batch_numbers;
+    }
+    $batch_numbers = getBatchNumbers();
 ?>
 
 <!DOCTYPE html>
@@ -86,11 +100,11 @@
                 <h4> Filter by:</h4>
 
                 <select id="filter">
-                    <option value="" disabled selected>Status</option>
+                    <option value="" disabled selected>Batch Number</option>
                     <option value="all">All</option>
-                    <option value="Completed">Completed</option>
-                    <option value="Reviewed">Reviewed</option>
-                    <option value="Pending">Closed</option>
+                    <?php foreach ($batch_numbers as $batch_no): ?>
+                        <option value="<?php echo $batch_no; ?>"><?php echo $batch_no; ?></option>
+                    <?php endforeach; ?>
                 </select>
             </div>
 
@@ -364,7 +378,7 @@
             document.getElementById("reportContent").innerHTML = content.replace(/\n/g, "<br>");
             openView();
         }
-{
+
         var modalOption1 = document.getElementById("statusModal");
         var modalOption2 = document.getElementById("profileModal");
         var modalOption3 = document.getElementById("statsModal");
@@ -429,7 +443,6 @@
         function downloadForm() {
             closeProfile();
         }
-}
     </script>
 </body>
 </html>

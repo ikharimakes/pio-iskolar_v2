@@ -94,9 +94,38 @@
         </div>
     </div>
 
+    <!-- DEACTIVATE MODAL -->
+    <div id="deactivateOverlay" class="overlay">
+        <div class="overlay-content">
+            <div class="infos">
+                <h2>Confirm Deactivation</h2>
+                <span class="closeOverlay" onclick="closeDeactivate()">&times;</span>
+            </div>
+            <div class="message">
+                <h4>Are you sure you want to deactivate this announcement?</h4>
+            </div>
+            <div class="button-container">
+                <form id="deactivateForm" method="post" action="">
+                    <input type="hidden" id="deactivate-id" name="announce_id">
+                    <button type="submit" name="deactivate" class="yes-button">Yes</button>
+                    <button type="button" class="no-button" onclick="closeDeactivate()">No</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <!-- JS CODE-->
     <script>
+        // DEACTIVATE
+        function openDeactivate(elem) {
+            if (elem.closest('.icon').classList.contains('disabled')) return;
+            document.getElementById("deactivate-id").value = elem.getAttribute("data-id");
+            document.getElementById("deactivateOverlay").style.display = "block";
+        }
+        function closeDeactivate() {
+            document.getElementById("deactivateOverlay").style.display = "none";
+        }
+
         // APPROVE
         function openApprove(elem) {
             if (elem.closest('.icon').classList.contains('disabled')) return;

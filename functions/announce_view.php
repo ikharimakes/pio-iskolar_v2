@@ -101,7 +101,7 @@ function annList($current_page = 1, $sort_column = 'title', $sort_order = 'asc')
 
                         <div class="icon">
                             <div class="tooltip"> Deactivate </div>
-                            <span> <ion-icon name="close-circle-outline" onclick="openDecline(this)" 
+                            <span> <ion-icon name="close-circle-outline" onclick="openDeactivate(this)" 
                                 data-id="'.$row["announce_id"].'"></ion-icon> </span>
                         </div>
 

@@ -1,7 +1,7 @@
 <?php
     include_once('../functions/general.php');
     include('../functions/school_view.php');
-    // include('../functions/school_fx.php');
+    include('../functions/school_fx.php');
     include('../functions/page.php');
     $sourceFile = 'ad_school.php';
 
@@ -94,11 +94,8 @@
                 <select id="filter">
                     <option value="" disabled selected>SEMESTER</option>
                     <option value="all">All</option>
-                    <option value="ACTIVE">ACTIVE</option>
-                    <option value="PROBATION">PROBATION</option>
-                    <option value="DROPPED">DROPPED</option>
-                    <option value="LOA">LOA</option>
-                    <option value="GRADUATE">GRADUATE</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
                 </select>
             </div>
 
@@ -157,14 +154,17 @@
                     </tr>
                     <tr>
                         <td class="details">SEMESTERS PER ACADEMIC YEAR</td>
-                        <td><input type="text" class="input" name="semester" pattern="\+63\d{10}" placeholder="+639012345678" value="+63" required></td>
+                        <td>
+                            <input type="radio" id="sem_2" name="semester" value="2"/> <label for="sem_2">2 SEMESTERS</label>
+                            <input type="radio" id="sem_3" name="semester"  value="3"/> <label for="sem_3">3 SEMESTERS</label>
+                        </td>
                     </tr>
                 </table>
                 
                 <br>
                 <center> <div class="button-container">
                     <button class="discard" onclick="closeAdd()">Discard</button>
-                    <button name="individual" type="submit" class="save">Save</button>
+                    <button name="add" type="submit" class="save">Save</button>
                 </div> <center>
             </div>
         </form>
@@ -194,7 +194,10 @@
                     </tr>
                     <tr>
                         <td class="details">SEMESTERS PER ACADEMIC YEAR</td>
-                        <td><input id="edit-sem" type="text" class="input" name="semester" pattern="\d{1}" required></td>
+                        <td>
+                            <input type="radio" id="sem_2" name="semester" value="2"/> <label for="sem_2">2 SEMESTERS</label>
+                            <input type="radio" id="sem_3" name="semester"  value="3"/> <label for="sem_3">3 SEMESTERS</label>
+                        </td>
                     </tr>
                 </table>
                 
@@ -375,9 +378,17 @@
             document.getElementById("edit-id").value = elem.getAttribute("data-id");
             document.getElementById("edit-name").value = elem.getAttribute("data-name");
             document.getElementById("edit-address").value = elem.getAttribute("data-address");
-            document.getElementById("edit-sem").value = elem.getAttribute("data-sem");
+
+            const semesterValue = elem.getAttribute("data-sem");
+            if (semesterValue === "2") {
+                document.getElementById("sem_2").checked = true;
+            } else if (semesterValue === "3") {
+                document.getElementById("sem_3").checked = true;
+            }
+
             document.getElementById("editModal").style.display = "block";
         }
+
         function closeEdit() {
             document.getElementById("editSchoolForm").reset();  // Reset the form fields
             document.getElementById("editModal").style.display = "none";

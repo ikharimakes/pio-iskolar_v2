@@ -49,7 +49,6 @@ if (isset($_POST['add_ann'])) {
     tempMail($recipients, $title, $content);
 
     if ($run) {
-        
         header('Location: ' . $_SERVER['PHP_SELF']);
     } else {
         die(mysqli_error($conn));
@@ -86,4 +85,24 @@ if (isset($_POST['add_ann'])) {
             die(mysqli_error($conn));
         }
     }
+
+//* ANNOUNCEMENT DEACTIVATE *//
+if(isset($_POST['deactivate'])){
+    $id = $_POST['announce_id'];
+
+    // Calculate the end date as one day before today
+    $end = date('Y-m-d', strtotime('-1 day'));
+
+    // Construct the update query to modify only the end_date
+    $update = "UPDATE announcements SET end_date = '$end' WHERE announce_id = '$id';";
+
+    $run = $conn->query($update);
+
+    if ($run){
+        header('Location: '.$_SERVER['PHP_SELF']);
+    } else {
+        die(mysqli_error($conn));
+    }
+}
+
 ?>

@@ -16,12 +16,12 @@ function reportDisplay($current_page = 1, $sort_column = 'title', $sort_order = 
     $sort_order = strtolower($sort_order) === 'desc' ? 'desc' : 'asc';
 
     $search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
-    // $filter = isset($_GET['filter']) ? $conn->real_escape_string($_GET['filter']) : '';
+    $filter = isset($_GET['filter']) ? $conn->real_escape_string($_GET['filter']) : '';
 
     $conditions = $search !== '' ? "WHERE title LIKE '%$search%' OR creation_date LIKE '%$search%'" : '';
-    // if ($filter !== '' && $filter !== 'all') {
-    //     $conditions .= $conditions === '' ? "WHERE status = '$filter'" : " AND status = '$filter'";
-    // }
+    if ($filter !== '' && $filter !== 'all') {
+        $conditions .= $conditions === '' ? "WHERE batch_no = '$filter'" : " AND batch_no = '$filter'";
+    }
 
     $displayQuery = "SELECT * FROM reports $conditions 
                      ORDER BY $sort_column $sort_order 

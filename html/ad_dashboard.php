@@ -235,7 +235,7 @@
         
         function redirectScholar(category = '', filter = '') {
             const form = document.createElement('form');
-            form.method = 'POST'; // Using POST to avoid appending params to the URL
+            form.method = 'GET'; // Using POST to avoid appending params to the URL
             form.action = 'ad_scholar.php';
 
             if (category) {
