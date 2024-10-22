@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3308
--- Generation Time: Oct 17, 2024 at 04:25 PM
+-- Generation Time: Oct 22, 2024 at 04:51 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -47,7 +47,7 @@ INSERT INTO `announcements` (`announce_id`, `batch_no`, `st_date`, `end_date`, `
 (6, 0, '2024-05-21', '2024-10-26', 'pic3.jpg', 'Results for Batch 27', ' The results of the Dr. Pio Valenzuela Scholarship Program will be released on Dr. Pio\'s 154th Birth Anniversary on December 11, 2023. \r\n\r\nRightfully deserving of the grant, they are currently getting to know more about their future college journeys as Dr. Pio Valenzuela scholars. \r\n\r\nCongratulations and make us proud, dear students! ', 'ACTIVE'),
 (16, 0, '2024-05-29', '2024-09-20', 'image.png', 'Test Announcement', ' This is a test announcement', 'INACTIVE'),
 (17, 0, '2024-05-29', '2024-11-14', 'pio-museo.jpg', 'Test', ' Placeholder', 'ACTIVE'),
-(19, 0, '2024-09-03', '2024-09-05', '454825879_981451210335064_3584102443445305743_n.jpg', 'ohhhh', ' halfway', 'INACTIVE'),
+(19, 0, '2024-10-20', '2024-10-19', '454825879_981451210335064_3584102443445305743_n.jpg', 'ohhhh', ' halfway', 'INACTIVE'),
 (37, 0, '2024-09-03', '2024-09-06', '449189555_773571168273027_1948298230391781972_n.jpg', 'wheee', ' oho', 'INACTIVE'),
 (41, 0, '2024-09-05', '2024-09-08', 'testing_Batch- (1).png', 'testing', ' aaaaaaaaaa', 'INACTIVE'),
 (42, 20, '2024-09-05', '2024-09-15', 'batch-loaf_Batch-20.png', 'batch-loaf', ' www', 'INACTIVE'),
@@ -126,8 +126,19 @@ INSERT INTO `notification` (`notif_id`, `user_id`, `date`, `title`, `content`, `
 (76, 1, '2024-09-13', '32001-CASPAR DOCUMENT SUBMISSION', 'Documents submitted: <br><br>CASPAR_NAVIA__Year1_Sem1_COR.pdf<br>CASPAR_NAVIA__Year1_Sem1_GRADES.pdf<br>CASPAR_NAVIA__Year1_Sem1_SOCIAL.pdf<br>CASPAR_NAVIA__Year1_Sem1_DIPLOMA.pdf', 0),
 (77, 1, '2024-09-13', '30005-CRUZ DOCUMENT SUBMISSION', 'Documents submitted: <br><br>CRUZ_MATTEO ANTONIO_Dela Cruz_Year1_Sem1_COR.pdf<br>CRUZ_MATTEO ANTONIO_Dela Cruz_Year1_Sem1_GRADES.pdf<br>CRUZ_MATTEO ANTONIO_Dela Cruz_Year1_Sem1_SOCIAL.pdf<br>CRUZ_MATTEO ANTONIO_Dela Cruz_Year1_Sem1_DIPLOMA.pdf', 0),
 (78, 1, '2024-09-13', '29005-Garcia DOCUMENT SUBMISSION', 'Documents submitted: <br><br>Garcia_Mark_Dela Rosa_Year1_Sem1_COR.pdf<br>Garcia_Mark_Dela Rosa_Year1_Sem1_GRADES.pdf<br>Garcia_Mark_Dela Rosa_Year1_Sem1_SOCIAL.pdf<br>Garcia_Mark_Dela Rosa_Year1_Sem1_DIPLOMA.pdf', 0),
-(79, 545, '2024-10-01', '145-HAVENFIELD DOCUMENT APPROVAL', 'Document has been approved.', 0),
-(80, 528, '2024-10-10', '157-Garcia DOCUMENT APPROVAL', 'Document has been approved.', 0);
+(80, 528, '2024-10-10', '157-Garcia DOCUMENT APPROVAL', 'Document has been approved.', 0),
+(81, 1, '2024-10-18', '31001-HAVENFIELD DOCUMENT SUBMISSION', 'Documents submitted: <br><br>HAVENFIELD_RAISSEILLE__Year1_Sem1_SOCIAL.pdf', 0),
+(84, 524, '2024-10-19', '162-Dela Cruz DOCUMENT APPROVAL', 'Document has been approved.', 0),
+(85, 1, '2024-10-22', '29001-Dela Cruz DOCUMENT SUBMISSION', 'Documents submitted: <br><br>Dela Cruz_Juan_Santos_Year1_Sem1_SOCIAL.pdf', 0),
+(86, 524, '2024-10-22', '170-Dela Cruz DOCUMENT APPROVAL', 'Document has been approved.', 0),
+(87, 524, '2024-10-22', '169-Dela Cruz DOCUMENT APPROVAL', 'Document has been approved.', 0),
+(88, 524, '2024-10-22', '166-Dela Cruz DOCUMENT APPROVAL', 'Document has been approved.', 0),
+(89, 544, '2024-10-22', '172-DE GUZMAN DOCUMENT APPROVAL', 'Document has been approved.', 0),
+(90, 544, '2024-10-22', '173-DE GUZMAN DOCUMENT APPROVAL', 'Document has been approved.', 0),
+(91, 544, '2024-10-22', '174-DE GUZMAN DOCUMENT APPROVAL', 'Document has been approved.', 0),
+(92, 525, '2024-10-22', '171-Reyes DOCUMENT APPROVAL', 'Document has been approved.', 0),
+(93, 525, '2024-10-22', '175-Reyes DOCUMENT APPROVAL', 'Document has been approved.', 0),
+(94, 525, '2024-10-22', '176-Reyes DOCUMENT APPROVAL', 'Document has been approved.', 0);
 
 -- --------------------------------------------------------
 
@@ -202,37 +213,38 @@ CREATE TABLE `scholar` (
   `_address` text NOT NULL COMMENT 'CAPS LOCK',
   `contact` varchar(20) NOT NULL COMMENT 'phone number',
   `email` varchar(320) NOT NULL COMMENT 'example@provider.com',
-  `remarks` text DEFAULT NULL
+  `remarks` text DEFAULT NULL,
+  `graduating` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `scholar`
 --
 
-INSERT INTO `scholar` (`scholar_id`, `batch_no`, `user_id`, `status`, `last_name`, `first_name`, `middle_name`, `school`, `course`, `_address`, `contact`, `email`, `remarks`) VALUES
-(29001, 29, 524, 'PROBATION', 'Dela Cruz', 'Juan', 'Santos', 'UNIVERSITY OF SANTO TOMAS', 'BACHELOR OF SCIENCE IN COMPUTER SCIENCE', '7322 ELPIDIO QUIRINO AVENUE, BARANGAY TALON, LAS PI?AS CITY, METRO MANILA', '+63968078392', 'email@email.com', NULL),
-(29002, 29, 525, 'LOA', 'Reyes', 'Maria', 'Gonzales', 'Ateneo de Manila University', 'Bachelor of Arts in Economics', '218 Mariano Marcos Street, Barangay Sumilang, Pasig City, Metro Manila', '+639982153874', 'abcde@gmail.com', NULL),
-(29003, 29, 526, 'ACTIVE', 'Santos', 'Carlos', 'Ramirez', 'De La Salle University', 'Bachelor of Science in Chemical Engineering', '5839 Gregorio Araneta Avenue, Barangay Tandang Sora, Quezon City, Metro Manila', '+639324689127', 'abcde@gmail.com', NULL),
-(29004, 29, 527, 'ACTIVE', 'Cruz', 'Ana', 'Reyes', 'University of Santo Tomas', 'Bachelor of Science in Pharmacy', '1342 Juan Luna Street, Barangay Tondo, Manila City, Metro Manila', '+639567438291', 'abcde@gmail.com', NULL),
-(29005, 29, 528, 'LOA', 'Garcia', 'Mark', 'Dela Rosa', 'POLYTECHNIC UNIVERSITY OF THE PHILIPPINES', 'BACHELOR OF SCIENCE IN ARCHITECTURE', '4175 E. RODRIGUEZ SR. AVENUE, BARANGAY MARILAG, QUEZON CITY, METRO MANILA', '+6309083746257', 'garcia@gmail.com', NULL),
-(29006, 29, 529, 'ACTIVE', 'Bautista', 'Jose', 'Mendoza', 'Far Eastern University', 'Bachelor of Science in Accountancy', '9219 A. Mabini Street, Barangay San Isidro, Para?aque City, Metro Manila', '+639196512437', 'abcde@gmail.com', NULL),
-(29007, 29, 530, 'DROPPED', 'Mendoza', 'Clara', 'Bautista', 'Polytechnic University of the Philippines', 'Bachelor of Science in Architecture', '3546 J.P. Rizal Avenue, Barangay Olympia, Makati City, Metro Manila', '+639458391752', 'abcde@gmail.com', NULL),
-(29008, 29, 531, 'PROBATION', 'Ramos', 'Vicente', 'Pascual', 'Adamson University', 'Bachelor of Science in Nursing', '5671 P. Burgos Street, Barangay San Miguel, Mandaluyong City, Metro Manila', '+639275716483', 'abcde@gmail.com', NULL),
-(29009, 29, 532, 'DROPPED', 'Perez', 'Elisa', 'Mercado', 'National University', 'Bachelor of Science in Business Administration', '2468 R. Magsaysay Boulevard, Barangay Sta. Mesa, Manila City, Metro Manila', '+639632159846', 'abcde@gmail.com', NULL),
-(29010, 29, 533, 'ACTIVE', 'Morales', 'Leo', 'Fernandez', 'University of the East', 'Bachelor of Laws', '9087 J. Fajardo Street, Barangay Sampaloc, Manila City, Metro Manila', '+639164387925', 'abcde@gmail.com', NULL),
-(30001, 30, 534, 'ACTIVE', 'JACINTO', 'ALEXIS ROVIC JOHN', '', 'PAMANTASAN NG LUNGSOD NG VALENZUELA', 'BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY', '1070 A VINCHY ST GEN T DE LEON VALENZUELA CITY', '+6309578078392', 'alexis.jacinto.320401@gmail.com', NULL),
-(30002, 30, 535, 'ACTIVE', 'REYES', 'ALTHEA MARIE', 'Aquino', 'University of the Philippines Diliman', 'Bachelor of Science in Computer Science', '27 Sampaguita Street, Barangay San Antonio, Quezon City', '+6309175552468', 'alexis.jacinto.320401+test1@gmail.com', NULL),
-(30003, 30, 536, 'ACTIVE', 'SANTOS', 'JOAQUIN MIGUEL', 'Mendoza', 'Ateneo de Manila University', 'Bachelor of Arts in Economics', 'Unit 15B Makati Skyline Tower, Ayala Avenue, Makati City', '+6309051237890', 'alexis.jacinto.320401+test2@gmail.com', NULL),
-(30004, 30, 537, 'ACTIVE', 'MERCADO', 'ZIA ISABEL', 'Lim', 'De La Salle University', 'Bachelor of Science in Chemical Engineering', '134 Mango Road, Poblacion, Davao City', '+6309289876543', 'alexis.jacinto.320401+test3@gmail.com', NULL),
-(30005, 30, 538, 'ACTIVE', 'CRUZ', 'MATTEO ANTONIO', 'Dela Cruz', 'University of Santo Tomas', 'Bachelor of Science in Pharmacy', '78 Rizal Boulevard, Bacolod City, Negros Occidental', '+6309392468135', 'alexis.jacinto.320401+test4@gmail.com', NULL),
-(30006, 30, 539, 'ACTIVE', 'BAUTISTA', 'ARIA GRACE', 'Tan', 'Map?a University', 'Bachelor of Science in Electronics Engineering', 'Block 3 Lot 7, Green Meadows Subdivision, Cainta, Rizal', '+6309987654321', 'alexis.jacinto.320401+test5@gmail.com', NULL),
-(30007, 30, 540, 'ACTIVE', 'DOMINGO', 'KAI RAFAEL', 'Reyes', 'Far Eastern University', 'Bachelor of Science in Accountancy', '56 Mayon Avenue, Legazpi City, Albay', '+6309451357902', 'alexis.jacinto.320401+test6@gmail.com', NULL),
-(30008, 30, 541, 'ACTIVE', 'VILLEGAS', 'LUNA SOFIA', 'Gonzales', 'Polytechnic University of the Philippines', 'Bachelor of Science in Architecture', 'Unit 203 Cebu Business Park, Cebu City', '+6309568024680', 'alexis.jacinto.320401+test7@gmail.com', NULL),
-(30009, 30, 542, 'ACTIVE', 'FERNANDEZ', 'ENZO GABRIEL', 'Pascual', 'Adamson University', 'Bachelor of Science in Nursing', '19 Kalayaan Street, Baguio City, Benguet', '+6309773691470', 'alexis.jacinto.320401+test8@gmail.com', NULL),
-(30010, 30, 543, 'ACTIVE', 'RAMOS', 'AMARA NICOLE', 'Ocampo', 'National University', 'Bachelor of Science in Business Administration', '42 Coral Way, Puerto Princesa City, Palawan', '+6309087418520', 'alexis.jacinto.320401+test9@gmail.com', NULL),
-(30011, 30, 544, 'ACTIVE', 'DE GUZMAN', 'NICO ALEJANDRO', 'Dizon', 'University of the East', 'Bachelor of Laws', '88 General Luna Road, Intramuros, Manila', '+6309261597532', 'alexis.jacinto.320401+test0@gmail.com', NULL),
-(31001, 31, 545, 'ACTIVE', 'HAVENFIELD', 'RAISSEILLE', '', 'PAMANTASAN NG LUNGSOD NG VALENZUELA', 'BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY', '1070 A VINCHY ST. GEN T DE LEON VALENZUELA CITY', '+639568078392', 'sail.havenfield@gmail.com', NULL),
-(32001, 32, 548, 'ACTIVE', 'CASPAR', 'NAVIA', '', 'PAMANTASAN NG LUNGSOD NG VALENZUELA', 'BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY', '1070 A VINCHY ST. GEN T DE LEON VALENZUELA', '+639568078392', 'sail.havenfield+testing@gmail.com', NULL);
+INSERT INTO `scholar` (`scholar_id`, `batch_no`, `user_id`, `status`, `last_name`, `first_name`, `middle_name`, `school`, `course`, `_address`, `contact`, `email`, `remarks`, `graduating`) VALUES
+(29001, 29, 524, 'PROBATION', 'Dela Cruz', 'Juan', 'Santos', 'PAMANTASAN NG LUNGSOD NG VALENZUELA', 'BACHELOR OF SCIENCE IN COMPUTER SCIENCE', '7322 ELPIDIO QUIRINO AVENUE, BARANGAY TALON, LAS PI?AS CITY, METRO MANILA', '+63968078392', 'email@email.com', NULL, 0),
+(29002, 29, 525, 'LOA', 'Reyes', 'Maria', 'Gonzales', 'Ateneo de Manila University', 'Bachelor of Arts in Economics', '218 Mariano Marcos Street, Barangay Sumilang, Pasig City, Metro Manila', '+639982153874', 'abcde@gmail.com', NULL, 0),
+(29003, 29, 526, 'ACTIVE', 'Santos', 'Carlos', 'Ramirez', 'De La Salle University', 'Bachelor of Science in Chemical Engineering', '5839 Gregorio Araneta Avenue, Barangay Tandang Sora, Quezon City, Metro Manila', '+639324689127', 'abcde@gmail.com', NULL, 0),
+(29004, 29, 527, 'ACTIVE', 'Cruz', 'Ana', 'Reyes', 'University of Santo Tomas', 'Bachelor of Science in Pharmacy', '1342 Juan Luna Street, Barangay Tondo, Manila City, Metro Manila', '+639567438291', 'abcde@gmail.com', NULL, 0),
+(29005, 29, 528, 'LOA', 'Garcia', 'Mark', 'Dela Rosa', 'POLYTECHNIC UNIVERSITY OF THE PHILIPPINES', 'BACHELOR OF SCIENCE IN ARCHITECTURE', '4175 E. RODRIGUEZ SR. AVENUE, BARANGAY MARILAG, QUEZON CITY, METRO MANILA', '+6309083746257', 'garcia@gmail.com', NULL, 0),
+(29006, 29, 529, 'ACTIVE', 'Bautista', 'Jose', 'Mendoza', 'Far Eastern University', 'Bachelor of Science in Accountancy', '9219 A. Mabini Street, Barangay San Isidro, Para?aque City, Metro Manila', '+639196512437', 'abcde@gmail.com', NULL, 0),
+(29007, 29, 530, 'DROPPED', 'Mendoza', 'Clara', 'Bautista', 'Polytechnic University of the Philippines', 'Bachelor of Science in Architecture', '3546 J.P. Rizal Avenue, Barangay Olympia, Makati City, Metro Manila', '+639458391752', 'abcde@gmail.com', NULL, 0),
+(29008, 29, 531, 'PROBATION', 'Ramos', 'Vicente', 'Pascual', 'Adamson University', 'Bachelor of Science in Nursing', '5671 P. Burgos Street, Barangay San Miguel, Mandaluyong City, Metro Manila', '+639275716483', 'abcde@gmail.com', NULL, 0),
+(29009, 29, 532, 'DROPPED', 'Perez', 'Elisa', 'Mercado', 'National University', 'Bachelor of Science in Business Administration', '2468 R. Magsaysay Boulevard, Barangay Sta. Mesa, Manila City, Metro Manila', '+639632159846', 'abcde@gmail.com', NULL, 0),
+(29010, 29, 533, 'ACTIVE', 'Morales', 'Leo', 'Fernandez', 'University of the East', 'Bachelor of Laws', '9087 J. Fajardo Street, Barangay Sampaloc, Manila City, Metro Manila', '+639164387925', 'abcde@gmail.com', NULL, 0),
+(30001, 30, 534, 'ACTIVE', 'JACINTO', 'ALEXIS ROVIC JOHN', '', 'PAMANTASAN NG LUNGSOD NG VALENZUELA', 'BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY', '1070 A VINCHY ST GEN T DE LEON VALENZUELA CITY', '+6309578078392', 'alexis.jacinto.320401@gmail.com', NULL, 0),
+(30002, 30, 535, 'ACTIVE', 'REYES', 'ALTHEA MARIE', 'Aquino', 'University of the Philippines Diliman', 'Bachelor of Science in Computer Science', '27 Sampaguita Street, Barangay San Antonio, Quezon City', '+6309175552468', 'alexis.jacinto.320401+test1@gmail.com', NULL, 0),
+(30003, 30, 536, 'ACTIVE', 'SANTOS', 'JOAQUIN MIGUEL', 'Mendoza', 'Ateneo de Manila University', 'Bachelor of Arts in Economics', 'Unit 15B Makati Skyline Tower, Ayala Avenue, Makati City', '+6309051237890', 'alexis.jacinto.320401+test2@gmail.com', NULL, 0),
+(30004, 30, 537, 'ACTIVE', 'MERCADO', 'ZIA ISABEL', 'Lim', 'De La Salle University', 'Bachelor of Science in Chemical Engineering', '134 Mango Road, Poblacion, Davao City', '+6309289876543', 'alexis.jacinto.320401+test3@gmail.com', NULL, 0),
+(30005, 30, 538, 'ACTIVE', 'CRUZ', 'MATTEO ANTONIO', 'Dela Cruz', 'University of Santo Tomas', 'Bachelor of Science in Pharmacy', '78 Rizal Boulevard, Bacolod City, Negros Occidental', '+6309392468135', 'alexis.jacinto.320401+test4@gmail.com', NULL, 0),
+(30006, 30, 539, 'ACTIVE', 'BAUTISTA', 'ARIA GRACE', 'Tan', 'Map?a University', 'Bachelor of Science in Electronics Engineering', 'Block 3 Lot 7, Green Meadows Subdivision, Cainta, Rizal', '+6309987654321', 'alexis.jacinto.320401+test5@gmail.com', NULL, 0),
+(30007, 30, 540, 'ACTIVE', 'DOMINGO', 'KAI RAFAEL', 'Reyes', 'Far Eastern University', 'Bachelor of Science in Accountancy', '56 Mayon Avenue, Legazpi City, Albay', '+6309451357902', 'alexis.jacinto.320401+test6@gmail.com', NULL, 0),
+(30008, 30, 541, 'ACTIVE', 'VILLEGAS', 'LUNA SOFIA', 'Gonzales', 'Polytechnic University of the Philippines', 'Bachelor of Science in Architecture', 'Unit 203 Cebu Business Park, Cebu City', '+6309568024680', 'alexis.jacinto.320401+test7@gmail.com', NULL, 0),
+(30009, 30, 542, 'ACTIVE', 'FERNANDEZ', 'ENZO GABRIEL', 'Pascual', 'Adamson University', 'Bachelor of Science in Nursing', '19 Kalayaan Street, Baguio City, Benguet', '+6309773691470', 'alexis.jacinto.320401+test8@gmail.com', NULL, 0),
+(30010, 30, 543, 'ACTIVE', 'RAMOS', 'AMARA NICOLE', 'Ocampo', 'National University', 'Bachelor of Science in Business Administration', '42 Coral Way, Puerto Princesa City, Palawan', '+6309087418520', 'alexis.jacinto.320401+test9@gmail.com', NULL, 0),
+(30011, 30, 544, 'ACTIVE', 'DE GUZMAN', 'NICO ALEJANDRO', 'Dizon', 'University of the East', 'Bachelor of Laws', '88 General Luna Road, Intramuros, Manila', '+6309261597532', 'alexis.jacinto.320401+test0@gmail.com', NULL, 0),
+(31001, 31, 545, 'GRADUATED', 'HAVENFIELD', 'RAISSEILLE', '', 'PAMANTASAN NG LUNGSOD NG VALENZUELA', 'BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY', '1070 A VINCHY ST. GEN T DE LEON VALENZUELA CITY', '+639568078392', 'sail.havenfield@gmail.com', NULL, 0),
+(32001, 32, 548, 'ACTIVE', 'CASPAR', 'NAVIA', '', 'PAMANTASAN NG LUNGSOD NG VALENZUELA', 'BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY', '1070 A VINCHY ST. GEN T DE LEON VALENZUELA', '+639568078392', 'sail.havenfield+testing@gmail.com', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -271,19 +283,18 @@ CREATE TABLE `submission` (
 --
 
 INSERT INTO `submission` (`submit_id`, `scholar_id`, `sub_date`, `doc_name`, `doc_type`, `school`, `acad_year`, `sem`, `doc_status`, `reason`) VALUES
-(145, 31001, '2024-09-13', 'HAVENFIELD_RAISSEILLE__Year1_Sem1_COR.pdf', 'COR', '0', '2024-2025', 1, 'APPROVED', ''),
-(146, 31001, '2024-09-13', 'HAVENFIELD_RAISSEILLE__Year1_Sem1_GRADES.pdf', 'GRADES', '0', '2024-2025', 1, 'PENDING', ''),
-(148, 31001, '2024-09-13', 'HAVENFIELD_RAISSEILLE__Year1_Sem1_DIPLOMA.pdf', 'DIPLOMA', '0', '2024-2025', 1, 'PENDING', ''),
-(149, 32001, '2024-09-13', 'CASPAR_NAVIA__Year1_Sem1_COR.pdf', 'COR', '0', '2024-2025', 1, 'PENDING', ''),
-(150, 32001, '2024-09-13', 'CASPAR_NAVIA__Year1_Sem1_GRADES.pdf', 'GRADES', '0', '2024-2025', 1, 'PENDING', ''),
-(152, 32001, '2024-09-13', 'CASPAR_NAVIA__Year1_Sem1_DIPLOMA.pdf', 'DIPLOMA', '0', '2024-2025', 1, 'PENDING', ''),
-(153, 30005, '2024-09-13', 'CRUZ_MATTEO ANTONIO_Dela Cruz_Year1_Sem1_COR.pdf', 'COR', '0', '2024-2025', 1, 'PENDING', ''),
-(154, 30005, '2024-09-13', 'CRUZ_MATTEO ANTONIO_Dela Cruz_Year1_Sem1_GRADES.pdf', 'GRADES', '0', '2024-2025', 1, 'PENDING', ''),
-(155, 30005, '2024-09-13', 'CRUZ_MATTEO ANTONIO_Dela Cruz_Year1_Sem1_SOCIAL.pdf', 'SOCIAL', '0', '2024-2025', 1, 'PENDING', ''),
-(156, 30005, '2024-09-13', 'CRUZ_MATTEO ANTONIO_Dela Cruz_Year1_Sem1_DIPLOMA.pdf', 'DIPLOMA', '0', '2024-2025', 1, 'PENDING', ''),
 (157, 29005, '2024-09-13', 'Garcia_Mark_Dela Rosa_Year1_Sem1_COR.pdf', 'COR', 'POLYTECHNIC UNIVERSITY OF THE PHILIPPINES', '2024-2025', 1, 'APPROVED', ''),
 (159, 29005, '2024-09-13', 'Garcia_Mark_Dela Rosa_Year1_Sem1_SOCIAL.pdf', 'SOCIAL', 'POLYTECHNIC UNIVERSITY OF THE PHILIPPINES', '2024-2025', 1, 'PENDING', ''),
-(160, 29005, '2024-09-13', 'Garcia_Mark_Dela Rosa_Year1_Sem1_DIPLOMA.pdf', 'DIPLOMA', 'POLYTECHNIC UNIVERSITY OF THE PHILIPPINES', '2024-2025', 1, 'PENDING', '');
+(160, 29005, '2024-09-13', 'Garcia_Mark_Dela Rosa_Year1_Sem1_DIPLOMA.pdf', 'DIPLOMA', 'POLYTECHNIC UNIVERSITY OF THE PHILIPPINES', '2024-2025', 1, 'PENDING', ''),
+(166, 29001, '2024-10-22', 'Dela Cruz_Juan_Santos_Year1_Sem1_SOCIAL.pdf', 'SOCIAL', 'PAMANTASAN NG LUNGSOD NG VALENZUELA', '2024-2025', 1, 'APPROVED', ''),
+(169, 29001, '2024-10-22', 'Dela Cruz_Juan_Santos_Year4_Sem1_GRADES.pdf', 'GRADES', 'PAMANTASAN NG LUNGSOD NG VALENZUELA', '2024-2025', 1, 'APPROVED', ''),
+(170, 29001, '2024-10-22', 'Dela Cruz_Juan_Santos_Year4_Sem1_COR.pdf', 'COR', 'PAMANTASAN NG LUNGSOD NG VALENZUELA', '2024-2025', 1, 'APPROVED', ''),
+(171, 29002, '2024-10-22', 'Reyes_Maria_Gonzales_Year4_Sem1_COR.pdf', 'COR', 'Ateneo de Manila University', '2024-2025', 1, 'APPROVED', ''),
+(172, 30011, '2024-10-22', 'DE GUZMAN_NICO ALEJANDRO_Dizon_Year3_Sem1_COR.pdf', 'COR', 'University of the East', '2024-2025', 1, 'APPROVED', ''),
+(173, 30011, '2024-10-22', 'DE GUZMAN_NICO ALEJANDRO_Dizon_Year3_Sem1_GRADES.pdf', 'GRADES', 'University of the East', '2024-2025', 1, 'APPROVED', ''),
+(174, 30011, '2024-10-22', 'DE GUZMAN_NICO ALEJANDRO_Dizon_Year3_Sem1_SOCIAL.pdf', 'SOCIAL', 'University of the East', '2024-2025', 1, 'APPROVED', ''),
+(175, 29002, '2024-10-22', 'Reyes_Maria_Gonzales_Year4_Sem1_GRADES.pdf', 'GRADES', 'Ateneo de Manila University', '2024-2025', 1, 'APPROVED', ''),
+(176, 29002, '2024-10-22', 'Reyes_Maria_Gonzales_Year4_Sem1_SOCIAL.pdf', 'SOCIAL', 'Ateneo de Manila University', '2024-2025', 1, 'APPROVED', '');
 
 -- --------------------------------------------------------
 
@@ -304,7 +315,7 @@ CREATE TABLE `university` (
 --
 
 INSERT INTO `university` (`school_id`, `school_name`, `address`, `acad_year`, `sem_count`) VALUES
-(1, 'PAMANTASAN NG LUNGSOD NG VALENZUELA', 'MXV9+GJF, Maysan Rd, Valenzuela, Metro Manila', '2024-2025', 2);
+(1, 'PAMANTASAN NG LUNGSOD NG VALENZUELA', 'MXV9+GJF, Maysan Rd, Valenzuela, Metro Manila', '2024-2025', 3);
 
 -- --------------------------------------------------------
 
@@ -326,7 +337,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `role_id`, `username`, `email`, `passhash`, `reset_code`) VALUES
-(1, 1, 'admin', '', 'admin', ''),
+(1, 1, 'admin', '', 'admin2', ''),
 (2, 3, 'evaluator', '', 'eval', ''),
 (3, 2, 'test', '', 'testing', ''),
 (524, 2, '29-001', '', 'Dela Cruz', ''),
@@ -444,7 +455,7 @@ ALTER TABLE `announcements`
 -- AUTO_INCREMENT for table `notification`
 --
 ALTER TABLE `notification`
-  MODIFY `notif_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+  MODIFY `notif_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
 
 --
 -- AUTO_INCREMENT for table `reports`
@@ -462,13 +473,13 @@ ALTER TABLE `role`
 -- AUTO_INCREMENT for table `submission`
 --
 ALTER TABLE `submission`
-  MODIFY `submit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=161;
+  MODIFY `submit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=177;
 
 --
 -- AUTO_INCREMENT for table `university`
 --
 ALTER TABLE `university`
-  MODIFY `school_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `school_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `user`
