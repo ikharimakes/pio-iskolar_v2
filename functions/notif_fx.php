@@ -31,27 +31,27 @@
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $action = $_POST['action'];
-        error_log("Action received: $action");
+        // error_log("Action received: $action");
 
         if ($action == 'delete') {
             $notif_id = $_POST['notif_id'];
-            error_log("Deleting notification ID: $notif_id");
+            // error_log("Deleting notification ID: $notif_id");
             $delete_query = "DELETE FROM notification WHERE notif_id = '$notif_id'";
             if ($conn->query($delete_query)) {
-                echo "Notification deleted.";
+                // echo "Notification deleted.";
             } else {
                 error_log("Error deleting notification: " . $conn->error);
-                echo "Error deleting notification.";
+                // echo "Error deleting notification.";
             }
         } elseif ($action == 'delete_all') {
             $user_id = $_POST['user_id'];
-            error_log("Deleting all notifications for user ID: $user_id");
+            // error_log("Deleting all notifications for user ID: $user_id");
             $delete_all_query = "DELETE FROM notification WHERE user_id = '$user_id'";
             if ($conn->query($delete_all_query)) {
-                echo "All notifications deleted.";
+                // echo "All notifications deleted.";
             } else {
                 error_log("Error deleting all notifications: " . $conn->error);
-                echo "Error deleting all notifications.";
+                // echo "Error deleting all notifications.";
             }
         }
     }

@@ -37,7 +37,7 @@
                     $execute = $conn->query($update);
                 } else {
                     // Insert a new document record
-                    $insert = "INSERT INTO submission (submit_id, scholar_id, sub_date, doc_name, doc_type, acad_year, sem, doc_status, school) VALUES (NULL, '$id', '$date', '$name', '$field', '$year', '$sem', 'PENDING', $school)";
+                    $insert = "INSERT INTO submission (submit_id, scholar_id, sub_date, doc_name, doc_type, acad_year, sem, doc_status, school) VALUES (NULL, '$id', '$date', '$name', '$field', '$year', '$sem', 'PENDING', '$school')";
                     $execute = $conn->query($insert);
                 }
                 
