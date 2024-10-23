@@ -33,6 +33,20 @@
         }
         exit;
     }
+
+    function getBatchNumbers() {
+        global $conn;
+            $query = "SELECT DISTINCT batch_no FROM reports ORDER BY batch_no";
+            $result = mysqli_query($conn, $query);
+            $batch_numbers = [];
+            if ($result) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $batch_numbers[] = $row['batch_no'];
+                }
+            }
+            return $batch_numbers;
+        }
+        $batch_numbers = getBatchNumbers();
 ?>
 
 <!DOCTYPE html>
@@ -47,6 +61,11 @@
     <link rel="stylesheet" href="css/confirm.css">
     <link rel="stylesheet" href="css/page.css">
     <script src="https://kit.fontawesome.com/3d9c1c4bc8.js" crossorigin="anonymous"></script>
+    <style>
+        .required-error {
+            border: 2px solid red;
+        }
+    </style>
 </head>
 <body>
     <!-- SIDEBAR - ad_nav.php -->
@@ -149,18 +168,25 @@
 
                 <div class="batch"> 
                     <h3>Recipient</h3>
-                        <div class="dropdown">
-                            <div class="dropdown-button" onclick="toggleDropdown()">Select Batches</div>
-                            <div class="dropdown-content">
-                                <label><input type="checkbox" name="batch" value="all"> All Batches</label>
-                                <label><input type="checkbox" name="batch" value="26"> Batch 26</label>
-                                <label><input type="checkbox" name="batch" value="27"> Batch 27</label>
-                                <label><input type="checkbox" name="batch" value="28"> Batch 28</label>
-                                <label><input type="checkbox" name="batch" value="29"> Batch 29</label>
-                                <label><input type="checkbox" name="batch" value="30"> Batch 30</label>
-                                <label><input type="checkbox" name="batch" value="31"> Batch 31</label>
-                            </div>
+                <!-- <div class="dropdown">
+                        <div class="dropdown-button" onclick="toggleDropdown()">Select Batches</div>
+                        <div class="dropdown-content">
+                            <label><input type="checkbox" name="batch" value="all"> All Batches</label>
+                            <label><input type="checkbox" name="batch" value="26"> Batch 26</label>
+                            <label><input type="checkbox" name="batch" value="27"> Batch 27</label>
+                            <label><input type="checkbox" name="batch" value="28"> Batch 28</label>
+                            <label><input type="checkbox" name="batch" value="29"> Batch 29</label>
+                            <label><input type="checkbox" name="batch" value="30"> Batch 30</label>
+                            <label><input type="checkbox" name="batch" value="31"> Batch 31</label>
                         </div>
+                    </div> -->
+                    <select name="batch">
+                        <option value="" disabled selected>Batch Number</option>
+                        <option value="all">All</option>
+                        <?php foreach ($batch_numbers as $batch_no): ?>
+                            <option value="<?php echo $batch_no; ?>"><?php echo $batch_no; ?></option>
+                        <?php endforeach; ?>
+                    </select>
                 </div> <br>
 
                 <div class="announceTitle">
@@ -242,9 +268,6 @@
                 </div> <br>
 
                 <div class="announceDate">
-                    <h3>Start Date</h3>
-                    <input type="date" id="edit-startDate" name="startDate" required> <br> <br> 
-
                     <h3>End Date</h3>
                     <input type="date" id="edit-endDate" name="endDate" required>
                 </div>
@@ -257,12 +280,28 @@
         </div>
     </div>
 
-    <!-- DELETE MODAL - confirm.php -->
+    <!-- DEACTIVATE MODAL -->
+    <div id="deactivateOverlay" class="overlay">
+        <div class="overlay-content">
+            <div class="infos">
+                <h2>Confirm Deactivation</h2>
+                <span class="closeOverlay" onclick="closeDeactivate()">&times;</span>
+            </div>
+            <div class="message">
+                <h4>Are you sure you want to deactivate this announcement?</h4>
+            </div>
+            <div class="button-container">
+                <form id="deactivateForm" method="post" action="">
+                    <input type="hidden" id="deactivate-id" name="announce_id">
+                    <button type="submit" name="deactivate" class="yes-button">Yes</button>
+                    <button type="button" class="no-button" onclick="closeDeactivate()">No</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <?php include 'confirm.php'; ?>
-
-    <!-- NOTIFICATION - notif.php -->
-    <?php include 'notif.php'; ?>
-
+    <?php include 'toast.php'; ?>
 
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
@@ -384,7 +423,6 @@
                     .then(response => response.text())
                     .then(html => {
                         tableBody.innerHTML = html;
-                        attachRowCheckboxEvents();
                     })
                     .catch(error => console.error('Error fetching table data:', error));
 
@@ -442,7 +480,6 @@
             }
         }
 
-
         // DROPDOWN WITH CHECKBOX
         function toggleDropdown() {
             document.querySelector('.dropdown').classList.toggle('active');
@@ -465,7 +502,6 @@
             document.getElementById("edit-id").value = elem.getAttribute("data-id");
             document.getElementById("edit-title").value = elem.getAttribute("data-title");
             document.getElementById("edit-content").value = elem.getAttribute("data-content");
-            document.getElementById("edit-startDate").value = elem.getAttribute("data-st_date");
             document.getElementById("edit-endDate").value = elem.getAttribute("data-end_date");
             document.getElementById("editModal").style.display = "block";
         }
@@ -483,6 +519,72 @@
                 $('label[for=' + labelFor + ']').text(file);
             });
         });
+
+        // DEACTIVATE
+        function openDeactivate(elem) {
+            if (elem.closest('.icon').classList.contains('disabled')) return;
+            document.getElementById("deactivate-id").value = elem.getAttribute("data-id");
+            document.getElementById("deactivateOverlay").style.display = "block";
+        }
+        function closeDeactivate() {
+            document.getElementById("deactivateOverlay").style.display = "none";
+        }
+        document.getElementById('deactivateForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent default form submission
+            
+            const announceId = document.querySelector('[name="announce_id"]').value;
+            console.log('announce_id:', announceId); // Log the value of announce_id
+            // Create a new FormData object
+            const formData = new FormData();
+
+            // Manually append the required fields
+            formData.append('deactivate', 'true'); // Flag for form submission
+            formData.append('announce_id', document.querySelector('[name="announce_id"]').value);
+            
+            fetch('', {
+                method: 'POST',
+                body: formData, // Use the FormData object directly
+            })
+            .then(response => response.text()) // Expect text response from the backend
+            .then(response => {
+                console.log('Fetch response status:', response.status); // Log the status
+                return response.text();
+            })
+            .then(response => {
+                console.log('Server response:', response); // Log the server response
+                if (response === 'success') {
+                    // Store the success message in sessionStorage before reload
+                    sessionStorage.setItem('toastMessage', 'Announcement deactivated successfully.');
+                    sessionStorage.setItem('toastTitle', 'Success');
+
+                    // Reload the page
+                    window.location.href = '<?php echo $_SERVER["PHP_SELF"]; ?>';
+                } else {
+                    showToast('An error occurred during deactivation.', 'Error');
+                }
+            })
+            .catch(error => {
+                console.error('Fetch Error:', error);
+                showToast('An unexpected error occurred.', 'Error');
+            });
+        });
+
+        // Show toast after page reload
+        window.addEventListener('load', function() {
+            const message = sessionStorage.getItem('toastMessage');
+            const title = sessionStorage.getItem('toastTitle');
+
+            if (message && title) {
+                // Show the toast
+                showToast(message, title);
+
+                // Clear sessionStorage after displaying the toast
+                sessionStorage.removeItem('toastMessage');
+                sessionStorage.removeItem('toastTitle');
+            }
+        });
+
+
     </script>
 </body>
 </html>

@@ -67,7 +67,7 @@ function reportDisplay($current_page = 1, $sort_column = 'report_id', $sort_orde
             ';
         }
     } else {
-        echo "<tr><td colspan='5'>No records found</td></tr>";
+        echo "<tr><td colspan='5'>No results found</td></tr>";
     }
 }
 

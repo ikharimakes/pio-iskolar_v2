@@ -26,6 +26,11 @@
     <link rel="stylesheet" href="css/ad_skoDetail.css">
     <link rel="stylesheet" href="css/profile.css"> 
     <link rel="stylesheet" href="css/confirm.css">
+    <style>
+        .required-error {
+            border: 2px solid red;
+        }
+    </style>
 </head>
 <body>
     <!-- SIDEBAR - navbar.php -->
@@ -92,10 +97,8 @@
         </div> 
     </div>
 
-
-    <!-- NOTIFICATION - notif.php -->
     <?php include 'notif.php'; ?>
-
+    <?php include 'toast.php'; ?>
 
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

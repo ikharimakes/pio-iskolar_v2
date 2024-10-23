@@ -9,22 +9,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id = $_POST['id'];
     $type = $_POST['type'];
     $name = $_POST['name'];
+    
+    // Get the current session user ID
+    $session_user_id = $_SESSION['uid'];
 
-    // Prepare SQL query to fetch valid user and passhash for user_id 1 or 3
-    $query = "SELECT user_id, username, passhash FROM user WHERE user_id IN (1, 3)";
-    $result = $conn->query($query);
+    // Prepare SQL query to fetch valid user and passhash for the logged-in user
+    $query = "SELECT user_id, username, passhash FROM user WHERE user_id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('i', $session_user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     $validCredentials = false;
 
     if ($result && $result->num_rows > 0) {
-        // Loop through the result to check for valid credentials
-        while ($row = $result->fetch_assoc()) {
-            if ($row['username'] === $username && $row['passhash'] === $password) {
-                $validCredentials = true;
-                break; // Stop checking once valid credentials are found
-            }
+        $row = $result->fetch_assoc();
+        if ($row['username'] === $username && $row['passhash'] === $password) {
+            $validCredentials = true;
         }
     }
+
+    $stmt->close();
 
     if ($validCredentials) {
         // Proceed with deletion
@@ -58,8 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             echo 'invalid';
         }
     } else {
-        // Invalid credentials
+        sleep(1);  // Prevent brute-force attacks
         echo 'invalid';
     }
 }
-
+?>

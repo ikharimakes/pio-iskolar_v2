@@ -46,6 +46,11 @@
     <link rel="stylesheet" href="css/ad_scholar.css"> <!-- REPLACE -->
     <link rel="stylesheet" href="css/page.css">
     <script src="https://kit.fontawesome.com/3d9c1c4bc8.js" crossorigin="anonymous"></script>
+    <style>
+        .required-error {
+            border: 2px solid red;
+        }
+    </style>
 </head>
 <body>
     <!-- SIDEBAR - ad_nav.php -->
@@ -210,9 +215,8 @@
         </form>
     </div>
 
-    <!-- DELETE MODAL - confirm.php -->
     <?php include 'confirm.php'; ?>
-
+    <?php include 'toast.php'; ?>
 
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

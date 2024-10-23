@@ -11,7 +11,7 @@
                 <p>You are about to delete this record. Please enter your credentials to delete it permanently:</p>
             </div>
             <br> 
-            <form id="deleteForm" method="POST">
+            <form id="deleteForm" method="POST" novalidate>
                 <div class="inner-content">
                     <label class="deleteText" for="username">Username:</label> <br>
                     <input class="input" type="text" id="username" name="username" placeholder="Enter Username" required>
@@ -94,37 +94,8 @@
         </div>
     </div>
 
-    <!-- DEACTIVATE MODAL -->
-    <div id="deactivateOverlay" class="overlay">
-        <div class="overlay-content">
-            <div class="infos">
-                <h2>Confirm Deactivation</h2>
-                <span class="closeOverlay" onclick="closeDeactivate()">&times;</span>
-            </div>
-            <div class="message">
-                <h4>Are you sure you want to deactivate this announcement?</h4>
-            </div>
-            <div class="button-container">
-                <form id="deactivateForm" method="post" action="">
-                    <input type="hidden" id="deactivate-id" name="announce_id">
-                    <button type="submit" name="deactivate" class="yes-button">Yes</button>
-                    <button type="button" class="no-button" onclick="closeDeactivate()">No</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
     <!-- JS CODE-->
     <script>
-        // DEACTIVATE
-        function openDeactivate(elem) {
-            if (elem.closest('.icon').classList.contains('disabled')) return;
-            document.getElementById("deactivate-id").value = elem.getAttribute("data-id");
-            document.getElementById("deactivateOverlay").style.display = "block";
-        }
-        function closeDeactivate() {
-            document.getElementById("deactivateOverlay").style.display = "none";
-        }
 
         // APPROVE
         function openApprove(elem) {
@@ -155,33 +126,77 @@
             document.getElementById("deleteOverlay").style.display = "block";
         }
         function closeDelete() {
+            document.getElementById("deleteForm").reset();  // Reset the form fields
             document.getElementById("deleteOverlay").style.display = "none";
         }
 
         document.getElementById('deleteForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-            const data = new URLSearchParams();
+            const form = e.target;
+            const requiredFields = form.querySelectorAll('[required]');
+            let valid = true;
+            
+            const loginError = document.getElementById('loginError');
+            loginError.style.display = 'none';
 
-            for (const pair of formData) {
-                data.append(pair[0], pair[1]);
-            }
-
-            fetch('../functions/delete_fx.php', {
-                method: 'POST',
-                body: data,
-            })
-            .then(response => response.text())
-            .then(response => {
-                if (response === 'success') {
-                    window.location.href = '<?php echo $_SERVER["PHP_SELF"]; ?>';
-                } else if (response === 'invalid') {
-                    document.getElementById('loginError').style.display = 'block';
+            requiredFields.forEach(field => {
+                if (!field.value) {
+                field.classList.add('required-error');
+                valid = false;
+                } else {
+                field.classList.remove('required-error');
                 }
-            })
-            .catch(error => {
-                console.error('Fetch Error:', error);
             });
+
+            if (!valid) {
+                e.preventDefault(); // Prevent form submission if required fields are empty
+            } else {
+                e.preventDefault();
+
+                const formData = new FormData(this);
+                const data = new URLSearchParams();
+
+                for (const pair of formData) {
+                    data.append(pair[0], pair[1]);
+                }
+
+                fetch('../functions/delete_fx.php', {
+                    method: 'POST',
+                    body: data,
+                })
+                .then(response => response.text()) // Expect text response from the backend
+                .then(response => {
+                    if (response === 'success') {
+                        // Store the success message in sessionStorage before reload
+                        sessionStorage.setItem('toastMessage', 'Record successfully deleted.');
+                        sessionStorage.setItem('toastTitle', 'Success');
+
+                        // Reload the page
+                        window.location.href = '<?php echo $_SERVER["PHP_SELF"]; ?>';
+                    } else if (response === 'invalid') {
+                        document.getElementById('loginError').style.display = 'block';
+                    } else {
+                        showToast('An error occurred during deletion.', 'Error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Fetch Error:', error);
+                    showToast('An unexpected error occurred.', 'Error');
+                });
+            }
+        });
+
+        window.addEventListener('load', function() {
+            const message = sessionStorage.getItem('toastMessage');
+            const title = sessionStorage.getItem('toastTitle');
+
+            if (message && title) {
+                // Show the success toast
+                showToast(message, title);
+
+                // Clear the message from sessionStorage after displaying
+                sessionStorage.removeItem('toastMessage');
+                sessionStorage.removeItem('toastTitle');
+            }
         });
 
         document.getElementById('showPassword').addEventListener('change', function() {

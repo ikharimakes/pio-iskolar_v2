@@ -60,6 +60,11 @@
     <link rel="stylesheet" href="css/ad_scholar.css">
     <link rel="stylesheet" href="css/page.css">
     <script src="https://kit.fontawesome.com/3d9c1c4bc8.js" crossorigin="anonymous"></script>
+    <style>
+        .required-error {
+            border: 2px solid red !important;
+        }
+    </style>
 </head>
 <body>
     <!-- SIDEBAR - ad_nav.php -->
@@ -73,7 +78,7 @@
             </div>
 
             <div class="headerRight">
-                <a class="user" href="ad_settings.php">
+                <a class="user" href="ad_profile.php">
                     <img src="images/profile.png" alt="">
                 </a>
             </div>
@@ -212,9 +217,9 @@
                 
                 <br>
                 <center> <div class="button-container">
-                    <button class="discard" onclick="closeAdd()">Discard</button>
+                    <button type="button" class="discard" onclick="closeAdd()">Discard</button>
                     <button name="individual" type="submit" class="save">Save</button>
-                </div> <center>
+                </div> </center>
             </div>
         </form>
     </div>
@@ -259,10 +264,9 @@
         </div>
     </div>
 
-    <!-- DELETE MODAL - confirm.php -->
     <?php include 'confirm.php'; ?>
-
-
+    <?php include 'toast.php'; ?>
+    
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script>
@@ -423,9 +427,51 @@
             document.getElementById("addScholarForm").reset();  // Reset the form fields
             document.getElementById("addModal").style.display = "none";
         }
-        function submitForm() {
-            closeAdd();
+
+        document.getElementById('addScholarForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent the form from being submitted
+
+            const formData = new FormData(); // Manually create FormData object
+            formData.append('individual', 'true'); // Flag for form submission
+
+            // Manually append each field
+            formData.append('scholar_id', document.querySelector('input[name="scholar_id"]').value);
+            formData.append('last_name', document.querySelector('input[name="last_name"]').value);
+            formData.append('first_name', document.querySelector('input[name="first_name"]').value);
+            formData.append('middle_name', document.querySelector('input[name="middle_name"]').value);
+            formData.append('school', document.querySelector('input[name="school"]').value);
+            formData.append('course', document.querySelector('input[name="course"]').value);
+            formData.append('address', document.querySelector('input[name="address"]').value);
+            formData.append('contact', document.querySelector('input[name="contact"]').value);
+            formData.append('email', document.querySelector('input[name="email"]').value);
+            try {
+            // Send the form data asynchronously via fetch
+            const response = await fetch('', {
+                method: 'POST',
+                body: formData,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' } // AJAX identifier
+            });
+
+            // Try parsing the response as JSON
+            const result = await response.json();
+
+            if (result.exists) {
+                // Scholar ID exists, show a toast notification and stop submission
+                showToast('Scholar ID already exists!', 'Duplicate Entry');
+            } else if (result.success) {
+                // Form submission succeeded
+                showToast('Scholar added successfully!', 'Success');
+                window.location.reload(); // Reload page or redirect
+            } else {
+                // Handle other potential errors
+                showToast('An error occurred during submission.', 'Error');
+            }
+        } catch (error) {
+            // If the response is not JSON (e.g., HTML), show the error
+            console.error('Error occurred:', error);
+            showToast('Unexpected response from the server.', 'Error');
         }
+        });
 
         //BATCH UPLOAD
         function openBatch() {

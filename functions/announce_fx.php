@@ -88,6 +88,7 @@ if (isset($_POST['add_ann'])) {
 
 //* ANNOUNCEMENT DEACTIVATE *//
 if(isset($_POST['deactivate'])){
+    var_dump($_POST); // See what data is being sent in the POST request
     $id = $_POST['announce_id'];
 
     // Calculate the end date as one day before today
@@ -96,13 +97,14 @@ if(isset($_POST['deactivate'])){
     // Construct the update query to modify only the end_date
     $update = "UPDATE announcements SET end_date = '$end' WHERE announce_id = '$id';";
 
-    $run = $conn->query($update);
-
-    if ($run){
-        header('Location: '.$_SERVER['PHP_SELF']);
+    if ($run = $conn->query($update)){
+        // Send a 'success' response instead of redirecting
+        echo 'success';
     } else {
-        die(mysqli_error($conn));
+        // Send an error response if the query fails
+        echo 'error';
     }
 }
+
 
 ?>

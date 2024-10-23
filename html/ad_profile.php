@@ -24,6 +24,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="css/ad_profile.css">
     <link rel="stylesheet" href="css/confirm.css">
+    <style>
+        .required-error {
+            border: 2px solid red;
+        }
+    </style>
 </head>
 <body>
     <!-- SIDEBAR - navbar.php -->
@@ -122,10 +127,7 @@
         </div> 
     </div>
 
-
-    <!-- NOTIFICATION - notif.php -->
-    <?php include 'notif.php'; ?>
-
+    <?php include 'toast.php'; ?>
 
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

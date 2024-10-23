@@ -60,7 +60,7 @@
                 ';
             }
         } else {
-            echo "<tr><td colspan='20'>No schools or universities found</td></tr>";
+            echo "<tr><td colspan='20'>No results found</td></tr>";
         }
     }
     

@@ -140,13 +140,21 @@
         </div>
     </div>
 
-    
+    <?php include 'toast.php'; ?>
+
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- FOR GRAPH-->
     <script>
         function toggleDropdown() {
             document.querySelector(".dropdown").classList.toggle("show");
+        }
+        
+        window.onclick = function(event) {
+            const dropdown = document.querySelector(".dropdown");
+            if (!dropdown.contains(event.target) && !event.target.matches('.dropdown-button')) {
+                dropdown.classList.remove("show");
+            }
         }
 
         function selectAllBatches() {

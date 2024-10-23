@@ -188,11 +188,8 @@
         </div>
     </div>
 
-    <!-- APPROVE/DECLINE/DELETE MODAL - confirm.php -->
-    <?php include('confirm.php');?>
-    
-    <!-- NOTIFICATION -->
-    <?php include('notiF.php');?>
+    <?php include 'confirm.php';?>
+    <?php include 'toast.php'; ?>
 
 
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>

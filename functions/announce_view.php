@@ -94,7 +94,6 @@ function annList($current_page = 1, $sort_column = 'announce_id', $sort_order = 
                                 data-id="'.$row["announce_id"].'" 
                                 data-title="'.$row["title"].'" 
                                 data-status="'.$row["status"].'" 
-                                data-st_date="'.$row["st_date"].'" 
                                 data-end_date="'.$row["end_date"].'"
                                 data-content="'.$row["content"].'"></ion-icon> </span>
                         </div>
@@ -108,7 +107,7 @@ function annList($current_page = 1, $sort_column = 'announce_id', $sort_order = 
                         <div class="icon">
                             <div class="tooltip"> Delete</div>
                             <span> <ion-icon name="trash-outline" onclick="openDelete(this)" 
-                                type="announce" 
+                                type="announcements" 
                                 data-id="'.$row["announce_id"].'" 
                                 data-name="'.$row["img_name"].'"></ion-icon> </span>
                         </div>
@@ -117,7 +116,7 @@ function annList($current_page = 1, $sort_column = 'announce_id', $sort_order = 
             ';
         }
     } else {
-        echo "<tr><td colspan='20'>No announcements found</td></tr>";
+        echo "<tr><td colspan='20'>No results found</td></tr>";
     }
 }
 

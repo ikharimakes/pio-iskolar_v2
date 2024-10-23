@@ -257,16 +257,17 @@ a {
     text-align: center;
 }
 .card {
-    width: 950px;
-    height: 800px;
+    width: 100%;
+    /* height: 800px; */
     transition: 0.3s;
     border-radius: 5px;
     text-align: center;
 }
 .pic {
     padding-top: 20px;
-    width: 700px;
-    height: 500px;
+    width: 80%;
+    height: 50%;
+    object-fit: cover;
 }
 .container {
     text-align: center;
@@ -472,4 +473,18 @@ a {
 
 .icon.disabled .disabled-tooltip {
     display: none; /* Hide tooltip for disabled actions */
+}
+
+.discard {
+    background-color: transparent;
+    color: #2F3787;
+    border: 2px solid #2F3787;
+    display: inline-block;
+    width: 30%;
+    height: 30px;
+    font-size: 18px;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 10px;
+    padding: 0 10px;
 }

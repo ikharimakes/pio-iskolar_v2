@@ -285,5 +285,5 @@
     width: 99%;
     height: 2px;
     background-color: #9D9D9D;
-    z-index: 2;
+    /* z-index: 2; */
 }

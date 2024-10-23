@@ -89,6 +89,8 @@
             </div>
 
             <div class="sort">
+                <h4> Filter by:</h4>
+                
                 <select id="filter">
                     <option value="" disabled selected>Status</option>
                     <option value="all">All</option>
@@ -144,8 +146,9 @@
         </div>
     </div>
 
-    <!-- NOTIFICATION - notif.php -->
     <?php include 'notif.php'; ?>
+    <?php include 'confirm.php'; ?>
+    <?php include 'toast.php'; ?>
 
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

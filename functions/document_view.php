@@ -84,7 +84,7 @@ function docxPending($current_page = 1, $sort_column = 'scholar_id', $sort_order
             ';
         }
     } else {
-        echo "<tr><td colspan='7'>No records found</td></tr>";
+        echo "<tr><td colspan='7'>No results found</td></tr>";
     }
 }
 
@@ -331,7 +331,7 @@ function docxScholar($id, $current_page = 1, $sort_column = 'sub_date', $sort_or
                             </a>
                         </div>
 
-                        <div class="icon '.$disabledClass.'">
+                        <div class="icon">
                             <div class="tooltip">Delete</div>
                             <span> <ion-icon name="trash-outline" onclick="openDelete(this)" 
                                 type="submission" 
@@ -343,7 +343,7 @@ function docxScholar($id, $current_page = 1, $sort_column = 'sub_date', $sort_or
             ';
         }
     } else {
-        echo "<tr><td colspan='6'>No records found</td></tr>";
+        echo "<tr><td colspan='6'>No results found</td></tr>";
     }
 }
 

@@ -61,6 +61,11 @@
     <link rel="stylesheet" href="css/confirm.css">
     <link rel="stylesheet" href="css/page.css">
     <script src="https://kit.fontawesome.com/3d9c1c4bc8.js" crossorigin="anonymous"></script>
+    <style>
+        .required-error {
+            border: 2px solid red;
+        }
+    </style>
 </head>
 
 <body>
@@ -195,12 +200,8 @@
         </div>
     </div>
 
-    <!-- DELETE MODAL - confirm.php -->
     <?php include 'confirm.php'; ?>
-
-    <!-- NOTIFICATION - notif.php -->
-    <?php include 'notif.php'; ?>
-
+    <?php include 'toast.php'; ?>
 
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

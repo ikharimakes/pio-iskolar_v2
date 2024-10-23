@@ -29,6 +29,11 @@
     <link rel="icon" type="image/x-icon" href="images/pio-logo.png">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="css/front.css">
+    <style>
+        .required-error {
+            border: 2px solid red;
+        }
+    </style>
 </head>
 
 <body>
@@ -74,15 +79,15 @@
                 <br> <br> <br> <br>
 
                 <div class="content">
-                    <form id="loginForm" method="post">
+                    <form id="loginForm" method="post" novalidate>
                         <center> <div class="inner-content1">
                             <label class="texts1" for="user">Enter Username/Email:</label> <br>
-                            <input class="inputs1" type="text" id="user" name="user" placeholder="Username">
+                            <input class="inputs1" type="text" id="user" name="user" placeholder="Username" required>
                         </div>
                         
                         <div class="inner-content2">
                             <label class="texts1" for="pass">Enter Password:</label> <br>
-                            <input class="inputs1" type="password" id="pass" name="pass" placeholder="Password"required>
+                            <input class="inputs1" type="password" id="pass" name="pass" placeholder="Password" required>
                         </div>
 
                         <div class="rem-container">
@@ -126,7 +131,7 @@
 
             <div class="inner-content">
                 <label class="texts" for="email">Enter Email Address:</label> <br>
-                <input class="inputs" type="email" id="email" name="email" placeholder="Email Address">
+                <input class="inputs" type="email" id="email" name="email" placeholder="Email Address" required>
             </div>
 
             <div class="btn">
@@ -147,11 +152,11 @@
                 <form action="" method="POST">
                 <div class="inner-content">
                     <label class="texts" for="newPassword">Enter New Password:</label> <br>
-                    <input class="inputs" type="password" id="newPassword" name="newPassword" placeholder="New Password">
+                    <input class="inputs" type="password" id="newPassword" name="newPassword" placeholder="New Password" required>
                 </div>
                 <div class="inner-content">
                     <label class="texts" for="confirmPassword">Confirm Password:</label> <br>
-                    <input class="inputs" type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password">
+                    <input class="inputs" type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
                 </div>
 
                 <div class="btn">
@@ -194,39 +199,61 @@
 
 
         document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+            const form = e.target;
+            const requiredFields = form.querySelectorAll('[required]');
+            let valid = true;
+            
+            const loginError = document.getElementById('loginError');
+            loginError.style.display = 'none';
 
-            const formData = new FormData(this);
-            const data = new URLSearchParams();
-
-            for (const pair of formData) {
-                data.append(pair[0], pair[1]);
-            }
-
-            fetch('../functions/login.php', {
-                method: 'POST',
-                body: data,
-            })
-            .then(response => response.text())
-            .then(response => {
-                console.log('Response:', response);
-                if (response === 'admin') {
-                    console.log("admin");
-                    window.location.href = 'ad_dashboard.php';
-                } else if (response === 'scholar') {
-                    console.log("scholar");
-                    window.location.href = 'dashboard.php';
-                } else if (response === 'evaluator') {
-                    console.log("evaluator");
-                    window.location.href = 'eval_dash.php';
+            requiredFields.forEach(field => {
+                if (!field.value) {
+                field.classList.add('required-error');
+                valid = false;
                 } else {
-                    console.log("invalid");
-                    document.getElementById('loginError').style.display = 'block';
+                field.classList.remove('required-error');
                 }
-            })
-            .catch(error => {
-                console.error('Fetch Error:', error);
             });
+
+            if (!valid) {
+                e.preventDefault(); // Prevent form submission if required fields are empty
+            } else {
+                e.preventDefault();
+                // Hide the login error on each new submit attempt
+
+                const formData = new FormData(this);
+                const data = new URLSearchParams();
+
+                for (const pair of formData) {
+                    data.append(pair[0], pair[1]);
+                }
+
+                fetch('../functions/login.php', {
+                    method: 'POST',
+                    body: data,
+                })
+                .then(response => response.text())
+                .then(response => {
+                    console.log('Response:', response);
+                    if (response === 'admin') {
+                        console.log("admin");
+                        window.location.href = 'ad_dashboard.php';
+                    } else if (response === 'scholar') {
+                        console.log("scholar");
+                        window.location.href = 'dashboard.php';
+                    } else if (response === 'evaluator') {
+                        console.log("evaluator");
+                        window.location.href = 'eval_dash.php';
+                    } else {
+                        console.log("invalid");
+                        // Show the login error if the response is invalid
+                        loginError.style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    console.error('Fetch Error:', error);
+                })
+            }
         });
 
         //FORGOT PASSWORD

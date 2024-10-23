@@ -54,12 +54,16 @@ function sendEmailNotification($email, $username, $password, $name,) {
     }
 }
 
+error_reporting(0);
+
 //* INDIVIDUAL CREATION IS HELL *//
-if(isset($_POST['individual'])){
+if (isset($_POST['individual'])) {
+    header('Content-Type: application/json');
+
+    $scholar_id = $_POST['scholar_id'];
     $last_name = strtoupper($_POST['last_name']);
     $first_name = strtoupper($_POST['first_name']);
     $middle_name = strtoupper($_POST['middle_name']);
-    $scholar_id = $_POST['scholar_id'];
     $batch_no = substr($scholar_id, 0, 2);
     $school = strtoupper($_POST['school']);
     $course = strtoupper($_POST['course']);
@@ -70,26 +74,42 @@ if(isset($_POST['individual'])){
     $username = substr($scholar_id, 0, 2) . '-' . substr($scholar_id, 2, 3);
     $password = $last_name;
 
-    $insert = "INSERT INTO user (user_id, role_id, username, passhash) VALUES (NULL, '2', '$username', '$password')";
-    $run = $conn->query($insert);
+    // Step 1: Check if scholar_id exists
+    $query = "SELECT COUNT(*) as count FROM scholar WHERE scholar_id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('s', $scholar_id);
+    $stmt->execute();
+    $stmt->bind_result($count);
+    $stmt->fetch();
+    $stmt->close();
 
-    // inserts into user
-    $idquery = "SELECT user_id from user where username = '$username'";
-    $result = $conn->query($idquery);
-    while ($row = $result->fetch_assoc()){
-        $uid = $row['user_id'];
+    // If a duplicate is found, return JSON response and halt the submission
+    if ($count > 0) {
+        echo json_encode(['exists' => true]);
+        exit();
+    } else {
+        // Step 2: Proceed with the insertion if no duplicate is found
+        $insertUser = "INSERT INTO user (user_id, role_id, username, passhash) VALUES (NULL, '2', '$username', '$password')";
+        if ($conn->query($insertUser)) {
+            $user_id = $conn->insert_id; // Get the last inserted user_id
+
+            $insertScholar = "INSERT INTO scholar (scholar_id, batch_no, user_id, status, last_name, first_name, middle_name, school, course, _address, contact, email, remarks) 
+                              VALUES ('$scholar_id', '$batch_no', '$user_id', 'ACTIVE', '$last_name', '$first_name', '$middle_name', '$school', '$course', '$address', '$contact', '$email', NULL)";
+            $run = $conn->query($insertScholar);
+
+            // Return success if insertion was successful
+            if ($run) {
+                // Optionally send an email (currently commented out)
+                // sendEmailNotification($email, $username, $password, $last_name);
+                sendEmailsAsync(["sail.havenfield@gmail.com"], "test", "testing", "pio.iskolar@gmail.com");
+
+                header('Location: ' . $_SERVER['PHP_SELF']);
+            } else {
+            }
+        } else {
+        }
+        exit();
     }
-
-    // inserts into scholar
-    //! CHANGE BATCH NUMBER
-    $insert = "INSERT INTO scholar (scholar_id, batch_no, user_id, status, last_name, first_name, middle_name, school, course, _address, contact, email, remarks) VALUES ('$scholar_id', '$batch_no', '$uid', 'ACTIVE', '$last_name', '$first_name', '$middle_name', '$school', '$course', '$address', '$contact', '$email', NULL)";
-    $run = $conn->query($insert);
-
-    //! Send email notification - DISABLED
-    // sendEmailNotification($email, $username, $password, $last_name);
-    sendEmailsAsync(["sail.havenfield@gmail.com"], "test", "testing", "pio.iskolar@gmail.com");
-    
-    header('Location: '.$_SERVER['PHP_SELF']);
 }
 
 //* BATCH CREATION *//

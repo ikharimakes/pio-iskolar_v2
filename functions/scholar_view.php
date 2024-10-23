@@ -122,7 +122,7 @@ function scholarList($current_page = 1, $sort_column = 'scholar_id', $sort_order
             ';
         }
     } else {
-        echo "<tr><td colspan='20'>No records found</td></tr>";
+        echo "<tr><td colspan='20'>No results found</td></tr>";
     }
 }
 
