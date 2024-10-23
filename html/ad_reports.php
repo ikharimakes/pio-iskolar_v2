@@ -16,8 +16,8 @@
         header("Location: front_page.php");
     }
 
-    $sort_column = isset($_GET['sort_column']) ? $_GET['sort_column'] : 'title';
-    $sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'asc';
+    $sort_column = isset($_GET['sort_column']) ? $_GET['sort_column'] : 'report_id';
+    $sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'desc';
     $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 
     $total_records = getTotalRecords();
@@ -76,7 +76,7 @@
             </div>
 
             <div class="headerRight">
-                <a class="user">
+                <a class="user" href="ad_profile.php">
                     <img src="images/profile.png" alt="">
                 </a>
             </div>

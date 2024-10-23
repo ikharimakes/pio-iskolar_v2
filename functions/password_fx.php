@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change'])) {
                 } else {
                     // $response['message'] = 'Current password is incorrect.';
                 }
-                $conn->close();
+                // $conn->close();
             } else {
                 // $response['message'] = 'User not logged in.';
             }
@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reset'])) {
                 }
 
                 $stmt->close();
-                $conn->close();
+                // $conn->close();
             } else {
                 // $response['message'] = 'User not logged in.';
             }

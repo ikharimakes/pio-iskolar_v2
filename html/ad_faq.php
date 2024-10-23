@@ -37,11 +37,7 @@ if ($user_role == "1") {
             </div>
 
             <div class="headerRight">
-                <div class="notif">
-                    <ion-icon name="notifications-outline" onclick="openNotif()"></ion-icon>
-                </div>
-
-                <a class="user">
+                <a class="user" href="ad_profile.php">
                     <img src="images/profile.png" alt="">
                 </a>
             </div>

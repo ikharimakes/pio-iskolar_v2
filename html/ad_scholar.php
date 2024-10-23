@@ -17,7 +17,7 @@
     }
 
     $sort_column = isset($_GET['sort_column']) ? $_GET['sort_column'] : 'scholar_id';
-    $sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'asc';
+    $sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'desc';
     $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 
     $total_records = getTotalRecords();

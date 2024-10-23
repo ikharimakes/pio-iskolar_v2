@@ -88,7 +88,7 @@
             </a>
 
             <div class="headerRight">
-                <a class="user" href="ad_settings.php">
+                <a class="user" href="ad_profile.php">
                     <img src="images/profile.png" alt="">
                 </a>
             </div>

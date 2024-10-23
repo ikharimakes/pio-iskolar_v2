@@ -89,7 +89,7 @@
     background: transparent;
 }
 .box-small-big h1 {
-    position: sticky;
+    /* position: sticky; */
     top: 0;
     font-size: 24px;
     font-weight: 700;

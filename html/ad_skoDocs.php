@@ -69,7 +69,7 @@
             </a>
 
             <div class="headerRight">
-                <a class="user">
+                <a class="user" href="ad_profile.php">
                     <img src="images/profile.png" alt="">
                 </a>
             </div>

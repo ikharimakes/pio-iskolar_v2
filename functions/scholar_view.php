@@ -3,7 +3,7 @@ include_once('../functions/general.php');
 global $conn;
 
 //* Scholar List *//
-function scholarList($current_page = 1, $sort_column = 'scholar_id', $sort_order = 'asc') {
+function scholarList($current_page = 1, $sort_column = 'scholar_id', $sort_order = 'desc') {
     global $conn, $year, $sem, $batch;
 
     $records_per_page = 15;
@@ -49,7 +49,7 @@ function scholarList($current_page = 1, $sort_column = 'scholar_id', $sort_order
                 "PROBATION" => "color: rgb(255,148,0); font-weight: 600;",
                 "DROPPED" => "color: rgb(189, 0, 0); font-weight: 600;",
                 "LOA" => "color: rgb(255, 219, 88); font-weight: 600;",
-                "GRADUATE" => "color: rgb(0,68,255); font-weight: 600;",
+                "GRADUATED" => "color: rgb(0,68,255); font-weight: 600;",
                 default => "",
             };
 
@@ -134,7 +134,7 @@ function getTotalRecords($category = '', $filter_value = '') {
 
     // Add search conditions
     if ($search !== '') {
-        $conditions .= " AND (last_name LIKE '%$search%' OR first_name LIKE '%$search%' OR middle_name LIKE '%$search%' OR status LIKE '%$search%')";
+        $conditions .= " AND (batch_no LIKE '%$search%' OR scholar_id LIKE '%$search%' OR last_name LIKE '%$search%' OR first_name LIKE '%$search%' OR middle_name LIKE '%$search%' OR school LIKE '%$search%')";
     }
 
     // Add filter conditions if category and filter are set

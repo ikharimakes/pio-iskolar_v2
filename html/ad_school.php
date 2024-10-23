@@ -16,7 +16,7 @@
         header("Location: front_page.php");
     }
 
-    $sort_column = isset($_GET['sort_column']) ? $_GET['sort_column'] : 'school_name';
+    $sort_column = isset($_GET['sort_column']) ? $_GET['sort_column'] : 'school_id';
     $sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'asc';
     $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 
@@ -59,7 +59,7 @@
             </div>
 
             <div class="headerRight">
-                <a class="user" href="ad_settings.php">
+                <a class="user" href="ad_profile.php">
                     <img src="images/profile.png" alt="">
                 </a>
             </div>
@@ -155,7 +155,7 @@
                     <tr>
                         <td class="details">SEMESTERS PER ACADEMIC YEAR</td>
                         <td>
-                            <input type="radio" id="sem_2" name="semester" value="2"/> <label for="sem_2">2 SEMESTERS</label>
+                            <input type="radio" id="sem_2" name="semester" value="2" required/> <label for="sem_2">2 SEMESTERS</label>
                             <input type="radio" id="sem_3" name="semester"  value="3"/> <label for="sem_3">3 SEMESTERS</label>
                         </td>
                     </tr>
@@ -195,7 +195,7 @@
                     <tr>
                         <td class="details">SEMESTERS PER ACADEMIC YEAR</td>
                         <td>
-                            <input type="radio" id="sem_2" name="semester" value="2"/> <label for="sem_2">2 SEMESTERS</label>
+                            <input type="radio" id="sem_2" name="semester" value="2" required/> <label for="sem_2">2 SEMESTERS</label>
                             <input type="radio" id="sem_3" name="semester"  value="3"/> <label for="sem_3">3 SEMESTERS</label>
                         </td>
                     </tr>

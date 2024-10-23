@@ -64,7 +64,7 @@
                     <ion-icon name="notifications-outline" onclick="openNotif()"></ion-icon>
                 </div>
 
-                <a class="user" href="ad_settings.php">
+                <a class="user" href="ad_profile.php">
                     <img src="images/profile.png" alt="">
                 </a>
             </div>

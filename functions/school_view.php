@@ -2,20 +2,19 @@
     include_once('../functions/general.php');
     global $conn;
 
-    function schoolList($current_page = 1, $sort_column = 'school_name', $sort_order = 'asc') {
+    function schoolList($current_page = 1, $sort_column = 'school_id', $sort_order = 'asc') {
         global $conn;
     
         $records_per_page = 15;
         $offset = ($current_page - 1) * $records_per_page;
     
         // Define valid columns for sorting
-        $validColumns = ['school_name'];
+        $validColumns = ['school_name', 'address'];
         if (!in_array($sort_column, $validColumns)) {
             $sort_column = 'school_id';
         }
     
         $sort_order = strtolower($sort_order) === 'desc' ? 'desc' : 'asc';
-        $sort_order .= ", school_id DESC";
     
         $search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
         $filter = isset($_GET['filter']) ? $conn->real_escape_string($_GET['filter']) : '';

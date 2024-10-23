@@ -24,7 +24,7 @@
     }
 
 // Admin View
-function annList($current_page = 1, $sort_column = 'title', $sort_order = 'asc') {
+function annList($current_page = 1, $sort_column = 'announce_id', $sort_order = 'desc') {
     global $conn;
 
     // Update the status of the announcements before fetching them
@@ -36,7 +36,7 @@ function annList($current_page = 1, $sort_column = 'title', $sort_order = 'asc')
     // Define valid columns for sorting
     $validColumns = ['batch_no', 'title', 'status', 'st_date', 'end_date'];
     if (!in_array($sort_column, $validColumns)) {
-        $sort_column = 'st_date';
+        $sort_column = 'announce_id';
     }
 
     $sort_order = strtolower($sort_order) === 'desc' ? 'desc' : 'asc';

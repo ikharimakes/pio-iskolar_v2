@@ -2,15 +2,15 @@
 include_once('../functions/general.php');
 global $conn;
 
-function reportDisplay($current_page = 1, $sort_column = 'title', $sort_order = 'asc') {
+function reportDisplay($current_page = 1, $sort_column = 'report_id', $sort_order = 'asc') {
     global $conn;
 
     $records_per_page = 15;
     $offset = ($current_page - 1) * $records_per_page;
 
-    $valid_columns = ['title', 'creation_date'];
+    $valid_columns = ['batch_no', 'title', 'creation_date'];
     if (!in_array($sort_column, $valid_columns)) {
-        $sort_column = 'creation_date';
+        $sort_column = 'report_id';
     }
 
     $sort_order = strtolower($sort_order) === 'desc' ? 'desc' : 'asc';
@@ -35,7 +35,7 @@ function reportDisplay($current_page = 1, $sort_column = 'title', $sort_order = 
                 <tr>
                     <td style="text-align: center;"> Batch '.$row["batch_no"].'</td>
                     <td>'.$row["title"].'</td>
-                    <td>'.$row["creation_date"].'</td>';
+                    <td style="text-align: center;">'.$row["creation_date"].'</td>';
             echo '
                     <td style="text-align: right;" class="wrap"> 
                         <div class="icon">
