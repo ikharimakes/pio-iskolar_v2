@@ -22,15 +22,16 @@ if (isset($_POST['individual'])) {
     $username = substr($scholar_id, 0, 2) . '-' . substr($scholar_id, 2, 3);
     $password = $last_name;
 
-    // Step 1: Check if scholar_id exists
-    $query = "SELECT COUNT(*) as count FROM scholar WHERE scholar_id = ?";
+    // Step 1: Check if scholar_id or email exists
+    $query = "SELECT COUNT(*) as count FROM scholar WHERE scholar_id = ? OR email = ?";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param('s', $scholar_id);
+    $stmt->bind_param('ss', $scholar_id, $email);
     $stmt->execute();
     $stmt->bind_result($count);
     $stmt->fetch();
     $stmt->close();
-    // If a duplicate is found, return JSON response and halt the submission
+    
+    // If a duplicate scholar_id or email is found, return JSON response and halt the submission
     if ($count > 0) {
         echo json_encode(['exists' => true]);
         exit();
@@ -152,7 +153,7 @@ if(isset($_FILES['csv'])){
                 $username = $_POST['batch_id'] . '-' . sprintf('%03d', $data[0]);
                 $password = $data[1];
                 $email = $data[8];
-                $insert = "INSERT INTO user (user_id, role_id, username, email, passhash) VALUES (NULL, '2', '$username', '$data[8]', '$password')";
+                $insert = "INSERT INTO user (user_id, role_id, username, email, passhash) VALUES (NULL, '2', '$username', '$email', '$password')";
                 $run = $conn->query($insert);
 
                 // inserts into user
@@ -168,11 +169,11 @@ if(isset($_FILES['csv'])){
                 $number = '+63' . $string;
                 $batch_no = $_POST['batch_id'];
 
-                $insert = "INSERT INTO scholar (scholar_id, batch_no, user_id, status, last_name, first_name, middle_name, school, course, _address, contact, email, remarks) VALUES ('$sid', '$batch_no', '$uid', 'ACTIVE', '$data[1]', '$data[2]', '$data[3]', '$data[4]', '$data[5]', '$data[6]', '$number', '$data[8]', NULL)";
+                $insert = "INSERT INTO scholar (scholar_id, batch_no, user_id, status, last_name, first_name, middle_name, school, course, _address, contact, email, remarks) VALUES ('$sid', '$batch_no', '$uid', 'ACTIVE', '$data[1]', '$data[2]', '$data[3]', '$data[4]', '$data[5]', '$data[6]', '$number', '$email', NULL)";
                 $run = $conn->query($insert);
 
                 //! Send email notification - DISABLED
-                //sendEmailNotification($data[8], $data[1], $password, $data[1]);
+
             }
             // closes pointer, deletes csv file
             fclose($handle);

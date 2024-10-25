@@ -6,9 +6,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $pass = $_POST['pass'];
     $remember = isset($_POST['remember']) ? $_POST['remember'] : false;  // Check if 'remember' is checked
 
-    // Prepare the SQL statement
-    $log = $conn->prepare("SELECT * FROM user WHERE username = ? AND passhash = ? LIMIT 1");
-    $log->bind_param("ss", $user, $pass);
+    // Prepare the SQL statement to allow login with either username or email
+    $log = $conn->prepare("SELECT * FROM user WHERE (username = ? OR email = ?) AND passhash = ? LIMIT 1");
+    $log->bind_param("sss", $user, $user, $pass);
     $log->execute();
     $result = $log->get_result();
 

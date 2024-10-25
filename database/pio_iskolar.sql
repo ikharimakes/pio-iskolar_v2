@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3308
--- Generation Time: Oct 25, 2024 at 04:02 PM
+-- Generation Time: Oct 26, 2024 at 01:25 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -237,7 +237,7 @@ INSERT INTO `scholar` (`scholar_id`, `batch_no`, `user_id`, `status`, `last_name
 (30008, 30, 541, 'ACTIVE', 'VILLEGAS', 'LUNA SOFIA', 'Gonzales', 'Polytechnic University of the Philippines', 'Bachelor of Science in Architecture', 'Unit 203 Cebu Business Park, Cebu City', '+6309568024680', 'alexis.jacinto.320401+test7@gmail.com', NULL, 0),
 (30009, 30, 542, 'ACTIVE', 'FERNANDEZ', 'ENZO GABRIEL', 'Pascual', 'Adamson University', 'Bachelor of Science in Nursing', '19 Kalayaan Street, Baguio City, Benguet', '+6309773691470', 'alexis.jacinto.320401+test8@gmail.com', NULL, 0),
 (30011, 30, 544, 'ACTIVE', 'DE GUZMAN', 'NICO ALEJANDRO', 'Dizon', 'University of the East', 'Bachelor of Laws', '88 General Luna Road, Intramuros, Manila', '+6309261597532', 'alexis.jacinto.320401+test0@gmail.com', NULL, 0),
-(31001, 31, 545, 'ACTIVE', 'HAVENFIELD', 'RAISSEILLE', '', 'PAMANTASAN NG LUNGSOD NG VALENZUELA', 'BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY', '1070 A VINCHY ST. GEN T DE LEON VALENZUELA CITY', '+639568078392', 'sail.havenfield@gmail.com', NULL, 0);
+(31001, 31, 606, 'ACTIVE', 'a', 'a', 'a', 'a', 'a', 'a', '+63a', 'a', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -287,8 +287,7 @@ INSERT INTO `submission` (`submit_id`, `scholar_id`, `sub_date`, `doc_name`, `do
 (173, 30011, '2024-10-22', 'DE GUZMAN_NICO ALEJANDRO_Dizon_Year3_Sem1_GRADES.pdf', 'GRADES', 'University of the East', '2024-2025', 1, 'APPROVED', ''),
 (174, 30011, '2024-10-22', 'DE GUZMAN_NICO ALEJANDRO_Dizon_Year3_Sem1_SOCIAL.pdf', 'SOCIAL', 'University of the East', '2024-2025', 1, 'APPROVED', ''),
 (175, 29002, '2024-10-22', 'Reyes_Maria_Gonzales_Year4_Sem1_GRADES.pdf', 'GRADES', 'Ateneo de Manila University', '2024-2025', 1, 'APPROVED', ''),
-(176, 29002, '2024-10-22', 'Reyes_Maria_Gonzales_Year4_Sem1_SOCIAL.pdf', 'SOCIAL', 'Ateneo de Manila University', '2024-2025', 1, 'APPROVED', ''),
-(177, 31001, '2024-10-25', 'HAVENFIELD_RAISSEILLE__Year1_Sem1_COR.pdf', 'COR', 'PAMANTASAN NG LUNGSOD NG VALENZUELA', '2024-2025', 1, 'PENDING', '');
+(176, 29002, '2024-10-22', 'Reyes_Maria_Gonzales_Year4_Sem1_SOCIAL.pdf', 'SOCIAL', 'Ateneo de Manila University', '2024-2025', 1, 'APPROVED', '');
 
 -- --------------------------------------------------------
 
@@ -309,7 +308,10 @@ CREATE TABLE `university` (
 --
 
 INSERT INTO `university` (`school_id`, `school_name`, `address`, `acad_year`, `sem_count`) VALUES
-(1, 'PAMANTASAN NG LUNGSOD NG VALENZUELA', 'MXV9+GJF, Maysan Rd, Valenzuela, Metro Manila', '2024-2025', 2);
+(1, 'PAMANTASAN NG LUNGSOD NG VALENZUELA', 'MXV9+GJF, Maysan Rd, Valenzuela, Metro Manila', '2024-2025', 2),
+(3, 'aa', 'bb', '2024-2025', 2),
+(4, 'bb', 'zz', '2024-2025', 3),
+(5, 'zz', 'aa', '2024-2025', 3);
 
 -- --------------------------------------------------------
 
@@ -323,44 +325,82 @@ CREATE TABLE `user` (
   `username` varchar(100) NOT NULL,
   `email` varchar(320) NOT NULL,
   `passhash` varchar(255) NOT NULL,
-  `reset_code` varchar(6) NOT NULL
+  `reset_code` varchar(8) NOT NULL,
+  `reset_expiry` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`user_id`, `role_id`, `username`, `email`, `passhash`, `reset_code`) VALUES
-(1, 1, 'admin', '', 'test', ''),
-(2, 3, 'evaluator', '', 'eval', ''),
-(3, 2, 'test', '', 'testing', ''),
-(524, 2, '29-001', '', 'Dela Cruz', ''),
-(525, 2, '29-002', '', 'Reyes', ''),
-(526, 2, '29-003', '', 'Santos', ''),
-(527, 2, '29-004', '', 'Cruz', ''),
-(528, 2, '29-005', '', 'Garcia', ''),
-(529, 2, '29-006', '', 'Bautista', ''),
-(530, 2, '29-007', '', 'Mendoza', ''),
-(531, 2, '29-008', '', 'Ramos', ''),
-(532, 2, '29-009', '', 'Perez', ''),
-(533, 2, '29-010', '', 'Morales', ''),
-(534, 2, '30-001', '', 'JACINTO', ''),
-(535, 2, '30-002', '', 'REYES', ''),
-(536, 2, '30-003', '', 'SANTOS', ''),
-(537, 2, '30-004', '', 'MERCADO', ''),
-(538, 2, '30-005', '', 'CRUZ', ''),
-(539, 2, '30-006', '', 'BAUTISTA', ''),
-(540, 2, '30-007', '', 'DOMINGO', ''),
-(541, 2, '30-008', '', 'VILLEGAS', ''),
-(542, 2, '30-009', '', 'FERNANDEZ', ''),
-(544, 2, '30-011', '', 'DE GUZMAN', ''),
-(545, 2, '31-001', '', 'HAVENFIELD', ''),
-(546, 2, '31-001', '', 'HAVENFIELD', ''),
-(547, 2, '31-001', '', 'HAVENFIELD', ''),
-(551, 2, '28-002', '', 'A', ''),
-(558, 2, '27-003', '', 'B', ''),
-(561, 2, '23-001', '', 'B', ''),
-(562, 2, '23-002', '', 'B', '');
+INSERT INTO `user` (`user_id`, `role_id`, `username`, `email`, `passhash`, `reset_code`, `reset_expiry`) VALUES
+(1, 1, 'admin', 'pio.iskolar.team@gmail.com', 'test', '', NULL),
+(2, 3, 'evaluator', 'pio.iskolar.team+eval@gmail.com', 'eval', '', NULL),
+(3, 2, 'test', '', 'testing', '', NULL),
+(524, 2, '29-001', '', 'Dela Cruz', '', NULL),
+(525, 2, '29-002', '', 'Reyes', '', NULL),
+(526, 2, '29-003', '', 'Santos', '', NULL),
+(527, 2, '29-004', '', 'Cruz', '', NULL),
+(528, 2, '29-005', '', 'Garcia', '', NULL),
+(529, 2, '29-006', '', 'Bautista', '', NULL),
+(530, 2, '29-007', '', 'Mendoza', '', NULL),
+(531, 2, '29-008', '', 'Ramos', '', NULL),
+(532, 2, '29-009', '', 'Perez', '', NULL),
+(533, 2, '29-010', '', 'Morales', '', NULL),
+(534, 2, '30-001', 'alexis.jacinto.320401@gmail.com', 'test', '', NULL),
+(535, 2, '30-002', '', 'REYES', '', NULL),
+(536, 2, '30-003', '', 'SANTOS', '', NULL),
+(537, 2, '30-004', '', 'MERCADO', '', NULL),
+(538, 2, '30-005', '', 'CRUZ', '', NULL),
+(539, 2, '30-006', '', 'BAUTISTA', '', NULL),
+(540, 2, '30-007', '', 'DOMINGO', '', NULL),
+(541, 2, '30-008', '', 'VILLEGAS', '', NULL),
+(542, 2, '30-009', '', 'FERNANDEZ', '', NULL),
+(544, 2, '30-011', '', 'DE GUZMAN', '', NULL),
+(547, 2, '31-001', '', 'HAVENFIELD', '', NULL),
+(551, 2, '28-002', '', 'A', '', NULL),
+(558, 2, '27-003', '', 'B', '', NULL),
+(561, 2, '23-001', '', 'B', '', NULL),
+(562, 2, '23-002', '', 'B', '', NULL),
+(563, 2, '31-001', '', 'TESTING', '', NULL),
+(564, 2, '31-001', '', 'A', '', NULL),
+(565, 2, '31-001', '', 'A', '', NULL),
+(566, 2, '31-001', '', 'A', '', NULL),
+(567, 2, '31-001', '', 'A', '', NULL),
+(568, 2, '31-001', '', 'A', '', NULL),
+(569, 2, '31-001', '', 'A', '', NULL),
+(570, 2, '31-001', '', 'A', '', NULL),
+(571, 2, '31-001', '', 'A', '', NULL),
+(572, 2, '31-001', '', 'A', '', NULL),
+(573, 2, '31-001', '', 'A', '', NULL),
+(574, 2, '31-001', '', 'A', '', NULL),
+(575, 2, '31-002', '', 'A', '', NULL),
+(576, 2, '31-003', '', 'A', '', NULL),
+(577, 2, '31-004', '', 'A', '', NULL),
+(578, 2, '31-005', '', 'A', '', NULL),
+(579, 2, '31-005', '', 'A', '', NULL),
+(580, 2, '31-004', '', 'A', '', NULL),
+(581, 2, '31-003', '', 'B', '', NULL),
+(582, 2, '31-006', '', 'B', '', NULL),
+(583, 2, '31-007', '', 'C', '', NULL),
+(584, 2, '31-008', '', 'C', '', NULL),
+(585, 2, '30-012', '', 'B', '', NULL),
+(586, 2, '32-001', '', 'D', '', NULL),
+(587, 2, '33-001', '', 'E', '', NULL),
+(588, 2, '33-002', '', 'E', '', NULL),
+(589, 2, '33-003', '', 'E', '', NULL),
+(590, 2, '33-004', '', 'E', '', NULL),
+(591, 2, '33-005', '', 'E', '', NULL),
+(592, 2, '32-001', '', 'A', '', NULL),
+(593, 2, '32-002', '', 'A', '', NULL),
+(594, 2, '32-003', '', 'A', '', NULL),
+(595, 2, '32-004', '', 'A', '', NULL),
+(596, 2, '32-005', '', 'A', '', NULL),
+(597, 2, '32-006', '', 'A', '', NULL),
+(603, 2, '30-001', 'a', 'a', '', NULL),
+(604, 2, '30-001', 'a', 'a', '', NULL),
+(605, 2, '30-001', 'a', 'a', '', NULL),
+(606, 2, '31-001', 'a', 'a', '', NULL);
 
 --
 -- Indexes for dumped tables
@@ -471,13 +511,13 @@ ALTER TABLE `submission`
 -- AUTO_INCREMENT for table `university`
 --
 ALTER TABLE `university`
-  MODIFY `school_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `school_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=563;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=607;
 
 --
 -- Constraints for dumped tables
