@@ -1,0 +1,59 @@
+        document.getElementById('deleteForm').addEventListener('submit', function(e) {
+            const form = e.target;
+            const requiredFields = form.querySelectorAll('[required]');
+            let valid = true;
+            
+            const loginError = document.getElementById('loginError');
+            loginError.style.display = 'none';
+
+            requiredFields.forEach(field => {
+                if (!field.value) {
+                field.classList.add('required-error');
+                valid = false;
+                } else {
+                field.classList.remove('required-error');
+                }
+                field.addEventListener('input', function() {
+                    if (field.value) {
+                        field.classList.remove('required-error');
+                    }
+                });
+            });
+
+            if (!valid) {
+                e.preventDefault(); // Prevent form submission if required fields are empty
+            } else {
+                e.preventDefault();
+
+                const formData = new FormData(this);
+                const data = new URLSearchParams();
+
+                for (const pair of formData) {
+                    data.append(pair[0], pair[1]);
+                }
+
+                fetch('../functions/delete_fx.php', {
+                    method: 'POST',
+                    body: data,
+                })
+                .then(response => response.text()) // Expect text response from the backend
+                .then(response => {
+                    if (response === 'success') {
+                        // Store the success message in sessionStorage before reload
+                        sessionStorage.setItem('toastMessage', 'Record successfully deleted.');
+                        sessionStorage.setItem('toastTitle', 'Success');
+
+                        // Reload the page
+                        window.location.href = '<?php echo $_SERVER["PHP_SELF"]; ?>';
+                    } else if (response === 'invalid') {
+                        document.getElementById('loginError').style.display = 'block';
+                    } else {
+                        showToast('An error occurred during deletion.', 'Error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Fetch Error:', error);
+                    showToast('An unexpected error occurred.', 'Error');
+                });
+            }
+        });

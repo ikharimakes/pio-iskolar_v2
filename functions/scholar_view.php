@@ -2,7 +2,7 @@
 include_once('../functions/general.php');
 global $conn;
 
-//* Scholar List *//
+//* SCHOLAR LIST *//
 function scholarList($current_page = 1, $sort_column = 'scholar_id', $sort_order = 'desc') {
     $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : (isset($_COOKIE['user_role']) ? $_COOKIE['user_role'] : null);
     $fullAccess = ($user_role == 1);
@@ -110,7 +110,7 @@ function scholarList($current_page = 1, $sort_column = 'scholar_id', $sort_order
                         <form style="display:inline" action="' . $viewRedirect . '" method="post">
                             <div class="icon">
                                 <div class="tooltip"> View</div>
-                                <input type="hidden" name="scholar_id" value="'.$row["scholar_id"].'">
+                                <input type="hidden" name="scholar" value="'.$row["scholar_id"].'">
                                 <button type="submit" name="view" style="all:unset;">
                                 <span><ion-icon name="eye-outline"></ion-icon> </span></button>
                             </div>
@@ -131,10 +131,12 @@ function scholarList($current_page = 1, $sort_column = 'scholar_id', $sort_order
     }
 }
 
-function getTotalRecords($category = '', $filter_value = '') {
+function getTotalRecords() {
     global $conn;
 
     $search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
+    $filter = isset($_GET['filter']) ? $conn->real_escape_string($_GET['filter']) : '';
+    $category = isset($_GET['category']) ? $conn->real_escape_string($_GET['category']) : '';
     $conditions = "1=1"; // Base condition
 
     // Add search conditions
@@ -143,8 +145,8 @@ function getTotalRecords($category = '', $filter_value = '') {
     }
 
     // Add filter conditions if category and filter are set
-    if ($category !== '' && $filter_value !== '' && $filter_value !== 'all') {
-        $conditions .= " AND $category = '$filter_value'";
+    if ($category !== '' && $filter !== '' && $filter !== 'all') {
+        $conditions .= " AND $category = '$filter'";
     }
 
     $countQuery = "SELECT COUNT(*) as total FROM scholar WHERE $conditions";
@@ -174,10 +176,10 @@ function getUniqueFilterValues($column) {
     return $values;
 }
 
-//* Scholar View - Admin*//
+//* SCHOLAR VIEW - ADMIN *//
 function scholarDetail() {
     global $conn;
-    if(isset($_POST['scholar_id'])) {$_SESSION['sid'] = $_POST['scholar_id'];}
+    if(isset($_POST['scholar'])) {$_SESSION['sid'] = $_POST['scholar'];}
     $id = $_SESSION['sid'];
     // SCHOLAR DETAILS
     $display = "SELECT * FROM scholar WHERE scholar_id = '$id'";
@@ -255,10 +257,10 @@ function scholarDetail() {
     }
 }
 
-//* Scholar View - Scholar*//
+//* SCHOLAR VIEW - SCHOLAR *//
 function scholarView() {
     global $conn;
-    if(isset($_POST['scholar_id'])) {$_SESSION['sid'] = $_POST['scholar_id'];}
+    if(isset($_POST['scholar'])) {$_SESSION['sid'] = $_POST['scholar'];}
     $id = $_SESSION['sid'];
     // SCHOLAR DETAILS
     $display = "SELECT * FROM scholar WHERE scholar_id = '$id'";

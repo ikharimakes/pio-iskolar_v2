@@ -7,13 +7,13 @@ namespace Composer\Autoload;
 class ComposerStaticInit175f515b2811e085f3258b59792b25af
 {
     public static $files = array (
+        'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
         'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
         'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '662a729f963d39afe703c9d9b7ab4a8c' => __DIR__ . '/..' . '/symfony/polyfill-php83/bootstrap.php',
         '2203a247e6fda86070a5e4e07aed533a' => __DIR__ . '/..' . '/symfony/clock/Resources/now.php',
-        'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
         'c4e03ecd470d2a87804979c0a8152284' => __DIR__ . '/..' . '/react/async/src/functions_include.php',
     );
 
@@ -42,8 +42,12 @@ class ComposerStaticInit175f515b2811e085f3258b59792b25af
         ),
         'R' => 
         array (
+            'React\\Stream\\' => 13,
+            'React\\Socket\\' => 13,
             'React\\Promise\\' => 14,
             'React\\EventLoop\\' => 16,
+            'React\\Dns\\' => 10,
+            'React\\Cache\\' => 12,
             'React\\Async\\' => 12,
         ),
         'P' => 
@@ -59,6 +63,7 @@ class ComposerStaticInit175f515b2811e085f3258b59792b25af
         ),
         'E' => 
         array (
+            'Evenement\\' => 10,
             'Egulias\\EmailValidator\\' => 23,
         ),
         'D' => 
@@ -134,6 +139,14 @@ class ComposerStaticInit175f515b2811e085f3258b59792b25af
         array (
             0 => __DIR__ . '/..' . '/symfony/clock',
         ),
+        'React\\Stream\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/react/stream/src',
+        ),
+        'React\\Socket\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/react/socket/src',
+        ),
         'React\\Promise\\' => 
         array (
             0 => __DIR__ . '/..' . '/react/promise/src',
@@ -141,6 +154,14 @@ class ComposerStaticInit175f515b2811e085f3258b59792b25af
         'React\\EventLoop\\' => 
         array (
             0 => __DIR__ . '/..' . '/react/event-loop/src',
+        ),
+        'React\\Dns\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/react/dns/src',
+        ),
+        'React\\Cache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/react/cache/src',
         ),
         'React\\Async\\' => 
         array (
@@ -177,6 +198,10 @@ class ComposerStaticInit175f515b2811e085f3258b59792b25af
         'PHPMailer\\PHPMailer\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
+        ),
+        'Evenement\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/evenement/evenement/src',
         ),
         'Egulias\\EmailValidator\\' => 
         array (

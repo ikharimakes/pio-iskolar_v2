@@ -360,8 +360,9 @@
                 fetchFilterValues(selectedCategory);
             });
 
+            // In ad_scholar.php, replace the existing fetch data implementation with this:
             const fetchData = (page = 1) => {
-                const params = new URLSearchParams(window.location.search);
+                const params = new URLSearchParams();
                 params.set('page', page);
 
                 // Add sort parameters
@@ -387,9 +388,13 @@
                     }
                 }
 
+                // Update URL without refreshing page (optional)
+                // window.history.replaceState({}, '', `?${params.toString()}`);
+
                 // Fetch table data
-                params.set('ajax', 'table');
-                fetch(`ad_scholar.php?${params.toString()}`)
+                const tableParams = new URLSearchParams(params);
+                tableParams.set('ajax', 'table');
+                fetch(`ad_scholar.php?${tableParams.toString()}`)
                     .then(response => response.text())
                     .then(html => {
                         tableBody.innerHTML = html;
@@ -397,8 +402,10 @@
                     .catch(error => console.error('Error fetching table data:', error));
 
                 // Fetch pagination data
-                params.set('ajax', 'pagination');
-                fetch(`ad_scholar.php?${params.toString()}`)
+                const paginationParams = new URLSearchParams(params);
+                console.log(paginationParams);
+                paginationParams.set('ajax', 'pagination');
+                fetch(`ad_scholar.php?${paginationParams.toString()}`)
                     .then(response => response.text())
                     .then(html => {
                         const parser = new DOMParser();
@@ -408,13 +415,21 @@
                             pagination.innerHTML = newPagination.innerHTML;
                         }
                     })
-                    .catch(error => console.error('Error fetching pagination data:', error));
+                    .catch(error => console.error('Error fetching pagination:', error));
             };
 
             // Add event listeners to search input and filter
-            searchInput.addEventListener('input', () => fetchData());
-            categorySelect.addEventListener('change', () => fetchData());
-            filter.addEventListener('change', () => fetchData());
+            searchInput.addEventListener('input', () => fetchData(1));
+            categorySelect.addEventListener('change', () => {
+                const selectedCategory = categorySelect.value;
+                fetchFilterValues(selectedCategory);
+                fetchData(1); // Reset to page 1 when category changes
+            });
+            filter.addEventListener('change', () => fetchData(1));
+
+            // searchInput.addEventListener('input', () => fetchData());
+            // categorySelect.addEventListener('change', () => fetchData());
+            // filter.addEventListener('change', () => fetchData());
 
             fetchData(); // Initial fetch on page load
         });
@@ -433,7 +448,6 @@
 
             const formData = new FormData(); // Manually create FormData object
             formData.append('individual', 'true'); // Flag for form submission
-
             // Manually append each field
             formData.append('scholar_id', document.querySelector('input[name="scholar_id"]').value);
             formData.append('last_name', document.querySelector('input[name="last_name"]').value);
@@ -444,33 +458,31 @@
             formData.append('address', document.querySelector('input[name="address"]').value);
             formData.append('contact', document.querySelector('input[name="contact"]').value);
             formData.append('email', document.querySelector('input[name="email"]').value);
+
             try {
-            // Send the form data asynchronously via fetch
-            const response = await fetch('', {
-                method: 'POST',
-                body: formData,
-                headers: { 'X-Requested-With': 'XMLHttpRequest' } // AJAX identifier
-            });
+                const response = await fetch('../functions/scholar_fx.php', {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
 
-            // Try parsing the response as JSON
-            const result = await response.json();
+                const result = await response.json();
 
-            if (result.exists) {
-                // Scholar ID exists, show a toast notification and stop submission
-                showToast('Scholar ID already exists!', 'Duplicate Entry');
-            } else if (result.success) {
-                // Form submission succeeded
-                showToast('Scholar added successfully!', 'Success');
-                window.location.reload(); // Reload page or redirect
-            } else {
-                // Handle other potential errors
-                showToast('An error occurred during submission.', 'Error');
+                if (result.exists) {
+                    showToast('Scholar ID already exists!', 'Duplicate Entry');
+                } else if (result.success) {
+                    showToast('Scholar added successfully! Email will be sent in the background.', 'Success');
+                    // Reload immediately after showing toast
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    showToast('An error occurred during submission.', 'Error');
+                }
+            } catch (error) {
+                console.error('Error occurred:', error);
+                showToast('Unexpected response from the server.', 'Error');
             }
-        } catch (error) {
-            // If the response is not JSON (e.g., HTML), show the error
-            console.error('Error occurred:', error);
-            showToast('Unexpected response from the server.', 'Error');
-        }
         });
 
         //BATCH UPLOAD

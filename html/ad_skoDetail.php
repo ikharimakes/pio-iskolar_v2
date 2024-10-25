@@ -21,7 +21,7 @@
     $sort_column = isset($_GET['sort_column']) ? $_GET['sort_column'] : 'scholar_id';
     $sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'asc';
 
-    if(isset($_POST['scholar_id'])) {$_SESSION['sid'] = $_POST['scholar_id'];}
+    if(isset($_POST['scholar'])) {$_SESSION['sid'] = $_POST['scholar'];}
     $id = $_SESSION['sid'];
 
     if (isset($_GET['ajax'])) {

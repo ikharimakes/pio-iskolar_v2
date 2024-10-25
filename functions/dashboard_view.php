@@ -9,7 +9,8 @@ function activeEvents() {
     $query = "SELECT title FROM announcements WHERE status = 'ACTIVE' ORDER BY st_date DESC";
     $result = mysqli_query($conn, $query);
     while ($row = mysqli_fetch_assoc($result)) {
-        echo "<li><a>" . $row['title'] . "</a></li>";
+        echo "<li>" . $row['title'] . "</li>";
+        // echo "<li><a>" . $row['title'] . "</a></li>";
     }
 }
 
@@ -27,7 +28,7 @@ function summaryScholars() {
     echo "
         <div class='box-row'>
             <div class='box box-small'>
-                <a href='#' onclick='redirectScholar();'>
+                <a href='#' style='text-decoration:none;' onclick='redirectScholar();'>
                     <h5 class='detail'>Total Scholars</h5>
 
                     <div class='box-num'>
@@ -37,7 +38,7 @@ function summaryScholars() {
             </div>
 
             <div class='box box-small'>
-                <a href='#' onclick='redirectScholar(\"status\", \"ACTIVE\");'>
+                <a href='#' style='text-decoration:none;' onclick='redirectScholar(\"status\", \"ACTIVE\");'>
                     <h5 class='detail'>Active Scholars</h5>
 
                     <div class='box-num'>
@@ -47,7 +48,7 @@ function summaryScholars() {
             </div>
 
             <div class='box box-small'>
-                <a href='#' onclick='redirectScholar(\"status\", \"DROPPED\");'>
+                <a href='#' style='text-decoration:none;' onclick='redirectScholar(\"status\", \"DROPPED\");'>
                     <h5 class='detail'>Scholars on Probation</h5>
 
                     <div class='box-num'>
@@ -57,7 +58,7 @@ function summaryScholars() {
             </div>
 
             <div class='box box-small'>
-                <a href='#' onclick='redirectScholar(\"status\", \"LOA\");'>
+                <a href='#' style='text-decoration:none;' onclick='redirectScholar(\"status\", \"LOA\");'>
                     <h5 class='detail'>Scholars on Leave of Absence</h5>
 
                     <div class='box-num'>

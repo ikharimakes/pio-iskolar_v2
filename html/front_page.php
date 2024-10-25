@@ -2,6 +2,7 @@
     include_once('../functions/general.php');
     include_once('../functions/announce_view.php');
     updateStatus();
+    clearExpiredResetCodes();
 
     $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : (isset($_COOKIE['user_role']) ? $_COOKIE['user_role'] : null);
 
@@ -15,7 +16,6 @@
         header("Location: eval_dashboard.php");
         exit();
     } else {
-        // header("Location: front_page.php");
     }
 ?>
 
@@ -116,9 +116,7 @@
         </div>
     </div>
 
-
-    
-    <!-- FORGOT PASSWORD MODAL -->
+    <!-- PASSWORD RESET MODAL -->
     <div id="forgotModal" class="forgot">
         <div class="forgot-content">
             <div class="infos">
@@ -128,14 +126,17 @@
             </div>
             <br><br>
 
-            <div class="inner-content">
-                <label class="texts" for="email">Enter Email Address:</label> <br>
-                <input class="inputs" type="email" id="email" name="email" placeholder="Email Address" required>
-            </div>
+            <form id="emailForm" method="post" novalidate>
+                <div class="inner-content">
+                    <label class="texts" for="email">Enter Email Address:</label> <br>
+                    <input class="inputs1" type="email" id="email" name="email" placeholder="Email Address" required>
+                </div>
 
-            <div class="btn">
-                <button onclick="openModal('passModal')" class="logIn-button"> Continue </button>
-            </div> <br>
+                <div class="btn">
+                    <button type="submit" class="logIn-button">Continue</button>
+                </div>
+            </form>
+            <br>
         </div> 
     </div>
 
@@ -143,29 +144,35 @@
         <div class="pass-content">
             <div class="infos">
                 <img src="images/pio-logo.png" alt="pio">
-                <h1>Forgot Password</h1>
+                <h1>Reset Password</h1>
                 <span class="close" onclick="closeModal('passModal')">&times;</span>
             </div>
             <br><br>
             
-                <form action="" method="POST">
+            <form id="resetForm" method="POST" novalidate>
+                <input type="hidden" id="resetEmail" name="email">
+                <div class="inner-content">
+                    <label class="texts" for="reset_code">Enter Reset Code:</label> <br>
+                    <input class="inputs1" type="text" id="reset_code" name="reset_code" placeholder="Enter code sent to your email" required>
+                </div>
                 <div class="inner-content">
                     <label class="texts" for="newPassword">Enter New Password:</label> <br>
-                    <input class="inputs" type="password" id="newPassword" name="newPassword" placeholder="New Password" required>
+                    <input class="inputs1" type="password" id="newPassword" name="newPassword" placeholder="New Password" required>
                 </div>
                 <div class="inner-content">
                     <label class="texts" for="confirmPassword">Confirm Password:</label> <br>
-                    <input class="inputs" type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
+                    <input class="inputs1" type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
                 </div>
 
                 <div class="btn">
-                    <button class="logIn-button" type="submit" name="reset"> Reset Password </button>
+                    <button class="logIn-button" type="submit">Reset Password</button>
                 </div> 
-                <form action="" method="POST">
+            </form>
             <br>
         </div>
     </div>
 
+    <?php include 'toast.php'; ?>
 
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
@@ -196,7 +203,6 @@
             dots[slideIndex - 1].className += " active";
         }
 
-
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             const form = e.target;
             const requiredFields = form.querySelectorAll('[required]');
@@ -212,11 +218,6 @@
                 } else {
                 field.classList.remove('required-error');
                 }
-                field.addEventListener('input', function() {
-                    if (field.value) {
-                        field.classList.remove('required-error');
-                    }
-                });
             });
 
             if (!valid) {
@@ -256,6 +257,106 @@
                     console.error('Fetch Error:', error);
                 })
             }
+        });
+
+        document.getElementById('emailForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const form = e.target;
+            const requiredFields = form.querySelectorAll('[required]');
+            let valid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value) {
+                    field.classList.add('required-error');
+                    valid = false;
+                } else {
+                    field.classList.remove('required-error');
+                }
+            });
+
+            if (valid) {
+                const formData = new FormData(this);
+                formData.append('check_email', '1');
+
+                fetch('../functions/password_fx.php', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('resetEmail').value = document.getElementById('email').value;
+                        openModal('passModal');
+                        showToast("Reset code has been sent to your email", "Check Your Email");
+                    } else {
+                        openModal('passModal');
+                        showToast("If email exists, you will receive a reset code", "Check Your Email");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showToast("An error occurred", "Error");
+                });
+            }
+        });
+
+        document.getElementById('resetForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const form = e.target;
+            const requiredFields = form.querySelectorAll('[required]');
+            let valid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value) {
+                    field.classList.add('required-error');
+                    valid = false;
+                } else {
+                    field.classList.remove('required-error');
+                }
+            });
+
+            if (valid) {
+                const formData = new FormData(this);
+                formData.append('reset_password', '1');
+
+                fetch('../functions/password_fx.php', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showToast("Password has been reset successfully", "Success");
+                        closeModal('passModal');
+                    } else {
+                        const field = document.getElementById(data.message === 'password_mismatch' ? 'confirmPassword' : 'reset_code');
+                        field.classList.add('required-error');
+                        
+                        let message = "An error occurred";
+                        if (data.message === 'password_mismatch') {
+                            message = "Passwords do not match";
+                        } else if (data.message === 'empty_fields') {
+                            message = "Please fill in all fields";
+                        } else if (data.message === 'invalid_code') {
+                            message = "Invalid or expired reset code";
+                        }
+                        showToast(message, "Error");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showToast("An error occurred", "Error");
+                });
+            }
+        });
+
+        // Add this to the existing input event listeners
+        document.querySelectorAll('.inputs1').forEach(input => {
+            input.addEventListener('input', function() {
+                if (this.value) {
+                    this.classList.remove('required-error');
+                }
+            });
         });
 
         //FORGOT PASSWORD

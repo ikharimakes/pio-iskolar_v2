@@ -1,58 +1,6 @@
 <?php
 include_once('../functions/general.php');
 global $conn, $batch;
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-function sendEmailNotification($email, $username, $password, $name,) {
-    $mail = new PHPMailer(true);
-
-    try {
-        // Server settings
-        $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com';
-        $mail->SMTPAuth = true;
-        $mail->Username = 'raisseille@gmail.com';   //pio.iskolar@gmail.com
-        $mail->Password = 'odaq gskz keoh vnwu';    //hadj fkxn jxjj kmdr
-        $mail->SMTPSecure = 'tls';
-        $mail->Port = 587;
-
-        // Recipients
-        $mail->setFrom('pio.iskolar@gmail.com', 'Pio Iskolar Team');
-        $mail->addAddress($email); // Add a recipient
-
-        // Content
-        $mail->isHTML(true); // Set email format to HTML
-        $mail->Subject = 'Your PIO ISKOLAR System Account Credentials';
-        $mail->Body    = "
-        <p>Dear Mr./Ms. $name,</p>
-        <p>We are pleased to inform you that your account for the PIO ISKOLAR System has been successfully created. This system is designed to help you manage your scholarship documents and stay updated with the latest announcements from the Dr. Pio Valenzuela Scholarship Program.</p>
-        <p>Below are your account credentials, which you will use to access the PIO ISKOLAR website:</p>
-        <p>
-            <strong>Username:</strong> $username<br>
-            <strong>Password:</strong> $password
-        </p>
-        <p>To ensure the security of your account, please log in using the above credentials and change your password immediately upon your first login.</p>
-        <p><strong>Steps to Change Your Password:</strong></p>
-        <ol>
-            <li>Log in to the PIO ISKOLAR System using the credentials provided above.</li>
-            <li>Navigate to your account settings.</li>
-            <li>Select \"Change Password.\"</li>
-            <li>Enter your temporary password, followed by your new password.</li>
-            <li>Confirm your new password and save the changes.</li>
-        </ol>
-        <p>If you encounter any issues or have any questions, please do not hesitate to contact our support team at <a href=\"mailto:https://valenzuela.gov.ph/drpioscholarship\">https://valenzuela.gov.ph/drpioscholarship</a>
-        <p>Thank you for being a part of the Dr. Pio Valenzuela Scholarship Program. We look forward to supporting your academic journey through this new system.</p>
-        <br>
-        <p>Best regards,</p>
-        <p>Pio Iskolar Team</p>
-        ";
-
-        $mail->send();
-    } catch (Exception $e) {
-        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-    }
-}
 
 error_reporting(0);
 
@@ -82,29 +30,61 @@ if (isset($_POST['individual'])) {
     $stmt->bind_result($count);
     $stmt->fetch();
     $stmt->close();
-
     // If a duplicate is found, return JSON response and halt the submission
     if ($count > 0) {
         echo json_encode(['exists' => true]);
         exit();
     } else {
         // Step 2: Proceed with the insertion if no duplicate is found
-        $insertUser = "INSERT INTO user (user_id, role_id, username, passhash) VALUES (NULL, '2', '$username', '$password')";
+        $insertUser = "INSERT INTO user (user_id, role_id, username, email, passhash) VALUES (NULL, '2', '$username', '$email', '$password')";
         if ($conn->query($insertUser)) {
             $user_id = $conn->insert_id; // Get the last inserted user_id
 
             $insertScholar = "INSERT INTO scholar (scholar_id, batch_no, user_id, status, last_name, first_name, middle_name, school, course, _address, contact, email, remarks) 
                               VALUES ('$scholar_id', '$batch_no', '$user_id', 'ACTIVE', '$last_name', '$first_name', '$middle_name', '$school', '$course', '$address', '$contact', '$email', NULL)";
             $run = $conn->query($insertScholar);
-
+            $subject = "Your PIO ISKOLAR System Account Credentials";
+            $body = "
+                <p>Dear Mr./Ms. $name,</p>
+                <p>We are pleased to inform you that your account for the PIO ISKOLAR System has been successfully created. This system is designed to help you manage your scholarship documents and stay updated with the latest announcements from the Dr. Pio Valenzuela Scholarship Program.</p>
+                <p>Below are your account credentials, which you will use to access the PIO ISKOLAR website:</p>
+                <p>
+                    <strong>Username:</strong> $username<br>
+                    <strong>Password:</strong> $password
+                </p>
+                <p>To ensure the security of your account, please log in using the above credentials and change your password immediately upon your first login.</p>
+                <p><strong>Steps to Change Your Password:</strong></p>
+                <ol>
+                    <li>Log in to the PIO ISKOLAR System using the credentials provided above.</li>
+                    <li>Navigate to your account settings.</li>
+                    <li>Select \"Change Password.\"</li>
+                    <li>Enter your temporary password, followed by your new password.</li>
+                    <li>Confirm your new password and save the changes.</li>
+                </ol>
+                <p>If you encounter any issues or have any questions, please do not hesitate to contact our support team at <a href=\"mailto:https://valenzuela.gov.ph/drpioscholarship\">https://valenzuela.gov.ph/drpioscholarship</a>
+                <p>Thank you for being a part of the Dr. Pio Valenzuela Scholarship Program. We look forward to supporting your academic journey through this new system.</p>
+                <br>
+                <p>Best regards,</p>
+                <p>Pio Iskolar Team</p>";
             // Return success if insertion was successful
             if ($run) {
-                // Optionally send an email (currently commented out)
-                // sendEmailNotification($email, $username, $password, $last_name);
-                sendEmailsAsync(["sail.havenfield@gmail.com"], "test", "testing", "pio.iskolar@gmail.com");
-
-                header('Location: ' . $_SERVER['PHP_SELF']);
+                // First, send immediate success response for the database operation
+                echo json_encode(['success' => true]);
+                
+                // Ensure the response is sent to the client
+                if (function_exists('fastcgi_finish_request')) {
+                    fastcgi_finish_request();
+                } else {
+                    ob_end_flush();
+                    flush();
+                }
+                
+                sendEmailAsync($email, $subject, $content);
+                
+                exit();
             } else {
+                echo json_encode(['success' => false]);
+                exit();
             }
         } else {
         }
@@ -172,7 +152,7 @@ if(isset($_FILES['csv'])){
                 $username = $_POST['batch_id'] . '-' . sprintf('%03d', $data[0]);
                 $password = $data[1];
                 $email = $data[8];
-                $insert = "INSERT INTO user (user_id, role_id, username, passhash) VALUES (NULL, '2', '$username', '$password')";
+                $insert = "INSERT INTO user (user_id, role_id, username, email, passhash) VALUES (NULL, '2', '$username', '$data[8]', '$password')";
                 $run = $conn->query($insert);
 
                 // inserts into user

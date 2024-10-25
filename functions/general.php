@@ -6,17 +6,15 @@ $warning = array();
 $sweetAlert = array();
 $warnAlert = array();
 
-require '../vendor/autoload.php';
-use Symfony\Component\Process\Process;
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
+require_once '../vendor/autoload.php';
+require 'mailer.php';
 // Function to output JavaScript console.log messages
-function js_debug_log($message) {
-    echo '<script>console.log(' . json_encode($message) . ');</script>';
-}
+// function js_debug_log($message) {
+//     echo '<script>console.log(' . json_encode($message) . ');</script>';
+// }
 
+    // $dsn = 'gmail://raisseille@gmail.com:odaqgskzkeohvnwu@default';
+    // $dsn = 'gmail://pio.iskolar.team@gmail.com:pogvqxmkzfyxnqt@default';
 
 //* DATABASE CONNECTION *//
     // Credentials
@@ -69,103 +67,68 @@ function js_debug_log($message) {
     }
 
 //* MAILING *//
-    function sendEmailsAsync(array $recipients, string $subject, string $message, string $from)
-    {
+    function sendEmailAsync(string $email, string $subject, string $content) {
+        $cmd = buildEmailCommand('processor.php', $email, $subject, $content);
+        executeCommand($cmd);
+    }
+
+    function sendBulkEmailAsync(array $recipients) {
         foreach ($recipients as $recipient) {
-            // Prepare the email parameters to be passed to the background process
-            $command = [
-                'php', // The PHP binary
-                __DIR__ . '/mailing_fx.php', // The separate PHP script file for sending the email
-                $recipient,
-                $subject,
-                $message,
-                $from
-            ];
+            sendEmailAsync($recipient['email'], $recipient['subject'], $recipient['content']);
+        }
+    }
 
-            // Create and start the process for sending the email in the background
-            $process = new Process($command);
-            $process->setTimeout(null);
-            $process->start();
+    function buildEmailCommand($script, string $email, string $subject, string $content) {
+        $scriptPath = __DIR__ . '/' . $script;
+        
+        // Base64 encode subject and content to preserve spaces and special characters
+        $encodedSubject = base64_encode($subject);
+        $encodedContent = base64_encode($content);
+        
+        $command = sprintf(
+            'php "%s" "%s" "%s" "%s"',
+            $scriptPath,
+            escapeshellarg($email),
+            escapeshellarg($encodedSubject),
+            escapeshellarg($encodedContent)
+        );
 
-            // // Optionally, you can check the output or status of the process
-            // $process->wait(function ($type, $buffer) {
-            //     if (Process::ERR === $type) {
-            //         echo 'Error: ' . $buffer;
-            //     } else {
-            //         echo 'Output: ' . $buffer;
-            //     }
-            // });
+        return PHP_OS === 'WINNT'
+            ? 'start /B ' . $command
+            : $command . ' > /dev/null 2>&1 &';
+    }
+
+    function executeCommand($command) {
+        if (PHP_OS === 'WINNT') {
+            pclose(popen($command, 'r'));
+        } else {
+            exec($command);
+        }
+    }
     
-            // Detach the process so it doesn't block the main thread
-            if (Process::STATUS_TERMINATED !== $process->getStatus()) {
-                return; // Simply return immediately without waiting for the process to complete
-            }
-        }
-    }
-
-    function tempMail(array $email, string $subject, string $body) {
-        $mail = new PHPMailer(true);
-        foreach ($email as $to) {
-            try {
-                // Server settings
-                $mail->isSMTP();
-                $mail->Host = 'smtp.gmail.com';
-                $mail->SMTPAuth = true;
-                $mail->Username = 'raisseille@gmail.com';   //pio.iskolar@gmail.com
-                $mail->Password = 'odaq gskz keoh vnwu';    //hadj fkxn jxjj kmdr
-                $mail->SMTPSecure = 'tls';
-                $mail->Port = 587;
+    function clearExpiredResetCodes() {
+        global $conn;
         
-                // Recipients
-                $mail->setFrom('pio.iskolar@gmail.com', 'Pio Iskolar Team');
-                $mail->addAddress($to); // Add a recipient
+        // Clear reset codes and expiry dates that have passed
+        $sql = "UPDATE user 
+                SET reset_code = NULL, 
+                    reset_expiry = NULL 
+                WHERE reset_expiry IS NOT NULL 
+                AND reset_expiry < NOW()";
+                
+        $stmt = $conn->prepare($sql);
         
-                // Content
-                $mail->isHTML(true); // Set email format to HTML
-                $mail->Subject = $subject;
-                $mail->Body    = $body;
-        
-                $mail->send();
-            } catch (Exception $e) {
-                echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-            }
-        }
-        header('Location: ' . $_SERVER['PHP_SELF']);
-    }
-
-    function inquiriesMail(string $email, string $name, string $body) {
-        $mail = new PHPMailer(true);
         try {
-            // Server settings
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPAuth = true;
-            $mail->Username = 'raisseille@gmail.com';   //pio.iskolar@gmail.com
-            $mail->Password = 'odaq gskz keoh vnwu';    //hadj fkxn jxjj kmdr
-            $mail->SMTPSecure = 'tls';
-            $mail->Port = 587;
-    
-            // Recipients
-            $mail->setFrom('pio.iskolar@gmail.com', 'Pio Iskolar Team');
-            $mail->AddAddress($email, $name);
-            $mail->AddAddress('raisseille@gmail.com', 'Coordinator');
-    
-            // Content
-            $mail->isHTML(true); // Set email format to HTML
-            $mail->Subject = "Scholar Inquiry";
-            $mail->Body    = $body;
-    
-            $mail->send();
+            $stmt->execute();
+            error_log("[CLEANUP] Cleared " . $stmt->affected_rows . " expired reset codes");
+            return true;
         } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            error_log("[CLEANUP] Error clearing expired reset codes: " . $e->getMessage());
+            return false;
+        } finally {
+            $stmt->close();
         }
-        header('Location: ' . $_SERVER['PHP_SELF']);
     }
-
-    if (isset($_POST['inquire'])) {
-        inquiriesMail($_POST['email'], $_POST['name'], $_POST['message']);
-    }
-
 
 //* PARAMETER PULL *//
     function academic() {
@@ -209,7 +172,7 @@ function js_debug_log($message) {
     
     function scholarFull() {
         global $conn;
-        if(isset($_POST['scholar_id'])) {$_SESSION['sid'] = $_POST['scholar_id'];}
+        if(isset($_POST['scholar'])) {$_SESSION['sid'] = $_POST['scholar'];}
         $id = $_SESSION['sid'];
         // SCHOLAR DETAILS
         $display = "SELECT * FROM scholar WHERE scholar_id = '$id'";

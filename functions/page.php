@@ -32,64 +32,112 @@ function renderPagination($current_page, $records_per_page, $total_records, $tot
 ?>
 
 <script>
+// In page.php, modify the navigatePage function:
     function navigatePage(page, sourceFile) {
-        const searchInput = document.querySelector('input[name="search"]').value.trim();
-        const selectedFilter = document.getElementById('filter').value;
-        const categorySelect = document.getElementById('category').value;
-        const tableBody = document.getElementById('docTableBody');
-        const pagination = document.getElementById('pagination');
+    // Table body mapping
+    const tableBodyMapping = {
+        'ad_announce.php': 'announceTableBody',
+        'ad_reports.php': 'reportTableBody',
+        'ad_scholar.php': 'scholarTableBody',
+        'ad_school.php': 'schoolTableBody',
+        'history.php': 'docTableBody'
+    };
 
-        let sortColumn = '';
-        let sortOrder = '';
+    // Get elements and log their values
+    const searchInput = document.querySelector('input[name="search"]');
+    const filterSelect = document.getElementById('filter');
+    const categorySelect = document.getElementById('category');
+    
+    console.log('Debug Values:', {
+        page,
+        sourceFile,
+        searchValue: searchInput?.value,
+        filterValue: filterSelect?.value,
+        categoryValue: categorySelect?.value
+    });
 
-        // Check for active sort
-        const activeSortIcons = document.querySelectorAll('.fa-sort-up, .fa-sort-down');
-        if (activeSortIcons.length > 0) {
-            const activeSortIcon = activeSortIcons[0];
-            sortColumn = activeSortIcon.closest('div').id.replace('sort', '').toLowerCase();
-            sortOrder = activeSortIcon.classList.contains('fa-sort-up') ? 'asc' : 'desc';
-        }
+    const tableBodyId = tableBodyMapping[sourceFile] || 'docTableBody';
+    const tableBody = document.getElementById(tableBodyId);
+    const pagination = document.getElementById('pagination');
 
-        const params = new URLSearchParams();
-        params.set('page', page);
+    // Build parameters
+    const params = new URLSearchParams();
+    params.set('page', page);
 
-        if (searchInput) {
-            params.set('search', searchInput);
-        }
+    // Add parameters and log each addition
+    if (searchInput?.value.trim()) {
+        params.set('search', searchInput.value.trim());
+        console.log('Added search param:', searchInput.value.trim());
+    }
 
-        if (selectedCategory) {
-            params.set('category', selectedCategory);
-            if (selectedFilter) {
-                params.set('filter', selectedFilter);
+    if (categorySelect?.value) {
+        params.set('category', categorySelect.value);
+        console.log('Added category param:', categorySelect.value);
+    }
+
+    if (filterSelect?.value) {
+        params.set('filter', filterSelect.value);
+        console.log('Added filter param:', filterSelect.value);
+    }
+
+    // Log final URL parameters
+    console.log('Final params:', params.toString());
+
+    // Fetch updated table data
+    const tableParams = new URLSearchParams(params);
+    tableParams.set('ajax', 'table');
+    
+    const tableUrl = `${sourceFile}?${tableParams.toString()}`;
+    console.log('Fetching table data from:', tableUrl);
+
+    fetch(tableUrl)
+        .then(response => {
+            if (!response.ok) {
+                console.error('Table fetch failed:', response.status, response.statusText);
+                throw new Error('Network response was not ok');
             }
-        }
-
-        if (sortColumn && sortOrder) {
-            params.set('sort_column', sortColumn);
-            params.set('sort_order', sortOrder);
-        }
-
-        // Fetch table data
-        params.set('ajax', 'table');
-        fetch(`${sourceFile}?${params.toString()}`)
-            .then(response => response.text())
-            .then(html => {
+            return response.text();
+        })
+        .then(html => {
+            if (tableBody) {
                 tableBody.innerHTML = html;
-            })
-            .catch(error => console.error('Error fetching table data:', error));
+                console.log('Table body updated successfully');
+            } else {
+                console.error('Table body element not found:', tableBodyId);
+            }
+        })
+        .catch(error => console.error('Error fetching table data:', error));
 
-        // Fetch pagination data
-        params.set('ajax', 'pagination');
-        fetch(`${sourceFile}?${params.toString()}`)
-            .then(response => response.text())
-            .then(html => {
+    // Fetch updated pagination
+    const paginationParams = new URLSearchParams(params);
+    paginationParams.set('ajax', 'pagination');
+    
+    const paginationUrl = `${sourceFile}?${paginationParams.toString()}`;
+    console.log('Fetching pagination from:', paginationUrl);
+
+    fetch(paginationUrl)
+        .then(response => {
+            if (!response.ok) {
+                console.error('Pagination fetch failed:', response.status, response.statusText);
+                throw new Error('Network response was not ok');
+            }
+            return response.text();
+        })
+        .then(html => {
+            if (pagination) {
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
                 const newPagination = doc.querySelector('#pagination');
                 if (newPagination) {
                     pagination.innerHTML = newPagination.innerHTML;
+                    console.log('Pagination updated successfully');
+                } else {
+                    console.error('New pagination element not found in response');
                 }
-            })
-            .catch(error => console.error('Error fetching pagination data:', error));
-    }
+            } else {
+                console.error('Pagination element not found in document');
+            }
+        })
+        .catch(error => console.error('Error fetching pagination:', error));
+}
 </script>

@@ -27,7 +27,7 @@
     <link rel="stylesheet" href="css/confirm.css">
     <style>
         .required-error {
-            border: 2px solid red;
+            border: 2px solid red !important;
         }
     </style>
 </head>
@@ -247,7 +247,7 @@
         <!-- MESSAGE -->
         <div class="inquiry-box">
             <h3>Inquiry Form</h3>
-            <form action="" method="post">
+            <form id="inquiryForm" novalidate>
                 <label for="name">Name:</label>
                 <input type="text" id="name" name="name" placeholder="Enter your name" required>
 
@@ -333,6 +333,80 @@
                 }
             });
         }
+        function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    document.getElementById('inquiryForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const form = e.target;
+        const requiredFields = form.querySelectorAll('[required]');
+        let valid = true;
+
+        // Reset all error states
+        requiredFields.forEach(field => {
+            if (!field.value.trim()) {
+                field.classList.add('required-error');
+                valid = false;
+            }
+            
+            if (field.type === 'email' && !isValidEmail(field.value.trim())) {
+                field.classList.add('required-error');
+                valid = false;
+                showToast('Please enter a valid email address', 'Invalid Address');
+                return;
+            }
+
+            // Add input event listeners to remove error class when user types
+            field.addEventListener('input', function() {
+                if (field.value.trim()) {
+                    field.classList.remove('required-error');
+                    if (field.type === 'email' && !isValidEmail(field.value.trim())) {
+                        field.classList.add('required-error');
+                    }
+                }
+            });
+        });
+
+        if (!valid) {
+            return;
+        }
+
+        const formData = new FormData(form);
+        const data = new URLSearchParams();
+
+        for (const pair of formData) {
+            data.append(pair[0], pair[1]);
+        }
+
+        fetch('../functions/inquiry_fx.php', {
+            method: 'POST',
+            body: data,
+        })
+        .then(response => response.text())
+        .then(response => {
+            if (response === 'success') {
+                showToast('Inquiry sent successfully!', 'Success');
+                form.reset();
+                requiredFields.forEach(field => {
+                    field.classList.remove('required-error');
+                });
+            } else {
+                showToast('Failed to send inquiry. Please try again.', 'Mail Error');
+            }
+        })
+        .catch(error => {
+            console.error('Fetch Error:', error);
+            showToast('An unexpected error occurred.', 'Error');
+        });
+    });
+
+    // Email validation helper function
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
     </script>
 </body>
 </html>

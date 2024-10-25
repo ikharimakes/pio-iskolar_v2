@@ -12,6 +12,8 @@
         "symfony/doctrine-messenger": "^7.1",
         "react/async": "^4.3",
         "react/promise": "^3.2",
-        "react/event-loop": "^1.5"
+        "react/event-loop": "^1.5",
+        "react/socket": "^1.16",
+        "react/stream": "^1.4"
     }
 }
