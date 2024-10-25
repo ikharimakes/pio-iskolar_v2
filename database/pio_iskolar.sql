@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3308
--- Generation Time: Oct 22, 2024 at 04:51 AM
+-- Generation Time: Oct 25, 2024 at 04:02 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -43,17 +43,11 @@ CREATE TABLE `announcements` (
 --
 
 INSERT INTO `announcements` (`announce_id`, `batch_no`, `st_date`, `end_date`, `img_name`, `title`, `content`, `status`) VALUES
-(3, 0, '2024-06-02', '2024-10-05', 'pic2.jpg', 'Contract Signing', 'City Mayor REX Gatchalian graces the orientation and contract signing of 212 recipients of the Dr. Pio Valenzuela Scholarship program at the Pamantasan ng Lungsod ng Valenzuela (#PLV) Qualified Grantees are required to report at the Scholarship Office at PLV Maysan Campus, 2nd floor on December 10 to 16, 2023 (except Saturday and Sunday) 8:00 AM to 5:00 PM. Look for Ms. Miko Tongco regarding Contract Signing and Orientation. Thank you! \r\n\"But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it? But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure?\"', 'INACTIVE'),
-(6, 0, '2024-05-21', '2024-10-26', 'pic3.jpg', 'Results for Batch 27', ' The results of the Dr. Pio Valenzuela Scholarship Program will be released on Dr. Pio\'s 154th Birth Anniversary on December 11, 2023. \r\n\r\nRightfully deserving of the grant, they are currently getting to know more about their future college journeys as Dr. Pio Valenzuela scholars. \r\n\r\nCongratulations and make us proud, dear students! ', 'ACTIVE'),
-(16, 0, '2024-05-29', '2024-09-20', 'image.png', 'Test Announcement', ' This is a test announcement', 'INACTIVE'),
+(3, 0, '2024-10-25', '2024-11-02', 'pic2.jpg', 'Contract Signing', 'City Mayor REX Gatchalian graces the orientation and contract signing of 212 recipients of the Dr. Pio Valenzuela Scholarship program at the Pamantasan ng Lungsod ng Valenzuela (#PLV) Qualified Grantees are required to report at the Scholarship Office at PLV Maysan Campus, 2nd floor on December 10 to 16, 2023 (except Saturday and Sunday) 8:00 AM to 5:00 PM. Look for Ms. Miko Tongco regarding Contract Signing and Orientation. Thank you! \r\n', 'ACTIVE'),
+(6, 0, '2024-10-25', '2024-11-24', 'pic3.jpg', 'Results for Batch 27', ' The results of the Dr. Pio Valenzuela Scholarship Program will be released on Dr. Pio\'s 154th Birth Anniversary on December 11, 2023. \r\n\r\nRightfully deserving of the grant, they are currently getting to know more about their future college journeys as Dr. Pio Valenzuela scholars. \r\n\r\nCongratulations and make us proud, dear students! ', 'ACTIVE'),
+(16, 0, '2024-10-25', '2024-11-08', 'image.png', 'Test Announcement', ' This is a test announcement', 'ACTIVE'),
 (17, 0, '2024-05-29', '2024-11-14', 'pio-museo.jpg', 'Test', ' Placeholder', 'ACTIVE'),
-(19, 0, '2024-10-20', '2024-10-19', '454825879_981451210335064_3584102443445305743_n.jpg', 'ohhhh', ' halfway', 'INACTIVE'),
-(37, 0, '2024-09-03', '2024-09-06', '449189555_773571168273027_1948298230391781972_n.jpg', 'wheee', ' oho', 'INACTIVE'),
-(41, 0, '2024-09-05', '2024-09-08', 'testing_Batch- (1).png', 'testing', ' aaaaaaaaaa', 'INACTIVE'),
-(42, 20, '2024-09-05', '2024-09-15', 'batch-loaf_Batch-20.png', 'batch-loaf', ' www', 'INACTIVE'),
-(43, 31, '2024-09-13', '2024-09-15', 'test announce_Batch-31.jpg', 'test announce', ' testing', 'INACTIVE'),
-(46, 31, '2024-09-13', '2024-09-16', 'test_Batch-31.jpg', 'test', ' ohhhhhh', 'INACTIVE'),
-(49, 31, '2024-09-13', '2024-09-30', 'Test_Batch-31 (1).jpg', 'Test', ' Testing', 'INACTIVE');
+(37, 0, '2024-09-03', '2024-10-24', '449189555_773571168273027_1948298230391781972_n.jpg', 'wheee', ' oho', 'INACTIVE');
 
 -- --------------------------------------------------------
 
@@ -138,7 +132,8 @@ INSERT INTO `notification` (`notif_id`, `user_id`, `date`, `title`, `content`, `
 (91, 544, '2024-10-22', '174-DE GUZMAN DOCUMENT APPROVAL', 'Document has been approved.', 0),
 (92, 525, '2024-10-22', '171-Reyes DOCUMENT APPROVAL', 'Document has been approved.', 0),
 (93, 525, '2024-10-22', '175-Reyes DOCUMENT APPROVAL', 'Document has been approved.', 0),
-(94, 525, '2024-10-22', '176-Reyes DOCUMENT APPROVAL', 'Document has been approved.', 0);
+(94, 525, '2024-10-22', '176-Reyes DOCUMENT APPROVAL', 'Document has been approved.', 0),
+(95, 1, '2024-10-25', '31001-HAVENFIELD DOCUMENT SUBMISSION', 'Documents submitted: <br><br>HAVENFIELD_RAISSEILLE__Year1_Sem1_COR.pdf', 0);
 
 -- --------------------------------------------------------
 
@@ -241,10 +236,8 @@ INSERT INTO `scholar` (`scholar_id`, `batch_no`, `user_id`, `status`, `last_name
 (30007, 30, 540, 'ACTIVE', 'DOMINGO', 'KAI RAFAEL', 'Reyes', 'Far Eastern University', 'Bachelor of Science in Accountancy', '56 Mayon Avenue, Legazpi City, Albay', '+6309451357902', 'alexis.jacinto.320401+test6@gmail.com', NULL, 0),
 (30008, 30, 541, 'ACTIVE', 'VILLEGAS', 'LUNA SOFIA', 'Gonzales', 'Polytechnic University of the Philippines', 'Bachelor of Science in Architecture', 'Unit 203 Cebu Business Park, Cebu City', '+6309568024680', 'alexis.jacinto.320401+test7@gmail.com', NULL, 0),
 (30009, 30, 542, 'ACTIVE', 'FERNANDEZ', 'ENZO GABRIEL', 'Pascual', 'Adamson University', 'Bachelor of Science in Nursing', '19 Kalayaan Street, Baguio City, Benguet', '+6309773691470', 'alexis.jacinto.320401+test8@gmail.com', NULL, 0),
-(30010, 30, 543, 'ACTIVE', 'RAMOS', 'AMARA NICOLE', 'Ocampo', 'National University', 'Bachelor of Science in Business Administration', '42 Coral Way, Puerto Princesa City, Palawan', '+6309087418520', 'alexis.jacinto.320401+test9@gmail.com', NULL, 0),
 (30011, 30, 544, 'ACTIVE', 'DE GUZMAN', 'NICO ALEJANDRO', 'Dizon', 'University of the East', 'Bachelor of Laws', '88 General Luna Road, Intramuros, Manila', '+6309261597532', 'alexis.jacinto.320401+test0@gmail.com', NULL, 0),
-(31001, 31, 545, 'GRADUATED', 'HAVENFIELD', 'RAISSEILLE', '', 'PAMANTASAN NG LUNGSOD NG VALENZUELA', 'BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY', '1070 A VINCHY ST. GEN T DE LEON VALENZUELA CITY', '+639568078392', 'sail.havenfield@gmail.com', NULL, 0),
-(32001, 32, 548, 'ACTIVE', 'CASPAR', 'NAVIA', '', 'PAMANTASAN NG LUNGSOD NG VALENZUELA', 'BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY', '1070 A VINCHY ST. GEN T DE LEON VALENZUELA', '+639568078392', 'sail.havenfield+testing@gmail.com', NULL, 0);
+(31001, 31, 545, 'ACTIVE', 'HAVENFIELD', 'RAISSEILLE', '', 'PAMANTASAN NG LUNGSOD NG VALENZUELA', 'BACHELOR OF SCIENCE IN INFORMATION TECHNOLOGY', '1070 A VINCHY ST. GEN T DE LEON VALENZUELA CITY', '+639568078392', 'sail.havenfield@gmail.com', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -294,7 +287,8 @@ INSERT INTO `submission` (`submit_id`, `scholar_id`, `sub_date`, `doc_name`, `do
 (173, 30011, '2024-10-22', 'DE GUZMAN_NICO ALEJANDRO_Dizon_Year3_Sem1_GRADES.pdf', 'GRADES', 'University of the East', '2024-2025', 1, 'APPROVED', ''),
 (174, 30011, '2024-10-22', 'DE GUZMAN_NICO ALEJANDRO_Dizon_Year3_Sem1_SOCIAL.pdf', 'SOCIAL', 'University of the East', '2024-2025', 1, 'APPROVED', ''),
 (175, 29002, '2024-10-22', 'Reyes_Maria_Gonzales_Year4_Sem1_GRADES.pdf', 'GRADES', 'Ateneo de Manila University', '2024-2025', 1, 'APPROVED', ''),
-(176, 29002, '2024-10-22', 'Reyes_Maria_Gonzales_Year4_Sem1_SOCIAL.pdf', 'SOCIAL', 'Ateneo de Manila University', '2024-2025', 1, 'APPROVED', '');
+(176, 29002, '2024-10-22', 'Reyes_Maria_Gonzales_Year4_Sem1_SOCIAL.pdf', 'SOCIAL', 'Ateneo de Manila University', '2024-2025', 1, 'APPROVED', ''),
+(177, 31001, '2024-10-25', 'HAVENFIELD_RAISSEILLE__Year1_Sem1_COR.pdf', 'COR', 'PAMANTASAN NG LUNGSOD NG VALENZUELA', '2024-2025', 1, 'PENDING', '');
 
 -- --------------------------------------------------------
 
@@ -315,7 +309,7 @@ CREATE TABLE `university` (
 --
 
 INSERT INTO `university` (`school_id`, `school_name`, `address`, `acad_year`, `sem_count`) VALUES
-(1, 'PAMANTASAN NG LUNGSOD NG VALENZUELA', 'MXV9+GJF, Maysan Rd, Valenzuela, Metro Manila', '2024-2025', 3);
+(1, 'PAMANTASAN NG LUNGSOD NG VALENZUELA', 'MXV9+GJF, Maysan Rd, Valenzuela, Metro Manila', '2024-2025', 2);
 
 -- --------------------------------------------------------
 
@@ -337,7 +331,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `role_id`, `username`, `email`, `passhash`, `reset_code`) VALUES
-(1, 1, 'admin', '', 'admin2', ''),
+(1, 1, 'admin', '', 'test', ''),
 (2, 3, 'evaluator', '', 'eval', ''),
 (3, 2, 'test', '', 'testing', ''),
 (524, 2, '29-001', '', 'Dela Cruz', ''),
@@ -359,12 +353,10 @@ INSERT INTO `user` (`user_id`, `role_id`, `username`, `email`, `passhash`, `rese
 (540, 2, '30-007', '', 'DOMINGO', ''),
 (541, 2, '30-008', '', 'VILLEGAS', ''),
 (542, 2, '30-009', '', 'FERNANDEZ', ''),
-(543, 2, '30-010', '', 'RAMOS', ''),
 (544, 2, '30-011', '', 'DE GUZMAN', ''),
 (545, 2, '31-001', '', 'HAVENFIELD', ''),
 (546, 2, '31-001', '', 'HAVENFIELD', ''),
 (547, 2, '31-001', '', 'HAVENFIELD', ''),
-(548, 2, '32-001', '', 'CASPAR', ''),
 (551, 2, '28-002', '', 'A', ''),
 (558, 2, '27-003', '', 'B', ''),
 (561, 2, '23-001', '', 'B', ''),
@@ -455,7 +447,7 @@ ALTER TABLE `announcements`
 -- AUTO_INCREMENT for table `notification`
 --
 ALTER TABLE `notification`
-  MODIFY `notif_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
+  MODIFY `notif_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
 
 --
 -- AUTO_INCREMENT for table `reports`
@@ -473,7 +465,7 @@ ALTER TABLE `role`
 -- AUTO_INCREMENT for table `submission`
 --
 ALTER TABLE `submission`
-  MODIFY `submit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=177;
+  MODIFY `submit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=178;
 
 --
 -- AUTO_INCREMENT for table `university`
