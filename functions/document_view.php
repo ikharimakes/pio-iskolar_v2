@@ -90,6 +90,9 @@ function docxPending($current_page = 1, $sort_column = 'scholar_id', $sort_order
 
 //* DOCUMENT DISPLAY - ADMIN-SIDE *//
 function docxAdmin($id, $sort_column = 'sub_date', $sort_order = 'asc') {
+    $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : (isset($_COOKIE['user_role']) ? $_COOKIE['user_role'] : null);
+    $fullAccess = ($user_role == 1);
+
     global $conn, $year, $sem;
     $valid_columns = ['doc_name', 'sub_date', 'doc_type', 'doc_status'];
 
@@ -184,11 +187,11 @@ function docxAdmin($id, $sort_column = 'sub_date', $sort_order = 'asc') {
 
             $disabledActions = [
                 'view' => ($status === 'MISSING'),
-                'approve' => ($status === 'MISSING' || $status === 'APPROVED' || $status === 'DECLINED'),
-                'decline' => ($status === 'MISSING' || $status === 'APPROVED' || $status === 'DECLINED'),
-                'upload' => ($status === 'PENDING' || $status === 'APPROVED' || $status === 'DECLINED'),
+                'approve' => (!$fullAccess || $status === 'MISSING' || $status === 'APPROVED' || $status === 'DECLINED'),
+                'decline' => (!$fullAccess || $status === 'MISSING' || $status === 'APPROVED' || $status === 'DECLINED'),
+                'upload' => (!$fullAccess || $status === 'PENDING' || $status === 'APPROVED' || $status === 'DECLINED'),
                 'download' => ($status === 'MISSING'),
-                'delete' => ($status === 'MISSING')
+                'delete' => (!$fullAccess || $status === 'MISSING')
             ];
 
             echo '
@@ -200,19 +203,22 @@ function docxAdmin($id, $sort_column = 'sub_date', $sort_order = 'asc') {
                     <td style="float: right;" class="wrap"> 
                         <div class="icon ' . ($disabledActions['view'] ? 'disabled' : '') . '" style="opacity: ' . ($disabledActions['view'] ? '0.5' : '1') . ';">
                             <div class="tooltip ' . ($disabledActions['view'] ? 'disabled-tooltip' : '') . '">View</div>
-                            <span> <ion-icon name="eye-outline" onclick="openPrev(this)"
-                                data-id="' . $row['submit_id'] . '"  
-                                data-doc_name="' . $row['doc_name'] . '" 
-                                data-doc_status="' . $row['doc_status'] . '"
-                                data-doc_reason="' . $row['reason'] . '"></ion-icon> </span>
+                            <span> 
+                                <ion-icon name="eye-outline" 
+                                    onclick="' . ($disabledActions['view'] ? 'return false;' : 'openPrev(this)') . '" 
+                                    data-id="' . $row['submit_id'] . '"  
+                                    data-doc_name="' . $row['doc_name'] . '" 
+                                    data-doc_status="' . $row['doc_status'] . '"
+                                    data-doc_reason="' . $row['reason'] . '"></ion-icon> 
+                            </span>
                         </div>
 
                         <div class="icon ' . ($disabledActions['upload'] ? 'disabled' : '') . '" style="opacity: ' . ($disabledActions['upload'] ? '0.5' : '1') . ';">
                             <div class="tooltip ' . ($disabledActions['upload'] ? 'disabled-tooltip' : '') . '">Upload</div>
                             <form action="" method="post" enctype="multipart/form-data">
                                 <span> 
-                                    <label for="' . $docType . '_' . $year . '_' . $sem . '">
-                                    <ion-icon name="cloud-upload-outline"></ion-icon>
+                                    <label for="' . $docType . '_' . $year . '_' . $sem . '" ' . ($disabledActions['upload'] ? 'style="pointer-events: none;"' : '') . '>
+                                        <ion-icon name="cloud-upload-outline"></ion-icon>
                                     </label> 
                                 </span>
                                 <input 
@@ -221,7 +227,8 @@ function docxAdmin($id, $sort_column = 'sub_date', $sort_order = 'asc') {
                                     type="file" 
                                     accept=".pdf" 
                                     style="display: none;" 
-                                    onchange="form.submit()" 
+                                    ' . ($disabledActions['upload'] ? 'disabled' : '') . ' 
+                                    onchange="this.form.submit()" 
                                 />
                                 <input type="hidden" name="type" value="' . $docType . '">
                                 <input type="hidden" name="upload" value="true">
@@ -230,29 +237,40 @@ function docxAdmin($id, $sort_column = 'sub_date', $sort_order = 'asc') {
 
                         <div class="icon ' . ($disabledActions['approve'] ? 'disabled' : '') . '" style="opacity: ' . ($disabledActions['approve'] ? '0.5' : '1') . ';">
                             <div class="tooltip ' . ($disabledActions['approve'] ? 'disabled-tooltip' : '') . '">Approve</div>
-                            <span> <ion-icon name="checkmark-circle-outline" onclick="openApprove(this)" 
-                                data-id="' . $row['submit_id'] . '"></ion-icon> </span>
+                            <span> 
+                                <ion-icon name="checkmark-circle-outline" 
+                                    onclick="' . ($disabledActions['approve'] ? 'return false;' : 'openApprove(this)') . '" 
+                                    data-id="' . $row['submit_id'] . '"></ion-icon> 
+                            </span>
                         </div>
 
                         <div class="icon ' . ($disabledActions['decline'] ? 'disabled' : '') . '" style="opacity: ' . ($disabledActions['decline'] ? '0.5' : '1') . ';">
                             <div class="tooltip ' . ($disabledActions['decline'] ? 'disabled-tooltip' : '') . '">Decline</div>
-                            <span> <ion-icon name="close-circle-outline" onclick="openDecline(this)" 
-                                data-id="' . $row['submit_id'] . '"></ion-icon> </span>
+                            <span> 
+                                <ion-icon name="close-circle-outline" 
+                                    onclick="' . ($disabledActions['decline'] ? 'return false;' : 'openDecline(this)') . '" 
+                                    data-id="' . $row['submit_id'] . '"></ion-icon> 
+                            </span>
                         </div>
 
                         <div class="icon ' . ($disabledActions['download'] ? 'disabled' : '') . '" style="opacity: ' . ($disabledActions['download'] ? '0.5' : '1') . ';">
                             <div class="tooltip ' . ($disabledActions['download'] ? 'disabled-tooltip' : '') . '">Download</div>
-                            <a href="../assets/' . $row['doc_name'] . '" download="' . $row['doc_name'] . '">
+                            <a href="' . ($disabledActions['download'] ? '#' : '../assets/' . $row['doc_name']) . '" 
+                            download="' . ($disabledActions['download'] ? '' : $row['doc_name']) . '"
+                            onclick="' . ($disabledActions['download'] ? 'return false;' : '') . '">
                                 <span> <ion-icon name="download-outline"></ion-icon> </span>
                             </a>
                         </div>
 
                         <div class="icon ' . ($disabledActions['delete'] ? 'disabled' : '') . '" style="opacity: ' . ($disabledActions['delete'] ? '0.5' : '1') . ';">
                             <div class="tooltip ' . ($disabledActions['delete'] ? 'disabled-tooltip' : '') . '">Delete</div>
-                            <span> <ion-icon name="trash-outline" onclick="openDelete(this)" 
-                                type="submission" 
-                                data-id="' . $row['submit_id'] . '" 
-                                data-name="' . $row['doc_name'] . '"></ion-icon> </span>
+                            <span> 
+                                <ion-icon name="trash-outline" 
+                                    onclick="' . ($disabledActions['delete'] ? 'return false;' : 'openDelete(this)') . '" 
+                                    type="submission" 
+                                    data-id="' . $row['submit_id'] . '" 
+                                    data-name="' . $row['doc_name'] . '"></ion-icon> 
+                            </span>
                         </div>
                     </td>
                 </tr>';

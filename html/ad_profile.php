@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="css/confirm.css">
     <style>
         .required-error {
-            border: 2px solid red;
+            border: 2px solid red !important;
         }
     </style>
 </head>
@@ -104,7 +104,7 @@
             </div>
             <br><br>
             
-            <form action="" method="POST">
+            <form id="passForm" method="POST" novalidate>
                 <div class="inner-content">
                     <label class="passText" for="oldPassword">Enter Current Password:</label> <br>
                     <input class="input" type="password" id="oldPassword" name="oldPassword" placeholder="Current Password" required>
@@ -137,11 +137,84 @@
             document.getElementById("passOverlay").style.display = "block";
         }
         function closePass() {
+            document.getElementById("passForm").reset();  // Reset the form fields
             document.getElementById("passOverlay").style.display = "none";
         }
-        function submitForm() {
-            closePass();
-        }
+        document.getElementById('passForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent default form submission
+
+            const form = e.target;
+            const requiredFields = form.querySelectorAll('[required]');
+            let valid = true;
+
+            // Validate required fields (empty fields are already accounted for)
+            requiredFields.forEach(field => {
+                if (!field.value) {
+                    field.classList.add('required-error');
+                    valid = false;
+                } else {
+                    field.classList.remove('required-error');
+                }
+                field.addEventListener('input', function() {
+                    if (field.value) {
+                        field.classList.remove('required-error');
+                    }
+                });
+            });
+
+            if (!valid) {
+                e.preventDefault(); // Prevent form submission if required fields are empty
+            } else {
+                e.preventDefault();
+
+                const formData = new FormData();
+                const data = new URLSearchParams();
+
+                formData.append('change', 'true');
+                formData.append('oldPassword', document.querySelector('[name="oldPassword"]').value);
+                formData.append('newPassword', document.querySelector('[name="newPassword"]').value);
+                formData.append('confirmPassword', document.querySelector('[name="confirmPassword"]').value);
+
+                fetch('../functions/password_fx.php', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.text())
+                .then(response => {
+                    if (response === 'success') {
+                        // Store success message in sessionStorage before reload
+                        sessionStorage.setItem('toastMessage', 'Password changed successfully.');
+                        sessionStorage.setItem('toastTitle', 'Success');
+                        
+                        // Reload the page to apply changes
+                        window.location.href = '<?php echo $_SERVER["PHP_SELF"]; ?>';
+                    } else if (response === 'incorrect') {
+                        showToast('The old password is incorrect.', 'Error');
+                    } else if (response === 'mismatch') {
+                        showToast('New passwords do not match.', 'Error');
+                    } else if (response === 'issing') {
+                        showToast('User session not found.', 'Error');
+                    } else {
+                        showToast('An error occurred while changing the password.', 'Error');
+                    }
+                })
+                .catch(() => {
+                    showToast('A server error occurred.', 'Error');
+                });
+            }
+        });
+
+        // Display stored toast message after page reload
+        window.addEventListener('load', () => {
+            const toastMessage = sessionStorage.getItem('toastMessage');
+            const toastTitle = sessionStorage.getItem('toastTitle');
+
+            if (toastMessage && toastTitle) {
+                showToast(toastMessage, toastTitle);
+                sessionStorage.removeItem('toastMessage');
+                sessionStorage.removeItem('toastTitle');
+            }
+        });
     </script>
 </body>
 </html>

@@ -89,10 +89,6 @@ if (isset($_POST['add_ann'])) {
     //* ANNOUNCEMENT DEACTIVATE *//
         if(isset($_POST['deactivate'])){
             global $conn;
-            ob_start();
-            var_dump( $_POST );
-            $output = ob_get_clean();
-            error_log( $output );
             $id = $_POST['announce_id'];
     
             // Calculate the end date as one day before today

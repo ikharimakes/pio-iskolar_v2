@@ -1,5 +1,6 @@
     <!-- CSS FILE -->
     <link rel="stylesheet" href="css/navbar.css">   
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     
     <!-- HTML CODE -->
     <nav class="sidebar">
@@ -28,34 +29,62 @@
                     <span class="icon">
                         <ion-icon name="school-outline"></ion-icon>
                     </span>
-                    <span class="text"> Scholar </span> 
+                    <span class="text"> Scholars </span> 
                 </a> </li>
 
                 <!-- <li class="navLink"> <a href="eval_docs.php" onclick="activateLink(this)">
                     <span class="icon">
                         <ion-icon name="document-outline"></ion-icon>
                     </span>
-                    <span class="text"> Pending </span> 
+                    <span class="text"> Pending Documents</span> 
                 </a> </li> -->
 
-                <!-- <li class="navLink"> <a href="eval_reports.php" onclick="activateLink(this)">
+                <li class="navLink"> <a href="eval_school.php" onclick="activateLink(this)">
+                    <span class="icon">
+                        <img src="images/school.png">
+                    </span>
+                    <span class="text"> School </span> 
+                </a> </li>
+
+                <li class="navLink"> <a href="eval_announce.php" onclick="activateLink(this)">
+                    <span class="icon">
+                        <ion-icon name="megaphone-outline"></ion-icon>
+                    </span>
+                    <span class="text"> Announcement </span>
+                </a> </li>
+                
+                <li class="navLink"> <a href="eval_reports.php" onclick="activateLink(this)">
                     <span class="icon">
                         <ion-icon name="stats-chart-outline"></ion-icon>
                     </span>
-                    <span class="text"> Reports </span> 
+                    <span class="text"> Reports </span>
+                </a> </li>
+
+                <li class="navLink"> <a href="eval_profile.php" onclick="activateLink(this)">
+                    <span class="icon">
+                        <ion-icon name="person-outline"></ion-icon>
+                    </span>
+                    <span class="text"> My Profile </span>
+                </a> </li>
+
+                <!-- <li class="navLink"> <a href="eval_inbox.php" onclick="activateLink(this)">
+                    <span class="icon">
+                        <ion-icon name="chatbubbles-outline"></ion-icon>
+                    </span>
+                    <span class="text"> Inbox </span> 
                 </a> </li> -->
 
                 <!-- <li class="navLink"><a href="eval_faq.php">
                     <span class="icon">
                         <ion-icon name="help-circle-outline"></ion-icon>
                     </span>
-                    <span class="text"> FAQ </span>
+                    <span class="text"> FAQ PLACEHOLDER</span>
                 </a></li> -->
             </ul>
         </div> 
 
         <div class="bottom-content">
-            <li class="navLink"><a href="logout.php">
+            <li class="navLink"><a href="../functions/logout.php">
                 <span class="icon">
                     <ion-icon name="log-out-outline"></ion-icon>
                 </span>

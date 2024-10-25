@@ -1,15 +1,14 @@
 <?php 
     include_once('../functions/general.php'); 
-    include('../functions/scholar_view.php');
     include ('../functions/password_fx.php');
-    
+
     $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : (isset($_COOKIE['user_role']) ? $_COOKIE['user_role'] : null);
 
-    if ($user_role == "2") {
+    if ($user_role == "3") {
+    } elseif ($user_role == "2") {
+        header("Location: dashboard.php");
     } elseif ($user_role == "1") {
         header("Location: ad_dashboard.php");
-    } elseif ($user_role == "3") {
-        header("Location: eval_dashboard.php");
     } else {
         header("Location: front_page.php");
     }
@@ -23,8 +22,7 @@
     <title>Pio Iskolar</title>
     <link rel="icon" type="image/x-icon" href="images/pio-logo.png">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="css/ad_skoDetail.css">
-    <link rel="stylesheet" href="css/profile.css"> 
+    <link rel="stylesheet" href="css/ad_profile.css">
     <link rel="stylesheet" href="css/confirm.css">
     <style>
         .required-error {
@@ -34,7 +32,7 @@
 </head>
 <body>
     <!-- SIDEBAR - navbar.php -->
-    <?php include 'navbar.php';?>
+    <?php include 'eval_navbar.php';?>
     
 
     <!-- TOP BAR -->
@@ -43,25 +41,57 @@
             <div class="headerName">
                 <h1>My Profile</h1>
             </div>
-
-            <div class="headerRight">
-                <div class="notifs">
-                    <ion-icon name="notifications-outline" onclick="openOverlay()"></ion-icon>
-                </div>
-            </div>
         </div>
 
         <div class="line"></div>
 
-
         <!-- MY PROFILE-->
-        <div class="details"><center> 
-            <?php scholarFull(); ?>
-        </center></div>
+        <div class="info">
+            <div class="profile_name"> 
+                <img src="images/profile.png" alt="Profile Picture"> <br>
+            </div>
 
-        <?php scholarView();?>
-
-        <a href="#" onclick="openPass()"> Change Password </a>
+            <div class="profile-info">
+                <table>
+                    <tr>
+                        <th>Name:</th>
+                        <td>LN, FN, MI</td>
+                    </tr>
+                    <tr>
+                        <th>Role:</th>
+                        <td>SCHOLAR COORDINATOR</td>
+                    </tr>
+                    <tr style="height: 40px;">
+                        <th> </th>
+                        <td> </td>
+                    </tr>
+                    <tr>
+                        <th>Address:</th>
+                        <td>123 SAMPAGUITA STREET, MALINTA, VALENZUELA CITY</td>
+                    </tr>
+                    <tr>
+                        <th>Contact:</th>
+                        <td>+639236259122/td>
+                    </tr>
+                    <tr>
+                        <th>Email:</th>
+                        <td>m**********@gmail.com</td>
+                    </tr>
+                    <tr style="height: 40px;">
+                        <th> </th>
+                        <td> </td>
+                    </tr>
+                    <tr style="height: 40px;">
+                        <th> <a href="#" onclick="openPass()"> Change Password </a></th>
+                        <td></td>
+                    </tr>
+                    <!-- <tr style="height: 40px;">
+                        <th> Download Profile </th>
+                        <td></td>
+                    </tr> -->
+                </table>
+            </div>
+        </div>
     </div>
 
 
@@ -97,7 +127,6 @@
         </div> 
     </div>
 
-    <?php include 'notif.php'; ?>
     <?php include 'toast.php'; ?>
 
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
@@ -108,6 +137,7 @@
             document.getElementById("passOverlay").style.display = "block";
         }
         function closePass() {
+            document.getElementById("passForm").reset();  // Reset the form fields
             document.getElementById("passOverlay").style.display = "none";
         }
         document.getElementById('passForm').addEventListener('submit', function(e) {
@@ -171,6 +201,18 @@
                 .catch(() => {
                     showToast('A server error occurred.', 'Error');
                 });
+            }
+        });
+
+        // Display stored toast message after page reload
+        window.addEventListener('load', () => {
+            const toastMessage = sessionStorage.getItem('toastMessage');
+            const toastTitle = sessionStorage.getItem('toastTitle');
+
+            if (toastMessage && toastTitle) {
+                showToast(toastMessage, toastTitle);
+                sessionStorage.removeItem('toastMessage');
+                sessionStorage.removeItem('toastTitle');
             }
         });
     </script>

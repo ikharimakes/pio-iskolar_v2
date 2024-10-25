@@ -3,19 +3,16 @@
     include_once('../functions/dashboard_view.php');
     include_once('../functions/announce_view.php');
     updateStatus();
-    
+
     $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : (isset($_COOKIE['user_role']) ? $_COOKIE['user_role'] : null);
 
     if ($user_role == "3") {
-    } elseif ($user_role == "1") {
-        header("Location: ad_dashboard.php");
-        exit();
     } elseif ($user_role == "2") {
         header("Location: dashboard.php");
-        exit();
+    } elseif ($user_role == "1") {
+        header("Location: ad_dashboard.php");
     } else {
         header("Location: front_page.php");
-        exit();
     }
 ?>
 
@@ -29,245 +26,203 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="css/ad_dashboard.css">
     <link rel="stylesheet" href="css/confirm.css">
+    <script src="https://kit.fontawesome.com/3d9c1c4bc8.js" crossorigin="anonymous"></script>
+    <style>
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-button {
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 160px;
+            border: 1px solid #ccc;
+            z-index: 1;
+            padding: 10px;
+        }
+
+        .dropdown-content label {
+            display: block;
+            padding: 5px;
+        }
+
+        .dropdown-content label:hover {
+            background-color: #f1f1f1;
+        }
+
+        .dropdown-content input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        .dropdown.show .dropdown-content {
+            display: block;
+        }
+    </style>
 </head>
 <body>
     <!-- SIDEBAR - eval_nav.php -->
     <?php include 'eval_navbar.php'; ?>
     
-
-    <!-- TOP BAR -->
-    <d class="main1">
+    <div class="main1" style="grid-template-rows: 70px 5% 42.5% 42.5%;">
         <div class="topBar">
             <div class="headerName">
                 <h1>Dashboard</h1>
             </div>
-
             <div class="headerRight">
-                <div class="notifs">
-                    <ion-icon name="notifications-outline" onclick="openNotif()"></ion-icon>
-                </div>
+                <a class="user" href="eval_profile.php">
+                    <img src="images/profile.png" alt="">
+                </a>
             </div>
         </div>
 
         <div class="line"></div>
 
-
-        <!-- DASHBOARD 
-         <div class="info">  
-            <div class="welcome-box">
-                <h1>Welcome Back, Coordinator</h1>
-                <ion-icon name="school"></ion-icon>
-            </div>
-        </div>-->
-
-
         <div class="box-container">
-            <div class="box-row">
-                <div class="box box-large">
-                    <h1>Pending (# of pending)</h1>
-
-                    <div class="box-pending">
-                        <table>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="box box-large">
-                    <h1>Files (per batch)</h1>
-
-                    <div class="box-batch">
-                        <ul>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="box box-large">
-                    <h1>Calendar</h1>
-
-                    <div class="box-calendar">
-                        <div class="nav-btn">
-                            <button id="prevBtn"><ion-icon name="chevron-back-outline"></ion-icon></button>
-                            <div class="month-year" id="monthYear"></div>
-                            <button id="nextBtn"><ion-icon name="chevron-forward-outline"></ion-icon></button>
-                        </div>
-
-                        <div class="weekdays" id="weekdays"></div>
-                    </div>
-
-                    <div class="event">
-                        <h3>Events</h3>
-                        <ul>
-                            <!-- <li> <a href="">Application for Batch 23</a> </li> -->
-                            <?php activeEvents(); ?>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+            <?php summaryScholars(); ?>
 
             <div class="box-row">
                 <div class="box-small-big">
-                    <h1>No. of Scholars & Active Scholars per Batch</h1>
+                    <h1>No. of Scholars per Batch</h1>
+                    
+                    <div class="sorts">
+                    <h4> Filter by:</h4>
 
+                    <div class="dropdown">
+                        <div class="dropdown-button" onclick="toggleDropdown()">Select Batches</div>
+                        <div class="dropdown-content">
+                            <label><input type="checkbox" id="all-batches" value="ALL" onclick="selectAllBatches()"> All Batches</label>
+                            <?php
+                            $query = "SELECT DISTINCT batch_no FROM scholar ORDER BY batch_no DESC";
+                            $result = mysqli_query($conn, $query);
+                            while ($row = mysqli_fetch_assoc($result)) {
+                                echo "<label><input type='checkbox' name='batch' value='" . $row['batch_no'] . "' onclick='updateBatchSelection()'> Batch " . $row['batch_no'] . "</label>";
+                            }
+                            ?>
+                        </div>
+                    </div>
+                </div>
                     <div class="box-graph">
                         <canvas id="myBarChart"></canvas>
                     </div>
                 </div>
-                
-                <div class="box-small">
-                    <h1>Summary</h1>
+            </div>
+        </div>
 
-                    <div class="box-summary">
-                        <?php summaryScholars(); ?>
-                    </div>
+        <div class="calendar-container">
+            <div class="box box-large">
+                <h1>Events</h1>
+
+                <div class="event">
+                    <ul>
+                        <?php activeEvents(); ?>
+                    </ul>
+                </div>
+            </div> <br>
+
+            <div class="box box-large">
+                <h1>Recent Submitted Documents</h1>
+
+                <div class="event">
+                    <ul>
+                        <li><a href="">Adriano, Jessica Raye</a></li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
 
-
-    <!-- NOTIFICATION - notif.php -->
-    <?php include 'notif.php'; ?>
+    <?php include 'toast.php'; ?>
 
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- FOR GRAPH-->
     <script>
-
-        //CHANGE PASS
-        function openPass() {
-            document.getElementById("passOverlay").style.display = "block";
+        function toggleDropdown() {
+            document.querySelector(".dropdown").classList.toggle("show");
         }
-        function closePass() {
-            document.getElementById("passOverlay").style.display = "none";
-        }
-        function submitForm() {
-            closePass();
-        }
-
-        //CALENDAR
-        document.addEventListener("DOMContentLoaded", function() {
-            const monthYearElement = document.getElementById("monthYear");
-            const weekdaysElement = document.getElementById("weekdays");
-            const prevBtn = document.getElementById("prevBtn");
-            const nextBtn = document.getElementById("nextBtn");
-
-            const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-            let currentDate = new Date();
-
-            function renderWeek(date) {
-                weekdaysElement.innerHTML = "";
-
-                const firstDayOfWeek = new Date(date.setDate(date.getDate() - date.getDay()));
-                const month = firstDayOfWeek.toLocaleString('default', { month: 'long' });
-                const year = firstDayOfWeek.getFullYear();
-
-                monthYearElement.textContent = `${month} ${year}`;
-
-                for (let i = 0; i < 7; i++) {
-                    const dayDate = new Date(firstDayOfWeek);
-                    dayDate.setDate(firstDayOfWeek.getDate() + i);
-                    const dayName = daysOfWeek[dayDate.getDay()];
-                    const dayNumber = dayDate.getDate();
-
-                    const dayElement = document.createElement("div");
-                    dayElement.classList.add("weekday");
-
-                    const dayNameElement = document.createElement("div");
-                    dayNameElement.classList.add("day-name");
-                    dayNameElement.textContent = dayName;
-
-                    const dayNumberElement = document.createElement("div");
-                    dayNumberElement.classList.add("day-number");
-                    dayNumberElement.textContent = dayNumber;
-
-                    dayElement.appendChild(dayNameElement);
-                    dayElement.appendChild(dayNumberElement);
-                    weekdaysElement.appendChild(dayElement);
-                }
+        
+        window.onclick = function(event) {
+            const dropdown = document.querySelector(".dropdown");
+            if (!dropdown.contains(event.target) && !event.target.matches('.dropdown-button')) {
+                dropdown.classList.remove("show");
             }
+        }
 
-            prevBtn.addEventListener("click", function() {
-                currentDate.setDate(currentDate.getDate() - 7);
-                renderWeek(currentDate);
+        function selectAllBatches() {
+            const isChecked = document.getElementById("all-batches").checked;
+            const batchCheckboxes = document.querySelectorAll("input[name='batch']");
+
+            batchCheckboxes.forEach(checkbox => {
+                checkbox.checked = isChecked;
             });
 
-            nextBtn.addEventListener("click", function() {
-                currentDate.setDate(currentDate.getDate() + 7);
-                renderWeek(currentDate);
-            });
+            fetchChartData();
+        }
 
-            renderWeek(new Date());
-        });
+        function updateBatchSelection() {
+            const allBatchesCheckbox = document.getElementById("all-batches");
+            const batchCheckboxes = document.querySelectorAll("input[name='batch']");
 
+            // Check if all checkboxes are selected
+            const allChecked = Array.from(batchCheckboxes).every(checkbox => checkbox.checked);
+
+            // Update the "All" checkbox state
+            allBatchesCheckbox.checked = allChecked;
+
+            fetchChartData();
+        }
 
         //GRAPH
-        // const ctx = document.getElementById('myBarChart').getContext('2d');
-        // const myBarChart = new Chart(ctx, {
-        //     type: 'bar',
-        //     data: {
-        //         labels: ['Batch 21', 'Batch 22', 'Batch 23', 'Batch 24', '  Batch 25'],
-        //         datasets: [
-        //             {
-        //                 label: '1st Semester',
-        //                 data: [65, 59, 80, 81, 56],
-        //                 backgroundColor: 'rgb(47, 55, 135)',
-        //                 borderWidth: 1
-        //             },
-        //             {
-        //                 label: '2nd Semester',
-        //                 data: [28, 48, 40, 19, 86],
-        //                 backgroundColor: 'rgb(217, 217, 217)',
-        //                 borderWidth: 1
-        //             }
-        //         ]
-        //     },
-        //     options: {
-        //         scales: {
-        //             y: {
-        //                 beginAtZero: true
-        //             }
-        //         }
-        //     }
-        // });
+        let myBarChart;  // Declare the chart instance variable outside of the function
 
         async function fetchChartData() {
             try {
-                const response = await fetch('../functions/dashboard_graph.php'); // Fetch data from PHP script
-                const data = await response.json(); // Parse JSON response
+                const selectedBatches = Array.from(document.querySelectorAll("input[name='batch']:checked")).map(checkbox => checkbox.value);
 
-                // Check if data was fetched successfully
-                if (!data || !data.labels || !data.total_scholars || !data.active_scholars) {
-                    console.error("Invalid data structure received from the server.");
+                // If "All" is selected, send all batches, otherwise send selected ones
+                const batches = (selectedBatches.includes('ALL') || selectedBatches.length === 0) ? 'ALL' : selectedBatches.join(',');
+
+                const response = await fetch(`../functions/dashboard_graph.php?batches=${batches}`);
+                const data = await response.json();
+
+                if (!data || !data.labels) {
+                    console.error("Invalid data received.");
                     return;
                 }
 
-                // Initialize the chart with fetched data
                 const ctx = document.getElementById('myBarChart').getContext('2d');
-                const myBarChart = new Chart(ctx, {
+
+                // Destroy the previous chart if it exists
+                if (myBarChart) {
+                    myBarChart.destroy();
+                }
+
+                // Create a new chart instance
+                myBarChart = new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: data.labels,  // Use dynamic labels from PHP
+                        labels: data.labels,
                         datasets: [
-                            {
-                                label: 'Total Scholars',
-                                data: data.total_scholars,  // Use dynamic data for total scholars
-                                backgroundColor: 'rgb(47, 55, 135)',
-                                borderWidth: 1
-                            },
-                            {
-                                label: 'ACTIVE Scholars',
-                                data: data.active_scholars,  // Use dynamic data for ACTIVE scholars
-                                backgroundColor: 'rgb(217, 217, 217)',
-                                borderWidth: 1
-                            }
+                            { label: 'Total Scholars', data: data.total_scholars, backgroundColor: 'rgb(47, 55, 135)' },
+                            { label: 'Active Scholars', data: data.active_scholars, backgroundColor: 'rgb(0, 200, 83)' },
+                            { label: 'Probation Scholars', data: data.probation_scholars, backgroundColor: 'rgb(255, 159, 64)' },
+                            { label: 'LOA Scholars', data: data.loa_scholars, backgroundColor: 'rgb(255, 205, 86)' },
+                            { label: 'Dropped Scholars', data: data.dropped_scholars, backgroundColor: 'rgb(255, 99, 132)' },
+                            { label: 'Graduated Scholars', data: data.graduated_scholars, backgroundColor: 'rgb(75, 192, 192)' }
                         ]
                     },
                     options: {
                         scales: {
-                            y: {
-                                beginAtZero: true
-                            }
+                            y: { beginAtZero: true }
                         }
                     }
                 });
@@ -276,8 +231,40 @@
             }
         }
 
-        // Fetch data and render the chart
+        fetchChartData();  // Initial call to load the chart
+
+        // Dropdown event listeners
+        document.getElementById("all-batches").addEventListener("change", selectAllBatches);
+        document.querySelectorAll("input[name='batch']").forEach(checkbox => {
+            checkbox.addEventListener("change", updateBatchSelection);
+        });
+                
         fetchChartData();
+        
+        function redirectScholar(category = '', filter = '') {
+            const form = document.createElement('form');
+            form.method = 'GET'; // Using POST to avoid appending params to the URL
+            form.action = 'eval_scholar.php';
+
+            if (category) {
+                const categoryInput = document.createElement('input');
+                categoryInput.type = 'hidden';
+                categoryInput.name = 'category';
+                categoryInput.value = category;
+                form.appendChild(categoryInput);
+            }
+
+            if (filter) {
+                const filterInput = document.createElement('input');
+                filterInput.type = 'hidden';
+                filterInput.name = 'filter';
+                filterInput.value = filter;
+                form.appendChild(filterInput);
+            }
+
+            document.body.appendChild(form);
+            form.submit();
+        }
     </script>
 </body>
 </html>

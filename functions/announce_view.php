@@ -2,7 +2,7 @@
     include_once('../functions/general.php');
     global $conn;
 
-// Status Update (for every viewing)
+//* STATUS UPDATE *//
     function updateStatus() {
         global $conn;
         $currentDate = date('Y-m-d');
@@ -23,8 +23,11 @@
 
     }
 
-// Admin View
+//* ADMIN SIDE *//
 function annList($current_page = 1, $sort_column = 'announce_id', $sort_order = 'desc') {
+    $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : (isset($_COOKIE['user_role']) ? $_COOKIE['user_role'] : null);
+    $fullAccess = ($user_role == 1);
+
     global $conn;
 
     // Update the status of the announcements before fetching them
@@ -64,10 +67,9 @@ function annList($current_page = 1, $sort_column = 'announce_id', $sort_order = 
                 "INACTIVE" => "color: rgb(189, 0, 0); font-weight: 600;",
                 default => "",
             };
-
-            // Display "ALL" if batch_no is 0, otherwise display the batch_no
+            
             $batchNoDisplay = $row["batch_no"] == 0 ? "ALL" : $row["batch_no"];
-
+        
             echo '   
                 <tr>
                     <td>'.$row["title"].'</td>
@@ -77,7 +79,7 @@ function annList($current_page = 1, $sort_column = 'announce_id', $sort_order = 
                     <td style="'.$style.'; text-align: center;">'.$row["status"].'</td>
                     <td style="text-align: right;" class="wrap"> 
                         <div class="icon">
-                            <div class="tooltip"> View</div>
+                            <div class="tooltip">View</div>
                             <span> <ion-icon name="eye-outline" onclick="openPrev(this)" 
                                 data-id="'.$row["announce_id"].'" 
                                 data-title="'.$row["title"].'" 
@@ -88,25 +90,25 @@ function annList($current_page = 1, $sort_column = 'announce_id', $sort_order = 
                                 data-content="'.$row["content"].'"></ion-icon> </span>
                         </div>
                         
-                        <div class="icon">
-                            <div class="tooltip"> Edit</div>
-                            <span> <ion-icon name="create-outline" onclick="openEdit(this)" 
+                        <div class="icon '.(!$fullAccess ? 'disabled' : '').'" style="opacity: '.(!$fullAccess ? '0.5' : '1').';">
+                            <div class="tooltip '.(!$fullAccess ? 'disabled-tooltip' : '').'">Edit</div>
+                            <span> <ion-icon name="create-outline" onclick="'.(!$fullAccess ? 'return false;' : 'openEdit(this)').'" 
                                 data-id="'.$row["announce_id"].'" 
                                 data-title="'.$row["title"].'" 
                                 data-status="'.$row["status"].'" 
                                 data-end_date="'.$row["end_date"].'"
                                 data-content="'.$row["content"].'"></ion-icon> </span>
                         </div>
-
-                        <div class="icon">
-                            <div class="tooltip"> Deactivate </div>
-                            <span> <ion-icon name="close-circle-outline" onclick="openDeactivate(this)" 
+        
+                        <div class="icon '.(!$fullAccess ? 'disabled' : '').'" style="opacity: '.(!$fullAccess ? '0.5' : '1').';">
+                            <div class="tooltip '.(!$fullAccess ? 'disabled-tooltip' : '').'">Deactivate</div>
+                            <span> <ion-icon name="close-circle-outline" onclick="'.(!$fullAccess ? 'return false;' : 'openDeactivate(this)').'" 
                                 data-id="'.$row["announce_id"].'"></ion-icon> </span>
                         </div>
-
-                        <div class="icon">
-                            <div class="tooltip"> Delete</div>
-                            <span> <ion-icon name="trash-outline" onclick="openDelete(this)" 
+        
+                        <div class="icon '.(!$fullAccess ? 'disabled' : '').'" style="opacity: '.(!$fullAccess ? '0.5' : '1').';">
+                            <div class="tooltip '.(!$fullAccess ? 'disabled-tooltip' : '').'">Delete</div>
+                            <span> <ion-icon name="trash-outline" onclick="'.(!$fullAccess ? 'return false;' : 'openDelete(this)').'" 
                                 type="announcements" 
                                 data-id="'.$row["announce_id"].'" 
                                 data-name="'.$row["img_name"].'"></ion-icon> </span>
@@ -120,7 +122,7 @@ function annList($current_page = 1, $sort_column = 'announce_id', $sort_order = 
     }
 }
 
-
+//* PAGINATION *//
 function getTotalRecords() {
     global $conn;
 
@@ -147,7 +149,7 @@ function getTotalRecords() {
 }
 
 // Dashboard Announcements
-// For Scholars -- add eval logic later
+//* SCHOLAR SIDE *//
 function annDisplay() {
     global $conn;
     $batch_no = $_SESSION['bid'];
@@ -175,7 +177,7 @@ function annDisplay() {
     }
 }
 
-// Front Page Announcements
+//* FRONT PAGE *//
     function annFront() {
         global $conn;
         $display = "SELECT img_name, title, content, status FROM announcements WHERE status = 'ACTIVE' AND batch_no = 0 ORDER BY st_date DESC, announce_id DESC";
@@ -210,5 +212,4 @@ function annDisplay() {
         }
 
     }
-
 ?>

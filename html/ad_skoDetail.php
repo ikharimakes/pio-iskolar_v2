@@ -73,7 +73,7 @@
     <link rel="stylesheet" href="css/confirm.css">
     <style>
         .required-error {
-            border: 2px solid red;
+            border: 2px solid red !important;
         }
     </style>
 </head>

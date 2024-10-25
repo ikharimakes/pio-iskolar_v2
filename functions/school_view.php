@@ -3,6 +3,8 @@
     global $conn;
 
     function schoolList($current_page = 1, $sort_column = 'school_id', $sort_order = 'asc') {
+        $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : (isset($_COOKIE['user_role']) ? $_COOKIE['user_role'] : null);
+        $fullAccess = ($user_role == 1);
         global $conn;
     
         $records_per_page = 15;
@@ -40,20 +42,20 @@
                         <td style="text-align: center;">'.$row["acad_year"].'</td>
                         <td style="text-align: center;">'.$row["sem_count"].'</td>
                         <td style="text-align: right;" class="wrap"> 
-                            <div class="icon">
-                                <div class="tooltip"> Edit</div>
-                                <span> <ion-icon name="create-outline" onclick="openEdit(this)" 
+                            <div class="icon '.(!$fullAccess ? 'disabled' : '').'" style="opacity: '.(!$fullAccess ? '0.5' : '1').';">
+                                <div class="tooltip '.(!$fullAccess ? 'disabled-tooltip' : '').'">Edit</div>
+                                <span> <ion-icon name="create-outline" onclick="'.(!$fullAccess ? 'return false;' : 'openEdit(this)').'" 
                                     data-id="'.$row["school_id"].'" 
                                     data-name="'.$row["school_name"].'" 
                                     data-address="'.$row["address"].'" 
                                     data-sem="'.$row["sem_count"].'"></ion-icon> </span>
                             </div>
 
-                            <div class="icon">
-                                <div class="tooltip"> Delete</div>
-                                <span> <ion-icon name="trash-outline" onclick="openDelete(this)" 
-                                    type="university" 
-                                    data-id="'.$row["school_id"].'"></ion-icon> </span>
+                            <div class="icon '.(!$fullAccess ? 'disabled' : '').'" style="opacity: '.(!$fullAccess ? '0.5' : '1').';">
+                                <div class="tooltip '.(!$fullAccess ? 'disabled-tooltip' : '').'">Delete</div>
+                                <span> <ion-icon name="trash-outline" onclick="'.(!$fullAccess ? 'return false;' : 'openDelete(this)').'" 
+                                        type="university" 
+                                        data-id="'.$row["school_id"].'"></ion-icon> </span>
                             </div>
                         </td>
                     </tr>

@@ -18,7 +18,8 @@ $from = $argv[4];
 $recipients = explode(',', $recipientsString);
 
 // Configure the mailer with Gmail
-$dsn = 'gmail://raisseille@gmail.com:odaqgskzkeohvnwu@default';
+// $dsn = 'gmail://raisseille@gmail.com:odaqgskzkeohvnwu@default';
+$dsn = 'gmail://pio.iskolar.team@gmail.com:pogvqxmkzfyxnqt@default';
 $transport = Transport::fromDsn($dsn);
 $mailer = new Mailer($transport);
 

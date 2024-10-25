@@ -5,8 +5,19 @@
     include('../functions/page.php');
     $sourceFile = 'eval_scholar.php';
 
+    $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : (isset($_COOKIE['user_role']) ? $_COOKIE['user_role'] : null);
+
+    if ($user_role == "3") {
+    } elseif ($user_role == "2") {
+        header("Location: dashboard.php");
+    } elseif ($user_role == "1") {
+        header("Location: ad_dashboard.php");
+    } else {
+        header("Location: front_page.php");
+    }
+
     $sort_column = isset($_GET['sort_column']) ? $_GET['sort_column'] : 'scholar_id';
-    $sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'asc';
+    $sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'desc';
     $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 
     $total_records = getTotalRecords();
@@ -14,11 +25,25 @@
     $records_per_page = 15;
     $total_page = ceil($total_records / $records_per_page);
 
+    $category = isset($_GET['category']) ? $_GET['category'] : '';
+    $values = getUniqueFilterValues($category);
+
+    // Handle AJAX requests
     if (isset($_GET['ajax'])) {
         if ($_GET['ajax'] === 'table') {
-            scholarDisplay($current_page, $sort_column, $sort_order);
+            scholarList($current_page, $sort_column, $sort_order);
         } elseif ($_GET['ajax'] === 'pagination') {
             renderPagination($current_page, $records_per_page, $total_records, $total_page, $sourceFile);
+        }
+        elseif ($_GET['ajax'] === 'getFilterValues') {
+            if (!empty($values)) {
+                echo '<option value="all">All</option>';
+                foreach ($values as $value) {
+                    echo '<option value="' . htmlspecialchars($value) . '">' . htmlspecialchars($value) . '</option>';
+                }
+            } else {
+                echo '<option value="all">ALL</option>';
+            }
         }
         exit;
     }
@@ -33,14 +58,17 @@
     <link rel="icon" type="image/x-icon" href="images/pio-logo.png">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="css/ad_scholar.css">
-    <link rel="stylesheet" href="css/confirm.css">
     <link rel="stylesheet" href="css/page.css">
     <script src="https://kit.fontawesome.com/3d9c1c4bc8.js" crossorigin="anonymous"></script>
+    <style>
+        .required-error {
+            border: 2px solid red !important;
+        }
+    </style>
 </head>
 <body>
     <!-- SIDEBAR - eval_nav.php -->
     <?php include 'eval_navbar.php'; ?>
-    
 
     <!-- TOP BAR -->
     <div class="main">
@@ -50,11 +78,7 @@
             </div>
 
             <div class="headerRight">
-                <div class="notif">
-                    <ion-icon name="notifications-outline" onclick="openNotif()"></ion-icon>
-                </div>
-
-                <a class="user" href="eval_settings.php">
+                <a class="user" href="eval_profile.php">
                     <img src="images/profile.png" alt="">
                 </a>
             </div>
@@ -74,20 +98,28 @@
                 </form>
             </div>
 
-            <div class="sort">
-                <select id="filter">
-                    <option value="" disabled selected>Status</option>
-                    <option value="all">All</option>
-                    <option value="ACTIVE">ACTIVE</option>
-                    <option value="PROBATION">PROBATION</option>
-                    <option value="DROPPED">DROPPED</option>
-                    <option value="LOA">LOA</option>
-                    <option value="GRADUATE">GRADUATE</option>
-                </select>
+            <div class="sorts">
+                <h4> Filter by:</h4>
+
+                <div class="sort">
+                    <select id="category">
+                        <option value="all" selected>NONE</option>
+                        <option value="batch_no">Batch Number</option>
+                        <option value="status">Scholar Status</option>
+                        <option value="school">School</option>
+                    </select>
+                </div>
+
+                <div class="sort">
+                    <select id="filter" style="width:150px;">
+                        <option value="all" disabled selected>NONE</option>
+                    </select>
+                </div>
             </div>
 
-            <button type="button" class="btnAdd" style="margin-right: 1vh;" onclick="openAdd()"> Add Scholar </button>
-            <button type="button" class="btnAdd" onclick="openBatch()"> Batch Creation </button>
+            <!-- <button type="button" class="btnAdd" style="margin-right: 1vh;" onclick="openAdd()"> Add Scholar </button>
+            <button type="button" class="btnAdd" style="margin-right: 1vh;" onclick="openBatch()"> Batch Creation </button>
+            <button type="button" class="btnAdd" id="exportBtn">Export Table</button> -->
         </div> <br>
 
         <div class="tables">
@@ -98,27 +130,26 @@
                             Scholar No.
                             <i id="scholarSortIcon" class="fa fa-sort"></i>
                         </div>
-                        </div>
                     </th>
                     <th style="width:12%">  
                         <div class="lName-header" id="sortLastName" style="cursor: pointer;">
                             Last Name
                             <i id="lastSortIcon" class="fa fa-sort"></i>
                         </div>
-                        </div>
                     </th>
-                    <th style="width:25%"> 
+                    <th style="width:20%"> 
                         <div class="fName-header" id="sortFirstName" style="cursor: pointer;">
                             First Name
                             <i id="firstSortIcon" class="fa fa-sort"></i>
                         </div>
                     </th>
-                    <th style="width:37%">
+                    <th style="width:30%">
                         <div class="school-header" id="sortSchool" style="cursor: pointer;">
                             School
                             <i id="schoolSortIcon" class="fa fa-sort"></i>
                         </div>
                     </th>
+                    <th style="justify-content: center; width:12%"> Doc Status </th>
                     <th style="justify-content: center; width:12%"> Status </th>
                     <th style="width:5%"> Actions </th>
                 </tr>
@@ -133,25 +164,29 @@
     
 
     <!-- ADD SCHOLAR MODAL -->    
-    <div id="addModal" class="overlay">
+    <div id="addModal" class="addOverlay">
         <form id="addScholarForm" method="post" action="">
-            <div class="overlay-content">
+            <div class="add-content">
                 <h2>Add Individual Scholar</h2>
                 <span class="closeOverlay" onclick="closeAdd()">&times;</span>
                 <br> <br>
                 
-                <table>
+                <table style="border:none;">
                     <tr>
                         <td class="details">SCHOLAR ID</td>
                         <td><input type="text" class="input" name="scholar_id" maxlength="5" pattern="\d{5}" placeholder="29001" required></td>
                     </tr>
                     <tr>
-                        <td class="details">NAME</td>
-                        <td>
-                            <input type="text" class="input" name="last_name" placeholder="Last Name" required>
-                            <input type="text" class="input" name="first_name" placeholder="First Name(s)" required>
-                            <input type="text" class="input" name="middle_name" placeholder="Middle Name">
-                        </td>
+                        <td class="details">LAST NAME</td>
+                        <td><input type="text" class="input" name="last_name" placeholder="Last Name" required></td>
+                    </tr>
+                    <tr>
+                        <td class="details">FIRST NAME</td>
+                        <td><input type="text" class="input" name="first_name" placeholder="First Name" required></td>
+                    </tr>
+                    <tr>
+                        <td class="details">MIDDLE NAME</td>
+                        <td><input type="text" class="input" name="middle_name" placeholder="Middle Name"></td>
                     </tr>
                     <tr>
                         <td class="details">SCHOOL</td>
@@ -179,8 +214,11 @@
                     </tr>
                 </table>
                 
-                <br><br>
-                <button name="individual" type="submit" class="button">Save</button>
+                <br>
+                <center> <div class="button-container">
+                    <button type="button" class="discard" onclick="closeAdd()">Discard</button>
+                    <button name="individual" type="submit" class="save">Save</button>
+                </div> </center>
             </div>
         </form>
     </div>
@@ -218,19 +256,16 @@
                         Batch Creation
                         <input type="file" name="csv" accept=".csv" id="upload" onchange="form.submit()" hidden/>
                     </label>
+                    <!-- WAG AUTO-SUBMIT -->
                 </div>
             </form>
             <br> <br>
         </div>
     </div>
 
-    <!-- DELETE MODAL - confirm.php -->
     <?php include 'confirm.php'; ?>
-
-    <!-- NOTIFICATION - notif.php -->
-    <?php include 'notif.php'; ?>
-
-
+    <?php include 'toast.php'; ?>
+    
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script>
@@ -238,10 +273,10 @@
         document.addEventListener('DOMContentLoaded', () => {
             const searchInput = document.querySelector('input[name="search"]');
             const filter = document.getElementById('filter');
-            const actionButtons = document.querySelector('.actions');
+            const categorySelect = document.getElementById('category');
             const tableBody = document.getElementById('scholarTableBody');
             const pagination = document.getElementById('pagination');
-
+            
             let sortStates = {
                 'scholar_id': 'neutral',
                 'last_name': 'neutral',
@@ -300,9 +335,35 @@
             handleSort('sortSchool', 'school');
             updateSortIcons();
 
+            // Fetch unique filter values for the selected category
+            const fetchFilterValues = (category) => {
+                if (category === 'all') {
+                    filter.innerHTML = '<option value="all" disabled selected>NONE</option>';
+                    return;
+                }
+
+                const params = new URLSearchParams();
+                params.set('ajax', 'getFilterValues');
+                params.set('category', category);
+
+                fetch(`eval_scholar.php?${params.toString()}`)
+                    .then(response => response.text()) // Use .text() since we're expecting raw HTML
+                    .then(html => {
+                        filter.innerHTML = html; // Directly set the HTML options
+                    })
+                    .catch(error => console.error('Error fetching filter values:', error));
+            };
+
+            categorySelect.addEventListener('change', () => {
+                const selectedCategory = categorySelect.value;
+                fetchFilterValues(selectedCategory);
+            });
+
             const fetchData = (page = 1) => {
                 const params = new URLSearchParams(window.location.search);
                 params.set('page', page);
+
+                // Add sort parameters
                 for (const [column, state] of Object.entries(sortStates)) {
                     if (state !== 'neutral') {
                         params.set('sort_column', column);
@@ -310,75 +371,49 @@
                     }
                 }
 
+                // Add search and filter parameters
                 const searchText = searchInput.value.trim();
-                if (searchText) {
-                    params.set('search', searchText);
-                }
-
-                const selectedFilter = filter.value;
-                if (selectedFilter && selectedFilter !== 'default') {
-                    params.set('filter', selectedFilter);
-                }
-
-                // Use 'history.php' as the source file
-                navigatePage(page, 'eval_scholar.php');
-            };
-
-            const navigatePage = (page, sourceFile) => {
-                const params = new URLSearchParams(window.location.search);
-                params.set('page', page);
-                const searchText = searchInput.value.trim();
+                const selectedCategory = categorySelect.value;
                 const selectedFilter = filter.value;
 
                 if (searchText) {
                     params.set('search', searchText);
                 }
-
-                if (selectedFilter && selectedFilter !== 'default') {
-                    params.set('filter', selectedFilter);
-                }
-
-                const sortColumn = Object.keys(sortStates).find(column => sortStates[column] !== 'neutral');
-                if (sortColumn) {
-                    params.set('sort_column', sortColumn);
-                    params.set('sort_order', sortStates[sortColumn]);
+                if (selectedCategory) {
+                    params.set('category', selectedCategory);
+                    if (selectedFilter) {
+                        params.set('filter', selectedFilter);
+                    }
                 }
 
                 // Fetch table data
                 params.set('ajax', 'table');
-                fetch(`${sourceFile}?${params.toString()}`)
+                fetch(`eval_scholar.php?${params.toString()}`)
                     .then(response => response.text())
                     .then(html => {
                         tableBody.innerHTML = html;
-                        attachRowCheckboxEvents();
                     })
                     .catch(error => console.error('Error fetching table data:', error));
 
                 // Fetch pagination data
                 params.set('ajax', 'pagination');
-                fetch(`${sourceFile}?${params.toString()}`)
+                fetch(`eval_scholar.php?${params.toString()}`)
                     .then(response => response.text())
                     .then(html => {
                         const parser = new DOMParser();
                         const doc = parser.parseFromString(html, 'text/html');
                         const newPagination = doc.querySelector('#pagination');
                         if (newPagination) {
-                            document.getElementById('pagination').innerHTML = newPagination.innerHTML;
+                            pagination.innerHTML = newPagination.innerHTML;
                         }
                     })
                     .catch(error => console.error('Error fetching pagination data:', error));
             };
 
-            searchInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    fetchData();
-                }
-            });
-
-            searchInput.addEventListener('input', () => {
-                fetchData();
-            });
+            // Add event listeners to search input and filter
+            searchInput.addEventListener('input', () => fetchData());
+            categorySelect.addEventListener('change', () => fetchData());
+            filter.addEventListener('change', () => fetchData());
 
             fetchData(); // Initial fetch on page load
         });
@@ -388,11 +423,54 @@
             document.getElementById("addModal").style.display = "block";
         }
         function closeAdd() {
+            document.getElementById("addScholarForm").reset();  // Reset the form fields
             document.getElementById("addModal").style.display = "none";
         }
-        function submitForm() {
-            closeAdd();
+
+        document.getElementById('addScholarForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent the form from being submitted
+
+            const formData = new FormData(); // Manually create FormData object
+            formData.append('individual', 'true'); // Flag for form submission
+
+            // Manually append each field
+            formData.append('scholar_id', document.querySelector('input[name="scholar_id"]').value);
+            formData.append('last_name', document.querySelector('input[name="last_name"]').value);
+            formData.append('first_name', document.querySelector('input[name="first_name"]').value);
+            formData.append('middle_name', document.querySelector('input[name="middle_name"]').value);
+            formData.append('school', document.querySelector('input[name="school"]').value);
+            formData.append('course', document.querySelector('input[name="course"]').value);
+            formData.append('address', document.querySelector('input[name="address"]').value);
+            formData.append('contact', document.querySelector('input[name="contact"]').value);
+            formData.append('email', document.querySelector('input[name="email"]').value);
+            try {
+            // Send the form data asynchronously via fetch
+            const response = await fetch('', {
+                method: 'POST',
+                body: formData,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' } // AJAX identifier
+            });
+
+            // Try parsing the response as JSON
+            const result = await response.json();
+
+            if (result.exists) {
+                // Scholar ID exists, show a toast notification and stop submission
+                showToast('Scholar ID already exists!', 'Duplicate Entry');
+            } else if (result.success) {
+                // Form submission succeeded
+                showToast('Scholar added successfully!', 'Success');
+                window.location.reload(); // Reload page or redirect
+            } else {
+                // Handle other potential errors
+                showToast('An error occurred during submission.', 'Error');
+            }
+        } catch (error) {
+            // If the response is not JSON (e.g., HTML), show the error
+            console.error('Error occurred:', error);
+            showToast('Unexpected response from the server.', 'Error');
         }
+        });
 
         //BATCH UPLOAD
         function openBatch() {
@@ -404,6 +482,29 @@
         function submitForm() {
             closeBatch();
         }
+
+        document.getElementById('exportBtn').addEventListener('click', function() {
+            fetch(window.location.href, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'export_csv=1' // Send a flag to indicate CSV export
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = 'scholar_list.csv'; // Set the file name
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(error => console.error('Error:', error));
+        });
     </script>
+    
 </body>
 </html>

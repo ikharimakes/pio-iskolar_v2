@@ -4,6 +4,10 @@ global $conn;
 
 //* Scholar List *//
 function scholarList($current_page = 1, $sort_column = 'scholar_id', $sort_order = 'desc') {
+    $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : (isset($_COOKIE['user_role']) ? $_COOKIE['user_role'] : null);
+    $fullAccess = ($user_role == 1);
+    $viewRedirect = ($user_role == 3) ? 'eval_skoDetail.php' : 'ad_skoDetail.php';
+    
     global $conn, $year, $sem, $batch;
 
     $records_per_page = 15;
@@ -103,7 +107,7 @@ function scholarList($current_page = 1, $sort_column = 'scholar_id', $sort_order
                     <td style="'.$docStyle.'; text-align:center;">'.$overall_status.'</td>
                     <td style="'.$statusStyle.'; text-align:center;">'.$row["status"].'</td>
                     <td style="text-align: right;" class="wrap"> 
-                        <form style="display:inline" action="ad_skoDetail.php" method="post">
+                        <form style="display:inline" action="' . $viewRedirect . '" method="post">
                             <div class="icon">
                                 <div class="tooltip"> View</div>
                                 <input type="hidden" name="scholar_id" value="'.$row["scholar_id"].'">
@@ -111,11 +115,12 @@ function scholarList($current_page = 1, $sort_column = 'scholar_id', $sort_order
                                 <span><ion-icon name="eye-outline"></ion-icon> </span></button>
                             </div>
                         </form>
-                        <div class="icon">
-                            <div class="tooltip"> Delete</div>
-                            <span> <ion-icon name="trash-outline" onclick="openDelete(this)" 
-                                type="user" 
-                                data-id="'.$row["user_id"].'" ></ion-icon> </span>
+                        <div class="icon ' . (!$fullAccess ? 'disabled' : '') . '" style="opacity: ' . (!$fullAccess ? '0.5' : '1') . ';">
+                            <div class="tooltip" style="display: ' . (!$fullAccess ? 'none' : 'block') . ';"> Delete</div>
+                            <span>
+                                <ion-icon name="trash-outline" onclick="' . (!$fullAccess ? 'return false;' : 'openDelete(this)') . '" 
+                                type="user" data-id="'.$row["user_id"].'" ></ion-icon>
+                            </span>
                         </div>
                     </td>
                 </tr>
@@ -292,7 +297,7 @@ function scholarView() {
                 } elseif ($key == 'Course') {
                     echo '<input type="text" name="course" value="'.$value.'" class="input2" style="text-align: left;" readonly>';
                 } elseif ($key == 'Scholar Status') {
-                    echo '<input name="scholar_status" id="scholarStatus" class="input2" style="text-align: left;" readonly>';
+                    echo '<input name="scholar_status" value="'.$value.'" class="input2" style="text-align: left;" readonly>';
                 } elseif ($key == 'Batch ID') {
                     echo '<input type="text" name="batch_id" value="'.$value.'" class="input2" style="text-align: left;s" readonly>';
                 } else {

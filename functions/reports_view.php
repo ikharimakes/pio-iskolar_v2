@@ -3,6 +3,9 @@ include_once('../functions/general.php');
 global $conn;
 
 function reportDisplay($current_page = 1, $sort_column = 'report_id', $sort_order = 'asc') {
+    $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : (isset($_COOKIE['user_role']) ? $_COOKIE['user_role'] : null);
+    $fullAccess = ($user_role == 1);
+
     global $conn;
 
     $records_per_page = 15;
@@ -56,9 +59,9 @@ function reportDisplay($current_page = 1, $sort_column = 'report_id', $sort_orde
                             </a>
                         </div>
 
-                        <div class="icon">
-                            <div class="tooltip"> Delete</div>
-                            <span> <ion-icon name="trash-outline" onclick="openDelete(this)" 
+                        <div class="icon '.(!$fullAccess ? 'disabled' : '').'" style="opacity: '.(!$fullAccess ? '0.5' : '1').';">
+                            <div class="tooltip '.(!$fullAccess ? 'disabled-tooltip' : '').'">Delete</div>
+                            <span> <ion-icon name="trash-outline" onclick="'.(!$fullAccess ? 'return false;' : 'openDelete(this)').'" 
                                 type="reports" 
                                 data-id="'.$row["report_id"].'"></ion-icon> </span>
                         </div>

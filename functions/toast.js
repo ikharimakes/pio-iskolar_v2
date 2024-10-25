@@ -27,10 +27,10 @@ function showToast(message, title) {
         toast.classList.add('show');
     }, 100);
 
-    // Auto-hide toast after 3 seconds
-    // setTimeout(() => {
-    //     hideToast(toast);
-    // }, 3000);
+    // Auto-hide toast after 5 seconds
+    setTimeout(() => {
+        hideToast(toast);
+    }, 3000);
 }
 
 // Function to hide and remove the toast

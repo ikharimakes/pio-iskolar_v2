@@ -145,6 +145,11 @@
                 } else {
                 field.classList.remove('required-error');
                 }
+                field.addEventListener('input', function() {
+                    if (field.value) {
+                        field.classList.remove('required-error');
+                    }
+                });
             });
 
             if (!valid) {

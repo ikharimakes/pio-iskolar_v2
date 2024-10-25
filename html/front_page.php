@@ -1,7 +1,6 @@
 <?php 
     include_once('../functions/general.php');
     include_once('../functions/announce_view.php');
-    include('../functions/password_fx.php');
     updateStatus();
 
     $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : (isset($_COOKIE['user_role']) ? $_COOKIE['user_role'] : null);
@@ -213,14 +212,17 @@
                 } else {
                 field.classList.remove('required-error');
                 }
+                field.addEventListener('input', function() {
+                    if (field.value) {
+                        field.classList.remove('required-error');
+                    }
+                });
             });
 
             if (!valid) {
                 e.preventDefault(); // Prevent form submission if required fields are empty
             } else {
                 e.preventDefault();
-                // Hide the login error on each new submit attempt
-
                 const formData = new FormData(this);
                 const data = new URLSearchParams();
 
@@ -243,7 +245,7 @@
                         window.location.href = 'dashboard.php';
                     } else if (response === 'evaluator') {
                         console.log("evaluator");
-                        window.location.href = 'eval_dash.php';
+                        window.location.href = 'eval_dashboard.php';
                     } else {
                         console.log("invalid");
                         // Show the login error if the response is invalid

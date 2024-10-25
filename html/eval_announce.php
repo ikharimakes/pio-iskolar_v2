@@ -1,17 +1,16 @@
 <?php
     include_once('../functions/general.php');
     include('../functions/announce_view.php');
-    include('../functions/announce_fx.php');
     include('../functions/page.php');
-    $sourceFile = 'ad_reports.php';
+    $sourceFile = 'eval_reports.php';
 
     $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : (isset($_COOKIE['user_role']) ? $_COOKIE['user_role'] : null);
 
-    if ($user_role == "1") {
+    if ($user_role == "3") {
     } elseif ($user_role == "2") {
         header("Location: dashboard.php");
-    } elseif ($user_role == "3") {
-        header("Location: eval_dashboard.php");
+    } elseif ($user_role == "1") {
+        header("Location: ad_dashboard.php");
     } else {
         header("Location: front_page.php");
     }
@@ -68,8 +67,8 @@
     </style>
 </head>
 <body>
-    <!-- SIDEBAR - ad_nav.php -->
-    <?php include 'ad_navbar.php'; ?>
+    <!-- SIDEBAR - eval_nav.php -->
+    <?php include 'eval_navbar.php'; ?>
     
 
     <!-- TOP BAR -->
@@ -80,7 +79,7 @@
             </div>
 
             <div class="headerRight">
-                <a class="user" href="ad_profile.php">
+                <a class="user" href="eval_profile.php">
                     <img src="images/profile.png" alt="">
                 </a>
             </div>
@@ -111,7 +110,7 @@
                 </select>
             </div>
             
-            <button type="button" class="btnAdd" onclick="openModal('announceModal')"> Add Announcement </button>
+            <!-- <button type="button" class="btnAdd" onclick="openModal('announceModal')"> Add Announcement </button> -->
         </div> <br>
 
         <div class="tables">
@@ -392,7 +391,7 @@
                 }
 
                 // Use 'history.php' as the source file
-                navigatePage(page, 'ad_announce.php');
+                navigatePage(page, 'eval_announce.php');
             };
 
             const navigatePage = (page, sourceFile) => {
@@ -573,8 +572,6 @@
                 sessionStorage.removeItem('toastTitle');
             }
         });
-
-
     </script>
 </body>
 </html>

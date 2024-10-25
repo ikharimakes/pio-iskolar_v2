@@ -66,6 +66,9 @@
         .dropdown.show .dropdown-content {
             display: block;
         }
+        .line {
+            z-index: 2;
+        }
     </style>
 </head>
 <body>
@@ -84,7 +87,7 @@
             </div>
         </div>
 
-        <div class="line"></div>
+        <div class="line" style="z-index:1"></div>
 
         <div class="box-container">
             <?php summaryScholars(); ?>
