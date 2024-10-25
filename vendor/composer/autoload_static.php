@@ -13,6 +13,8 @@ class ComposerStaticInit175f515b2811e085f3258b59792b25af
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '662a729f963d39afe703c9d9b7ab4a8c' => __DIR__ . '/..' . '/symfony/polyfill-php83/bootstrap.php',
         '2203a247e6fda86070a5e4e07aed533a' => __DIR__ . '/..' . '/symfony/clock/Resources/now.php',
+        'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
+        'c4e03ecd470d2a87804979c0a8152284' => __DIR__ . '/..' . '/react/async/src/functions_include.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -37,6 +39,12 @@ class ComposerStaticInit175f515b2811e085f3258b59792b25af
             'Symfony\\Component\\EventDispatcher\\' => 34,
             'Symfony\\Component\\Dotenv\\' => 25,
             'Symfony\\Component\\Clock\\' => 24,
+        ),
+        'R' => 
+        array (
+            'React\\Promise\\' => 14,
+            'React\\EventLoop\\' => 16,
+            'React\\Async\\' => 12,
         ),
         'P' => 
         array (
@@ -125,6 +133,18 @@ class ComposerStaticInit175f515b2811e085f3258b59792b25af
         'Symfony\\Component\\Clock\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/clock',
+        ),
+        'React\\Promise\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/react/promise/src',
+        ),
+        'React\\EventLoop\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/react/event-loop/src',
+        ),
+        'React\\Async\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/react/async/src',
         ),
         'Psr\\Log\\' => 
         array (

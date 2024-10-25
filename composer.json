@@ -9,6 +9,9 @@
         "symfony/google-mailer": "^7.1",
         "symfony/messenger": "^7.1",
         "doctrine/dbal": "^4.2",
-        "symfony/doctrine-messenger": "^7.1"
+        "symfony/doctrine-messenger": "^7.1",
+        "react/async": "^4.3",
+        "react/promise": "^3.2",
+        "react/event-loop": "^1.5"
     }
 }
