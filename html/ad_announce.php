@@ -531,29 +531,23 @@
         }
         document.getElementById('deactivateForm').addEventListener('submit', function(e) {
             e.preventDefault(); // Prevent default form submission
-            
+
             const announceId = document.querySelector('[name="announce_id"]').value;
             console.log('announce_id:', announceId); // Log the value of announce_id
             // Create a new FormData object
             const formData = new FormData();
 
             // Manually append the required fields
-            formData.append('deactivate', 'true'); // Flag for form submission
+            formData.append('deactivate', 'true');
             formData.append('announce_id', document.querySelector('[name="announce_id"]').value);
             
-            fetch('', {
+            fetch('../functions/announce_fx.php', {
                 method: 'POST',
                 body: formData, // Use the FormData object directly
             })
-            .then(response => response.text()) // Expect text response from the backend
+            .then(response => response.text())
             .then(response => {
-                console.log('Fetch response status:', response.status); // Log the status
-                return response.text();
-            })
-            .then(response => {
-                console.log('Server response:', response); // Log the server response
                 if (response === 'success') {
-                    // Store the success message in sessionStorage before reload
                     sessionStorage.setItem('toastMessage', 'Announcement deactivated successfully.');
                     sessionStorage.setItem('toastTitle', 'Success');
 

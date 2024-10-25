@@ -3,6 +3,10 @@ include_once('../functions/general.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     global $conn; // Use the global connection variable
+    ob_start();
+    var_dump( $_POST );
+    $output = ob_get_clean();
+    error_log( $output );
 
     $username = $_POST['username'];
     $password = $_POST['password'];

@@ -34,7 +34,7 @@ if (isset($_POST['add_ann'])) {
     $batch = is_numeric($batch) && intval($batch) == $batch ? intval($batch) : "0";
 
     // Modified insert query to include batch_no column and updated $img_name
-    $insert = "INSERT INTO announcements (announce_id, batch_no, st_date, end_date, img_name, title, content, _status) 
+    $insert = "INSERT INTO announcements (announce_id, batch_no, st_date, end_date, img_name, title, content, status) 
                VALUES (NULL, '$batch', '$start', '$end', '$img_name', '$title', '$content', 1)";
     $run = $conn->query($insert);
 
@@ -85,26 +85,29 @@ if (isset($_POST['add_ann'])) {
             die(mysqli_error($conn));
         }
     }
-
-//* ANNOUNCEMENT DEACTIVATE *//
-if(isset($_POST['deactivate'])){
-    var_dump($_POST); // See what data is being sent in the POST request
-    $id = $_POST['announce_id'];
-
-    // Calculate the end date as one day before today
-    $end = date('Y-m-d', strtotime('-1 day'));
-
-    // Construct the update query to modify only the end_date
-    $update = "UPDATE announcements SET end_date = '$end' WHERE announce_id = '$id';";
-
-    if ($run = $conn->query($update)){
-        // Send a 'success' response instead of redirecting
-        echo 'success';
-    } else {
-        // Send an error response if the query fails
-        echo 'error';
-    }
-}
-
-
+    
+    //* ANNOUNCEMENT DEACTIVATE *//
+        if(isset($_POST['deactivate'])){
+            global $conn;
+            ob_start();
+            var_dump( $_POST );
+            $output = ob_get_clean();
+            error_log( $output );
+            $id = $_POST['announce_id'];
+    
+            // Calculate the end date as one day before today
+            $end = date('Y-m-d', strtotime('-1 day'));
+    
+            // Construct the update query to modify only the end_date
+            $update = "UPDATE announcements SET end_date = '$end' WHERE announce_id = '$id';";
+    
+            error_log($update);
+            if ($conn->query($update)){
+                // Send a 'success' response instead of redirecting
+                echo 'success';
+            } else {
+                // Send an error response if the query fails
+                echo 'error';
+            }
+        }
 ?>
