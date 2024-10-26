@@ -178,7 +178,7 @@
                             <label><input type="checkbox" name="batch" value="31"> Batch 31</label>
                         </div>
                     </div> -->
-                    <select id="statusSort" name="batch">
+                    <select id="statusSort" name="batch" required>
                         <option value="" disabled selected>Batch Number</option>
                         <option value="all">All</option>
                         <?php foreach ($batch_numbers as $batch_no): ?>
@@ -189,7 +189,7 @@
 
                 <div class="announceTitle">
                     <h3>Announcement Title</h3>
-                    <input type="text" name="title"> 
+                    <input type="text" name="title" required /> 
                 </div> <br>
 
                 <div class="announceImg">
@@ -197,12 +197,12 @@
                     <label for="add-file" class="custom-file-upload">
                         <ion-icon name="share-outline"> </ion-icon> Upload Image
                     </label>
-                    <input name="cover" type="file" id="add-file" accept="image/png, image/gif, image/jpeg" style="display: none;" /> 
+                    <input name="cover" type="file" id="add-file" accept="image/png, image/gif, image/jpeg" style="display: none;"  required/> 
                 </div> <br>
 
                 <div class="announceDetail">
                     <h3>Announcement Details</h3>
-                    <textarea name="content" rows="2" cols="50"> </textarea>
+                    <textarea name="content" rows="2" cols="50" required> </textarea>
                 </div> <br>
 
                 <div class="announceDate">
@@ -248,7 +248,7 @@
                 <input type="hidden" id="edit-id" name="id">
                 <div class="announceTitle">
                     <h3>Announcement Title</h3>
-                    <input type="text" id="edit-title" name="title">
+                    <input type="text" id="edit-title" name="title" required>
                 </div> <br>
 
                 <div class="announceImg">
@@ -257,12 +257,12 @@
                     <label for="update-file" class="custom-file-upload">
                         <ion-icon name="share-outline"> </ion-icon> Upload Image
                     </label>
-                    <input name="cover" type="file" id="update-file" accept="image/png, image/gif, image/jpeg" style="display: none;" /> 
+                    <input name="cover" type="file" id="update-file" accept="image/png, image/gif, image/jpeg" style="display: none;"  required/> 
                 </div> <br>
 
                 <div class="announceDetail">
                     <h3>Announcement Details</h3>
-                    <textarea id="edit-content" name="content" rows="2" cols="50"> </textarea>
+                    <textarea id="edit-content" name="content" rows="2" cols="50" required> </textarea>
                 </div> <br>
 
                 <div class="announceDate">
