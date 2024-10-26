@@ -11,7 +11,7 @@
     } elseif ($user_role == "3") {
         header("Location: eval_dashboard.php");
     } else {
-        header("Location: front_page.php");
+        header("Location: index.php");
     }
 ?>
 
@@ -117,17 +117,17 @@
 
     <!-- VIEW MODAL -->
     <div id="viewOverlay" class="viewOverlay">
-        <div class="overlay-content">
+        <div class="overlay-content" style="width:initial !important;">
             <span class="closeOverlay" onclick="closeView()">&times;</span>
             <br>
 
             <div class="card"> 
-                <img id="modalImage" class="pic" src="" alt="Image" /> <!-- Updated src -->
+                <img id="modalImage" class="pic" src="" alt="Image" />
                 <div class="container">
-                    <h2 id="modalTitle"> <!-- Updated title --> </h2>
-                    <p id="modalDate" class="date"> <!-- Updated date --> </p>
+                    <h2 id="modalTitle"></h2>
+                    <p id="modalDate" class="date"></p>
                     <center> 
-                        <p id="modalContent" class="caption"> <!-- Updated content --> </p>
+                        <p id="modalContent" class="caption"></p>
                     </center>
                 </div> 
             </div>
@@ -141,15 +141,15 @@
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script>
         // VIEW
-        function openView(img, title, content, date) {
+        function openView(elem) {
             // Display the modal
             document.getElementById("viewOverlay").style.display = "block";
 
-            // Populate modal fields
-            document.getElementById("modalImage").src = "../assets/" + img;
-            document.getElementById("modalTitle").innerText = title;
-            document.getElementById("modalContent").innerText = content;
-            document.getElementById("modalDate").innerText = date;
+            // Populate modal fields using data attributes
+            document.getElementById("modalImage").src = "../assets/" + elem.getAttribute("data-img");
+            document.getElementById("modalTitle").innerText = elem.getAttribute("data-title");
+            document.getElementById("modalContent").innerText = elem.getAttribute("data-content");
+            document.getElementById("modalDate").innerText = elem.getAttribute("data-date");
         }
 
         function closeView() {

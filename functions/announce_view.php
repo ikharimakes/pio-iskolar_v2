@@ -168,7 +168,12 @@ function annDisplay() {
             $st_date = htmlspecialchars($row["st_date"], ENT_QUOTES, 'UTF-8');
 
             print '
-                <div class="announce" onclick="openView(\'' . $img_name . '\', \'' . $title . '\', \'' . $content . '\', \'' . $st_date . '\')">
+                <div class="announce" 
+                     onclick="openView(this)"
+                     data-img="' . $img_name . '"
+                     data-title="' . $title . '"
+                     data-content="' . $content . '"
+                     data-date="' . $st_date . '">
                     <div class="title">' . $title . '</div>
                     <div class="titleDate">' . $st_date . '</div>
                 </div> <hr>

@@ -14,6 +14,6 @@
     }
 
     // Redirect to the front page or login page after logout
-    header("Location: ../html/front_page.php");
+    header("Location: ../html/index.php");
     exit();
 ?>

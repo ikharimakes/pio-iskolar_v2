@@ -10,7 +10,7 @@
         header("Location: eval_dashboard.php");
         exit();
     } else {
-        header("Location: front_page.php");
+        header("Location: index.php");
         exit();
     }
 ?>

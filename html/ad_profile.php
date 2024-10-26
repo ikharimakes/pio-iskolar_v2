@@ -10,7 +10,7 @@
     } elseif ($user_role == "3") {
         header("Location: eval_dashboard.php");
     } else {
-        header("Location: front_page.php");
+        header("Location: index.php");
     }
 ?>
 

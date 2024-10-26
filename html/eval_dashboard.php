@@ -12,7 +12,7 @@
     } elseif ($user_role == "1") {
         header("Location: ad_dashboard.php");
     } else {
-        header("Location: front_page.php");
+        header("Location: index.php");
     }
     
     // Handle redirect if POST data exists

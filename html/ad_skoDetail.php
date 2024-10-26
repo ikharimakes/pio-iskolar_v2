@@ -15,7 +15,7 @@
     } elseif ($user_role == "3") {
         header("Location: eval_dashboard.php");
     } else {
-        header("Location: front_page.php");
+        header("Location: index.php");
     }
 
     $sort_column = isset($_GET['sort_column']) ? $_GET['sort_column'] : 'scholar_id';
