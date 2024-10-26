@@ -140,4 +140,20 @@ function summaryDocs() {
     </div>
     ";
 }
+
+function summarySubmission() {
+    global $conn;
+    $query = "SELECT doc_name FROM submission ORDER BY submit_id DESC LIMIT 10";
+    $result = mysqli_query($conn, $query);
+
+    // Fetch all rows into an array
+    $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+    // Loop through each row and output doc_name
+    foreach ($rows as $row) {
+        echo "
+            <li>{$row['doc_name']}</li>
+        ";
+    }
+}
 ?>

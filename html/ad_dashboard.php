@@ -146,7 +146,7 @@
 
                 <div class="event">
                     <ul>
-                        <li><a href="">Adriano, Jessica Raye</a></li>
+                        <?php summarySubmission(); ?>
                     </ul>
                 </div>
             </div>

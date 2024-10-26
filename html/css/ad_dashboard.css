@@ -199,7 +199,8 @@
 .event {
     padding: 10px 20px 0 20px;
     overflow-x: auto;
-    max-height: 150px; 
+    max-height: calc(100% - 80px);
+    word-wrap:break-word;
 }
 .event h3 {
     font-size: 18px;
