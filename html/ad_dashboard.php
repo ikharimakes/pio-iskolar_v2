@@ -246,23 +246,32 @@
         
         function redirectScholar(category = '', filter = '') {
             const form = document.createElement('form');
-            form.method = 'GET'; // Using POST to avoid appending params to the URL
+            form.method = 'GET';  // Keep as GET since we want the parameters in URL
             form.action = 'ad_scholar.php';
 
+            // Always create a 'page' input to reset to page 1
+            const pageInput = document.createElement('input');
+            pageInput.type = 'hidden';
+            pageInput.name = 'page';
+            pageInput.value = '1';
+            form.appendChild(pageInput);
+
+            // Add category if provided
             if (category) {
                 const categoryInput = document.createElement('input');
                 categoryInput.type = 'hidden';
                 categoryInput.name = 'category';
                 categoryInput.value = category;
                 form.appendChild(categoryInput);
-            }
 
-            if (filter) {
-                const filterInput = document.createElement('input');
-                filterInput.type = 'hidden';
-                filterInput.name = 'filter';
-                filterInput.value = filter;
-                form.appendChild(filterInput);
+                // Only add filter if category exists
+                if (filter) {
+                    const filterInput = document.createElement('input');
+                    filterInput.type = 'hidden';
+                    filterInput.name = 'filter';
+                    filterInput.value = filter;
+                    form.appendChild(filterInput);
+                }
             }
 
             document.body.appendChild(form);

@@ -178,7 +178,7 @@
                             <label><input type="checkbox" name="batch" value="31"> Batch 31</label>
                         </div>
                     </div> -->
-                    <select name="batch">
+                    <select id="statusSort" name="batch">
                         <option value="" disabled selected>Batch Number</option>
                         <option value="all">All</option>
                         <?php foreach ($batch_numbers as $batch_no): ?>

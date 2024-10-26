@@ -244,7 +244,7 @@
                 <h4>Step 2: Fill out the Template</h4>
             </div> <br>
 
-            <form action="" method="post" enctype="multipart/form-data">
+            <form id="batchForm" method="post" enctype="multipart/form-data">
                 <div class="step">
                     <h4>Step 3: Batch Number</h4>
                     <input type="number" id="textInput" name="batch_id" required>
@@ -252,11 +252,11 @@
 
                 <div class="step">
                     <h4>Step 4: Upload here </h4>
-                    <label type="button" class="lblAdd" for="upload"> 
-                        <ion-icon name="share-outline"> </ion-icon>
-                        Batch Creation
-                        <input type="file" name="csv" accept=".csv" id="upload" onchange="form.submit()" hidden/>
-                    </label>
+                        <label type="button" class="lblAdd" for="upload">
+                            <ion-icon name="share-outline"> </ion-icon>
+                            Batch Creation
+                            <input type="file" name="csv" accept=".csv" id="upload" hidden/>
+                        </label>
                     <!-- WAG AUTO-SUBMIT -->
                 </div>
             </form>
@@ -490,19 +490,83 @@
             document.getElementById("batchModal").style.display = "block";
         }
         function closeBatch() {
+            document.getElementById("batchForm").reset();  // Reset the 
             document.getElementById("batchModal").style.display = "none";
         }
-        function submitForm() {
-            closeBatch();
-        }
 
+        document.getElementById('upload').addEventListener('change', function(e) {
+            e.preventDefault();
+            const fileInput = this; // Store reference to file input
+            const formData = new FormData(document.getElementById('batchForm'));
+            
+            fetch('../functions/scholar_fx.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    showToast(data.message, data.title);
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 3000);
+                } else if (data.status === 'error') {
+                    showToast(data.message, data.title);
+                    // Clear the file input
+                    fileInput.value = '';
+                    // If you're using jQuery, alternatively you could use:
+                    // $(fileInput).val('');
+                }
+            })
+            .catch(error => {
+                console.error('Upload error:', error);
+                showToast('An unexpected error occurred.', 'Error');
+                // Also clear the file input on unexpected errors
+                fileInput.value = '';
+            });
+        });
+        
         document.getElementById('exportBtn').addEventListener('click', function() {
-            fetch(window.location.href, {
+            let sortStates = {
+                'scholar_id': 'neutral',
+                'last_name': 'neutral',
+                'first_name': 'neutral',
+                'school': 'neutral'
+            };
+
+            // Get current sort state
+            const sortColumn = Object.entries(sortStates)
+                .find(([_, state]) => state !== 'neutral')?.[0] || 'scholar_id';
+            const sortOrder = sortStates[sortColumn] || 'asc';
+
+            // Get current search and filter parameters
+            const searchValue = document.querySelector('input[name="search"]').value.trim();
+            const categoryValue = document.getElementById('category').value;
+            const filterValue = document.getElementById('filter').value;
+
+            // Build the query parameters
+            const params = new URLSearchParams();
+            params.set('export_csv', '1');
+            params.set('sort_column', sortColumn);
+            params.set('sort_order', sortOrder);
+            
+            if (searchValue) {
+                params.set('search', searchValue);
+            }
+            if (categoryValue && categoryValue !== 'all') {
+                params.set('category', categoryValue);
+            }
+            if (filterValue && filterValue !== 'all') {
+                params.set('filter', filterValue);
+            }
+
+            // Make the fetch request with the parameters
+            fetch(`${window.location.pathname}?${params.toString()}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: 'export_csv=1' // Send a flag to indicate CSV export
+                body: params.toString()
             })
             .then(response => response.blob())
             .then(blob => {
@@ -510,7 +574,7 @@
                 const a = document.createElement('a');
                 a.style.display = 'none';
                 a.href = url;
-                a.download = 'scholar_list.csv'; // Set the file name
+                a.download = 'scholar_list.csv';
                 document.body.appendChild(a);
                 a.click();
                 window.URL.revokeObjectURL(url);

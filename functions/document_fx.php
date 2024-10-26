@@ -25,7 +25,7 @@ if (isset($_POST['update'])) {
     
     // Notification
     $date = date('Y-m-d');
-    $scholar_query = "SELECT s.user_id, s.last_name 
+    $scholar_query = "SELECT s.user_id, s.last_name sub.doc_name
                       FROM scholar s
                       INNER JOIN submission sub ON s.scholar_id = sub.scholar_id
                       WHERE sub.submit_id = ?";
@@ -37,7 +37,7 @@ if (isset($_POST['update'])) {
     $user_id = $scholar_info['user_id'];
 
     $title = "{$doc_id}-{$scholar_info['last_name']} DOCUMENT UPDATE";
-    $content = "Document status updated to: {$status}<br>Reason: {$reason}";
+    $content = "{$scholar_info['doc_name']} status updated to: {$status}<br>Reason: {$reason}";
     $notif_insert = "INSERT INTO notification (user_id, date, title, content) VALUES ('$user_id', '$date', '$title', '$content')";
     $notif_execute = $conn->query($notif_insert);
     if (!$notif_execute) {
@@ -73,7 +73,7 @@ if (isset($_POST['approve'])) {
     $user_id = $scholar_info['user_id'];
 
     $title = "{$doc_id}-{$scholar_info['last_name']} DOCUMENT APPROVAL";
-    $content = "Document has been approved.";
+    $content = "{$scholar_info['doc_name']} has been approved.";
     $notif_insert = "INSERT INTO notification (user_id, date, title, content) VALUES ('$user_id', '$date', '$title', '$content')";
     $notif_execute = $conn->query($notif_insert);
     if (!$notif_execute) {
@@ -113,7 +113,7 @@ if (isset($_POST['decline'])) {
     $user_id = $scholar_info['user_id'];
 
     $title = "{$doc_id}-{$scholar_info['last_name']} DOCUMENT DECLINE";
-    $content = "Document has been declined.<br>Reason: {$reason}";
+    $content = "{$scholar_info['doc_name']} has been declined.<br>Reason: {$reason}";
     $notif_insert = "INSERT INTO notification (user_id, date, title, content) VALUES ('$user_id', '$date', '$title', '$content')";
     $notif_execute = $conn->query($notif_insert);
     if (!$notif_execute) {

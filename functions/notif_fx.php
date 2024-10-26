@@ -18,11 +18,11 @@
                 print "'$title', '$date', '$content', $notif_id";
                 print ')">
                         '.$title.' <br>
-                        <button class="notif-close-btn" onclick="event.stopPropagation(); deleteNotif('.$notif_id.')">
-                            <ion-icon name="trash-outline"></ion-icon>
-                        </button>
                     </li>
                 ';
+            //     <button class="delete-btn" onclick="event.stopPropagation(); deleteNotif('.$notif_id.')">
+            //     <ion-icon name="trash-outline"></ion-icon>
+            // </button>
             }
         } else {
             echo '<script>document.getElementById("noNotifsMessage").style.display = "block";</script>';

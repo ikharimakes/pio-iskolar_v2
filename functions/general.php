@@ -8,13 +8,9 @@ $warnAlert = array();
 
 require_once '../vendor/autoload.php';
 require 'mailer.php';
-// Function to output JavaScript console.log messages
-// function js_debug_log($message) {
-//     echo '<script>console.log(' . json_encode($message) . ');</script>';
-// }
 
-    // $dsn = 'gmail://raisseille@gmail.com:odaqgskzkeohvnwu@default';
-    // $dsn = 'gmail://pio.iskolar.team@gmail.com:pogvqxmkzfyxnqt@default';
+// $dsn = 'gmail://raisseille@gmail.com:odaqgskzkeohvnwu@default';
+// $dsn = 'gmail://pio.iskolar.team@gmail.com:pogvqxmkzfyxnqt@default';
 
 //* DATABASE CONNECTION *//
     // Credentials

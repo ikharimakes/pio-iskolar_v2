@@ -48,23 +48,22 @@
     flex-grow: 1;
 }
 .delete-selected-btn {
-    display: none;
     position: absolute;
-    right: 50px;
-    font-size: 18px;
-    color: black;
     background: none;
     border: none;
     cursor: pointer;
+    background-color: #2F3787;
+    color: white;
+    border-radius: 16px;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
 }
 .delete-selected-btn:hover {
     color: #000;
 }
 
-.notif-checkbox {
-    margin-right: 10px; /* Space between checkbox and span */
-    transform: scale(1.2);
-}
 .notif-list {
     list-style-type: none;
     padding: 0;

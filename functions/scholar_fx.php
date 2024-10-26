@@ -45,8 +45,8 @@ if (isset($_POST['individual'])) {
                               VALUES ('$scholar_id', '$batch_no', '$user_id', 'ACTIVE', '$last_name', '$first_name', '$middle_name', '$school', '$course', '$address', '$contact', '$email', NULL)";
             $run = $conn->query($insertScholar);
             $subject = "Your PIO ISKOLAR System Account Credentials";
-            $body = "
-                <p>Dear Mr./Ms. $name,</p>
+            $content = "
+                <p>Dear Mr./Ms. $last_name,</p>
                 <p>We are pleased to inform you that your account for the PIO ISKOLAR System has been successfully created. This system is designed to help you manage your scholarship documents and stay updated with the latest announcements from the Dr. Pio Valenzuela Scholarship Program.</p>
                 <p>Below are your account credentials, which you will use to access the PIO ISKOLAR website:</p>
                 <p>
@@ -94,52 +94,27 @@ if (isset($_POST['individual'])) {
 }
 
 //* BATCH CREATION *//
-if(isset($_FILES['csv'])){
-    if($_FILES['csv']['error'] == 0){
+if(isset($_FILES['csv'])) {
+    if($_FILES['csv']['error'] == 0) {
         $tmpName = $_FILES['csv']['tmp_name'];
+        $errorRows = [];
+        $batch_id = $_POST['batch_id'];
+
         if(($handle = fopen($tmpName, 'r')) !== FALSE) {
-            // necessary if a large csv file
             set_time_limit(0);
-            $error = array();
-            while(($data = fgetcsv($handle, 501, ',')) !== FALSE) {
-                // checks if row is "empty"
-                $isEmptyRow = true;
-                for ($i = 1; $i <= 8; $i++) {
-                    if (!empty($data[$i])) {
-                        $isEmptyRow = false;
-                        break;
-                    }
-                }
-                if ($isEmptyRow) {continue;}
-
-                // checks for individual empty fields
-                $requiredFields = [1, 2, 4, 5, 6, 7, 8];
-                foreach ($requiredFields as $field) {
-                    if (empty($data[$field])) {
-                        array_push($error, $data[0]);
-                        continue 2;
-                    }
-                }
-            }
-            if(!empty($error)) {
-                // loads error modal
-                $_SESSION['error_array'] = $error;
-            }
-
-            // rewinds pointer
-            rewind($handle);
-
-            // starts csv upload
-            $skipRows = 2; // Number of rows to skip
+            
+            // First pass: validate all data
+            $skipRows = 2;
             $currentRow = 0;
-            while((($data = fgetcsv($handle, 501, ',')) !== FALSE) && (!isset($_SESSION['error_array']))) {
-                // skips the first $skipRows lines (assuming headers and formats)
-                if($currentRow < $skipRows) { 
+            
+            while(($data = fgetcsv($handle, 501, ',')) !== FALSE) {
+                // Skip header rows
+                if($currentRow < $skipRows) {
                     $currentRow++;
-                    continue; 
+                    continue;
                 }
-
-                // checks if row is "empty"
+                
+                // Skip empty rows
                 $isEmptyRow = true;
                 for ($i = 1; $i <= 8; $i++) {
                     if (!empty($data[$i])) {
@@ -147,69 +122,149 @@ if(isset($_FILES['csv'])){
                         break;
                     }
                 }
-                if ($isEmptyRow) {continue;}
+                if ($isEmptyRow) continue;
 
-                // get the values from the csv
-                $username = $_POST['batch_id'] . '-' . sprintf('%03d', $data[0]);
-                $password = $data[1];
-                $email = $data[8];
-                $insert = "INSERT INTO user (user_id, role_id, username, email, passhash) VALUES (NULL, '2', '$username', '$email', '$password')";
-                $run = $conn->query($insert);
+                $rowNum = $currentRow + 1;
+                $rowErrors = [];
 
-                // inserts into user
-                $idquery = "SELECT user_id from user where username = '$username'";
-                $result = $conn->query($idquery);
-                while ($row = $result->fetch_assoc()){
-                    $uid = $row['user_id'];
+                // Required fields check (excluding control number)
+                $requiredFields = [
+                    1 => "Last Name",
+                    2 => "First Name",
+                    4 => "School",
+                    5 => "Course",
+                    6 => "Address",
+                    7 => "Contact",
+                    8 => "Email"
+                ];
+                
+                foreach ($requiredFields as $field => $fieldName) {
+                    if (empty($data[$field])) {
+                        $rowErrors[] = "Missing $fieldName";
+                    }
                 }
-                // inserts into scholar
-                //! CHANGE BATCH NUMBER
-                $sid = $_POST['batch_id'] . sprintf('%03d', $data[0]);
-                $string = str_replace(' ', '', $data['7']);
-                $number = '+63' . $string;
-                $batch_no = $_POST['batch_id'];
 
-                $insert = "INSERT INTO scholar (scholar_id, batch_no, user_id, status, last_name, first_name, middle_name, school, course, _address, contact, email, remarks) VALUES ('$sid', '$batch_no', '$uid', 'ACTIVE', '$data[1]', '$data[2]', '$data[3]', '$data[4]', '$data[5]', '$data[6]', '$number', '$email', NULL)";
-                $run = $conn->query($insert);
+                // Email format check
+                if (!empty($data[8]) && !filter_var($data[8], FILTER_VALIDATE_EMAIL)) {
+                    $rowErrors[] = "Invalid email format";
+                }
 
-                //! Send email notification - DISABLED
+                // Contact number format check
+                if (!empty($data[7])) {
+                    // Remove all spaces and non-digit characters
+                    $contactNum = preg_replace('/[^0-9]/', '', $data[7]);
+                    // Check if exactly 10 digits
+                    if (strlen($contactNum) !== 10) {
+                        $rowErrors[] = "Contact should be 10 digits";
+                    }
+                }
 
+                // Check for duplicates
+                if (!empty($data[0])) {
+                    $scholar_id = $batch_id . sprintf('%03d', $data[0]);
+                    $stmt = $conn->prepare("SELECT 1 FROM scholar WHERE scholar_id = ? OR email = ?");
+                    $stmt->bind_param("ss", $scholar_id, $data[8]);
+                    $stmt->execute();
+                    if ($stmt->get_result()->num_rows > 0) {
+                        $rowErrors[] = "Scholar ID or email already exists";
+                    }
+                }
+
+                if (!empty($rowErrors)) {
+                    $errorRows[] = "Row $rowNum: " . implode(", ", $rowErrors);
+                }
+                
+                $currentRow++;
             }
-            // closes pointer, deletes csv file
+
+            // If there are errors, return them immediately as JSON
+            if (!empty($errorRows)) {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => implode("\n", $errorRows),
+                    'title' => 'Validation Errors'
+                ]);
+                exit();
+            }
+
+            // If no errors, proceed with insertion
+            rewind($handle);
+            $currentRow = 0;
+            
+            while(($data = fgetcsv($handle, 501, ',')) !== FALSE) {
+                if($currentRow < $skipRows) {
+                    $currentRow++;
+                    continue;
+                }
+                
+                // Skip empty rows
+                $isEmptyRow = true;
+                for ($i = 1; $i <= 8; $i++) {
+                    if (!empty($data[$i])) {
+                        $isEmptyRow = false;
+                        break;
+                    }
+                }
+                if ($isEmptyRow) continue;
+
+                // Insert user
+                $username = $batch_id . '-' . sprintf('%03d', $data[0]);
+                $email = $data[8];
+                
+                $stmt = $conn->prepare("INSERT INTO user (user_id, role_id, username, email, passhash) VALUES (NULL, '2', ?, ?, ?)");
+                $stmt->bind_param("sss", $username, $email, $data[1]); // Plain text password
+                $stmt->execute();
+                
+                $uid = $conn->insert_id;
+                
+                // Insert scholar
+                $sid = $batch_id . sprintf('%03d', $data[0]);
+                // Clean contact number and add +63
+                $contact = '+63' . preg_replace('/[^0-9]/', '', $data[7]);
+                
+                $stmt = $conn->prepare("INSERT INTO scholar (scholar_id, batch_no, user_id, status, last_name, first_name, middle_name, school, course, _address, contact, email, remarks) VALUES (?, ?, ?, 'ACTIVE', ?, ?, ?, ?, ?, ?, ?, ?, NULL)");
+                $stmt->bind_param("sssssssssss", $sid, $batch_id, $uid, $data[1], $data[2], $data[3], $data[4], $data[5], $data[6], $contact, $email);
+                $stmt->execute();
+
+                // Send welcome email to the scholar
+                $subject = "Your PIO ISKOLAR System Account Credentials";
+                $content = "
+                    <p>Dear Mr./Ms. $data[1],</p>
+                    <p>We are pleased to inform you that your account for the PIO ISKOLAR System has been successfully created. This system is designed to help you manage your scholarship documents and stay updated with the latest announcements from the Dr. Pio Valenzuela Scholarship Program.</p>
+                    <p>Below are your account credentials, which you will use to access the PIO ISKOLAR website:</p>
+                    <p>
+                        <strong>Username:</strong> $username<br>
+                        <strong>Password:</strong> $data[1]
+                    </p>
+                    <p>To ensure the security of your account, please log in using the above credentials and change your password immediately upon your first login.</p>
+                    <p><strong>Steps to Change Your Password:</strong></p>
+                    <ol>
+                        <li>Log in to the PIO ISKOLAR System using the credentials provided above.</li>
+                        <li>Navigate to your account settings.</li>
+                        <li>Select \"Change Password.\"</li>
+                        <li>Enter your temporary password, followed by your new password.</li>
+                        <li>Confirm your new password and save the changes.</li>
+                    </ol>
+                    <p>If you encounter any issues or have any questions, please do not hesitate to contact our support team at <a href=\"mailto:https://valenzuela.gov.ph/drpioscholarship\">https://valenzuela.gov.ph/drpioscholarship</a>
+                    <p>Thank you for being a part of the Dr. Pio Valenzuela Scholarship Program. We look forward to supporting your academic journey through this new system.</p>
+                    <br>
+                    <p>Best regards,</p>
+                    <p>Pio Iskolar Team</p>";
+
+                sendEmailAsync($email, $subject, $content);
+            }
+            
             fclose($handle);
-            unset($_FILES['csv']);
+            
+            // Return success response
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'CSV data successfully uploaded and welcome emails sent',
+                'title' => 'Success'
+            ]);
+            exit();
         }
     }
-    header('Location: '.$_SERVER['PHP_SELF']);
-    die;
-}
-
-//* BATCH CREATION ERROR *//
-if(isset($_SESSION['error_array'])) {
-    print '
-        <div id="errorOverlay" class="errorOverlay">
-            <div class="error-content">
-                <div class="infos">
-                    <h2>Upload Failed</h2>
-                        <span class="closeError" onclick="closeError()">&times;</span>
-                </div>
-                <div class="message"><h4>
-    ';
-        foreach ((array) $_SESSION['error_array'] as $line) {
-        print '   
-                Error in row '. $line .'.<br>
-        ';
-        }
-    print '
-                </div>
-                <div class="ok-button-container">
-                    <button class="ok-button" onclick="closeError()"> OK </button>
-                </div>
-            </div>
-        </div>
-    ';
-    unset($_SESSION['error_array']);
-    header('Location: '.$_SERVER['PHP_SELF']);
 }
 
 //* UPDATE SCHOLAR DETAILS *//
@@ -241,9 +296,13 @@ if (isset($_POST['save'])) {
     }
 }
 
-function exportScholarListToCSV($sort_column = 'scholar_id', $sort_order = 'asc') {
+function exportScholarListToCSV() {
     global $conn, $year, $sem;
 
+    // Get sort parameters from POST or default values
+    $sort_column = isset($_POST['sort_column']) ? $_POST['sort_column'] : 'scholar_id';
+    $sort_order = isset($_POST['sort_order']) ? $_POST['sort_order'] : 'asc';
+    
     $valid_columns = ['scholar_id', 'last_name', 'first_name', 'school', 'status'];
     if (!in_array($sort_column, $valid_columns)) {
         $sort_column = 'scholar_id';
@@ -251,24 +310,26 @@ function exportScholarListToCSV($sort_column = 'scholar_id', $sort_order = 'asc'
 
     $sort_order = strtolower($sort_order) === 'desc' ? 'desc' : 'asc';
 
-    $search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
-    $filter = isset($_GET['filter']) ? $conn->real_escape_string($_GET['filter']) : '';
-    $category = isset($_GET['category']) ? $conn->real_escape_string($_GET['category']) : '';
-    $conditions = "1=1"; // Base condition
+    // Get search and filter parameters from POST instead of GET
+    $search = isset($_POST['search']) ? $conn->real_escape_string($_POST['search']) : '';
+    $filter = isset($_POST['filter']) ? $conn->real_escape_string($_POST['filter']) : '';
+    $category = isset($_POST['category']) ? $conn->real_escape_string($_POST['category']) : '';
+    
+    // Rest of your existing export function remains the same
+    $conditions = "1=1";
 
-    // Search conditions
     if ($search !== '') {
-        $conditions .= " AND (batch_no LIKE '%$search%' OR scholar_id LIKE '%$search%' OR last_name LIKE '%$search%' OR first_name LIKE '%$search%' OR middle_name LIKE '%$search%' OR school LIKE '%$search%')";
+        $conditions .= " AND (batch_no LIKE '%$search%' OR scholar_id LIKE '%$search%' OR 
+                        last_name LIKE '%$search%' OR first_name LIKE '%$search%' OR 
+                        middle_name LIKE '%$search%' OR school LIKE '%$search%')";
     }
 
-    // Filter by the dynamic category if both category and filter are provided
     if ($category !== 'all' && $filter !== 'all') {
         $valid_filter_columns = ['batch_no', 'status', 'school'];
         if (in_array($category, $valid_filter_columns)) {
             $conditions .= " AND $category = '" . $conn->real_escape_string($filter) . "'";
         }
     }
-
     // Query without the offset to fetch all records
     $query = "SELECT scholar_id, last_name, first_name, school, status FROM scholar WHERE $conditions ORDER BY $sort_column $sort_order";
     $result = $conn->query($query);
