@@ -25,7 +25,7 @@ if (isset($_POST['update'])) {
     
     // Notification
     $date = date('Y-m-d');
-    $scholar_query = "SELECT s.user_id, s.last_name sub.doc_name
+    $scholar_query = "SELECT s.user_id, s.last_name, sub.doc_name
                       FROM scholar s
                       INNER JOIN submission sub ON s.scholar_id = sub.scholar_id
                       WHERE sub.submit_id = ?";
@@ -40,6 +40,7 @@ if (isset($_POST['update'])) {
     $content = "{$scholar_info['doc_name']} status updated to: {$status}<br>Reason: {$reason}";
     $notif_insert = "INSERT INTO notification (user_id, date, title, content) VALUES ('$user_id', '$date', '$title', '$content')";
     $notif_execute = $conn->query($notif_insert);
+    error_log($notif_insert);
     if (!$notif_execute) {
         die(mysqli_error($conn));
     }
@@ -61,7 +62,7 @@ if (isset($_POST['approve'])) {
 
     // Notification
     $date = date('Y-m-d');
-    $scholar_query = "SELECT s.user_id, s.last_name 
+    $scholar_query = "SELECT s.user_id, s.last_name, sub.doc_name
                       FROM scholar s
                       INNER JOIN submission sub ON s.scholar_id = sub.scholar_id
                       WHERE sub.submit_id = ?";
@@ -101,7 +102,7 @@ if (isset($_POST['decline'])) {
 
     // Notification
     $date = date('Y-m-d');
-    $scholar_query = "SELECT s.user_id, s.last_name 
+    $scholar_query = "SELECT s.user_id, s.last_name, sub.doc_name
                       FROM scholar s
                       INNER JOIN submission sub ON s.scholar_id = sub.scholar_id
                       WHERE sub.submit_id = ?";

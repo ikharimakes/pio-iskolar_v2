@@ -171,7 +171,13 @@
                     <h3>Batch Number</h3>
                         <div id="inputField" class="hideText" style="display: block;">
                             <label for="textInput" style="font-weight: bold;">Enter Batch Number:</label>
-                            <input type="number" name="batch_id" required>
+                            <select id="statusSort">
+                                <option value="" disabled selected>Batch Number</option>
+                                <option value="all">All</option>
+                                <?php foreach ($batch_numbers as $batch_no): ?>
+                                    <option value="<?php echo $batch_no; ?>"><?php echo $batch_no; ?></option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
                 </div>
                 <div class="btn">

@@ -559,7 +559,7 @@
                     showToast(data.message, data.title);
                     setTimeout(() => {
                         window.location.reload();
-                    }, 3000);
+                    }, 5000);
                 } else if (data.status === 'error') {
                     showToast(data.message, data.title);
                     // Clear the file input

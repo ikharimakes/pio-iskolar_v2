@@ -49,8 +49,8 @@ if (isset($_POST['add_ann'])) {
         
         while ($row = $scholar_result->fetch_assoc()) {
             $user_id = $row['user_id'];
-            $notif_insert = "INSERT INTO notification (user_id, date, title, content, status) 
-                            VALUES ('$user_id', '$date', '$notif_title', '$notif_content', 1)";
+            $notif_insert = "INSERT INTO notification (user_id, date, title, content) 
+                            VALUES ('$user_id', '$date', '$notif_title', '$notif_content')";
             $conn->query($notif_insert);
         }
 
@@ -125,8 +125,8 @@ if(isset($_POST['update_ann'])){
         
         while ($row = $scholar_result->fetch_assoc()) {
             $user_id = $row['user_id'];
-            $notif_insert = "INSERT INTO notification (user_id, date, title, content, status) 
-                            VALUES ('$user_id', '$date', '$notif_title', '$notif_content', 1)";
+            $notif_insert = "INSERT INTO notification (user_id, date, title, content) 
+                            VALUES ('$user_id', '$date', '$notif_title', '$notif_content')";
             $conn->query($notif_insert);
         }
 

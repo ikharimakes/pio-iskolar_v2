@@ -358,14 +358,86 @@
         // });
 
         // VIEW MODAL
+        // function openPrev(elem) {
+        //     document.getElementById('viewModal').style.display = 'block';
+        //     document.getElementById("view-doc_name").innerText = elem.getAttribute("data-doc_name");
+        //     document.getElementById("update-doc_id").value = elem.getAttribute("data-id");
+
+        //     const pdfPath = '../assets/' + elem.getAttribute("data-doc_name");
+        //     console.log(pdfPath);
+        //     loadPDF(pdfPath);
+        // }
+
         function openPrev(elem) {
-            document.getElementById('viewModal').style.display = 'block';
+            const status = elem.getAttribute("data-doc_status");
+            const reason = elem.getAttribute("data-doc_reason") || "";
+
             document.getElementById("view-doc_name").innerText = elem.getAttribute("data-doc_name");
             document.getElementById("update-doc_id").value = elem.getAttribute("data-id");
 
+            if (status === "PENDING") {
+                document.getElementById("approveRadio").disabled = false;
+                document.getElementById("declineRadio").disabled = false;
+                document.getElementById("updateButton").style.display = "block";
+            } else {
+                document.getElementById("approveRadio").disabled = true;
+                document.getElementById("declineRadio").disabled = true;
+                document.getElementById("updateButton").style.display = "none";
+            }
+
+            document.getElementById("approveRadio").checked = status === "APPROVED";
+            document.getElementById("declineRadio").checked = status === "DECLINED";
+            document.getElementById("declineOptions").style.display = status === "DECLINED" ? "block" : "none";
+            document.getElementById("otherReason").style.display = reason && status === "DECLINED" ? "block" : "none";
+            document.getElementById("denialReasonText").value = reason;
+
             const pdfPath = '../assets/' + elem.getAttribute("data-doc_name");
-            console.log(pdfPath);
             loadPDF(pdfPath);
+
+            document.getElementById("viewModal").style.display = "block";
+            validateForm();  // Add this line to validate form on opening
+        }
+
+        document.getElementById("approveRadio").addEventListener("change", function() {
+            if (this.checked) {
+                document.getElementById("declineOptions").style.display = "none";
+            }
+            validateForm();
+        });
+
+        document.getElementById("declineRadio").addEventListener("change", function() {
+            if (this.checked) {
+                document.getElementById("declineOptions").style.display = "block";
+            }
+            validateForm();
+        });
+
+        document.getElementById("declineReasonSelect").addEventListener("change", function() {
+            if (this.value === "OTHER") {
+                document.getElementById("otherReason").style.display = "block";
+            } else {
+                document.getElementById("otherReason").style.display = "none";
+            }
+            validateForm();
+        });
+
+        document.getElementById("denialReasonText").addEventListener("input", validateForm);
+
+        function validateForm() {
+            const approveRadio = document.getElementById("approveRadio").checked;
+            const declineRadio = document.getElementById("declineRadio").checked;
+            const declineReasonSelected = document.getElementById("declineReasonSelect").value;
+            const otherReasonText = document.getElementById("denialReasonText").value.trim();
+
+            const saveButton = document.getElementById("updateButton");
+
+            if (approveRadio || (declineRadio && declineReasonSelected && (declineReasonSelected !== "OTHER" || otherReasonText))) {
+                saveButton.disabled = false;
+                saveButton.style.background = "#2F3787";
+            } else {
+                saveButton.disabled = true;
+                saveButton.style.background = "grey";
+            }
         }
 
         function closePrev() {
@@ -377,7 +449,6 @@
                 closePrev();
             }
         });
-
 
         // Show reason for declining when "DECLINED" is selected
         document.getElementById('declineRadio').addEventListener('click', function() {

@@ -36,7 +36,7 @@
 
     function getBatchNumbers() {
         global $conn;
-            $query = "SELECT DISTINCT batch_no FROM reports ORDER BY batch_no";
+            $query = "SELECT DISTINCT batch_no FROM scholar ORDER BY batch_no";
             $result = mysqli_query($conn, $query);
             $batch_numbers = [];
             if ($result) {
@@ -197,7 +197,7 @@
                     <label for="add-file" class="custom-file-upload">
                         <ion-icon name="share-outline"> </ion-icon> Upload Image
                     </label>
-                    <input name="cover" type="file" id="add-file" accept="image/png, image/gif, image/jpeg" style="display: none;"  required/> 
+                    <input name="cover" type="file" id="add-file" accept="image/png, image/gif, image/jpeg" style="display: none;"/> 
                 </div> <br>
 
                 <div class="announceDetail">
@@ -257,7 +257,7 @@
                     <label for="update-file" class="custom-file-upload">
                         <ion-icon name="share-outline"> </ion-icon> Upload Image
                     </label>
-                    <input name="cover" type="file" id="update-file" accept="image/png, image/gif, image/jpeg" style="display: none;"  required/> 
+                    <input name="cover" type="file" id="update-file" accept="image/png, image/gif, image/jpeg" style="display: none;"/> 
                 </div> <br>
 
                 <div class="announceDetail">

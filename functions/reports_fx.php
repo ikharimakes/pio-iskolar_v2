@@ -254,7 +254,6 @@
             $templateProcessor->setValue('Dropped', isset($scholar_count['dropped_scholars']) ? $scholar_count['dropped_scholars'] : 0);
             $templateProcessor->setValue('Absence', isset($scholar_count['loa_scholars']) ? $scholar_count['loa_scholars'] : 0);
             $templateProcessor->setValue('Graduates', isset($scholar_count['graduated_scholars']) ? $scholar_count['graduated_scholars'] : 0);
-            
 
             $templateProcessor->cloneRow('SCHOLAR_ID', count($status_data));
             // Loop to replace scholar-specific placeholders
