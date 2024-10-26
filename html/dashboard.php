@@ -1,6 +1,7 @@
 <?php 
     include_once('../functions/general.php'); 
     include('../functions/announce_view.php');
+    include('../functions/dashboard_view.php');
     
     $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : (isset($_COOKIE['user_role']) ? $_COOKIE['user_role'] : null);
 
@@ -60,31 +61,7 @@
 
 
         <div class="box-container">
-            <div class="box-row">
-                <div class="box box-small">
-                    <h5 class='detail'>Total Submitted Documents</h5>
-
-                    <div class="box-num">
-                        <h2 class='num'>8</h2>
-                    </div>
-                </div>
-
-                <div class="box box-small">
-                    <h5 class='detail'>Approved Documents</h5>
-
-                    <div class="box-num">
-                        <h2 class='num'>8</h2>
-                    </div>
-                </div>
-
-                <div class="box box-small">
-                    <h5 class='detail'>Declined Documents</h5>
-
-                    <div class="box-num">
-                        <h2 class='num'>0</h2>
-                    </div>
-                </div>
-            </div>
+            <?php summaryDocs(); ?>
 
             <div class="box-row">
                 <div class="box-small-big">

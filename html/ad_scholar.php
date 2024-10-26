@@ -30,7 +30,21 @@
 
     // Handle AJAX requests
     if (isset($_GET['ajax'])) {
-        if ($_GET['ajax'] === 'table') {
+        if ($_GET['ajax'] === 'getInitialFilters') {
+            $htmlResponse = '';
+    
+            if (isset($_SESSION['scholar_filter'])) {
+                $filterData = $_SESSION['scholar_filter'];
+                $htmlResponse .= '<input type="hidden" id="category" value="' . htmlspecialchars($filterData['category']) . '">';
+                $htmlResponse .= '<input type="hidden" id="filter" value="' . htmlspecialchars($filterData['filter']) . '">';
+    
+                // Clear the session data after using it
+                unset($_SESSION['scholar_filter']);
+            }
+    
+            echo $htmlResponse;
+            exit;
+        } else if ($_GET['ajax'] === 'table') {
             scholarList($current_page, $sort_column, $sort_order);
         } elseif ($_GET['ajax'] === 'pagination') {
             renderPagination($current_page, $records_per_page, $total_records, $total_page, $sourceFile);
@@ -278,6 +292,46 @@
             const tableBody = document.getElementById('scholarTableBody');
             const pagination = document.getElementById('pagination');
             
+            const checkInitialFilters = () => {
+                fetch('ad_scholar.php?ajax=getInitialFilters')
+                    .then(response => response.text())
+                    .then(html => {
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = html;
+
+                        const categoryValue = tempDiv.querySelector('#category')?.value;
+                        const filterValue = tempDiv.querySelector('#filter')?.value;
+
+                        if (categoryValue) {
+                            categorySelect.value = categoryValue;
+
+                            // Fetch filter values for this category
+                            const params = new URLSearchParams();
+                            params.set('ajax', 'getFilterValues');
+                            params.set('category', categoryValue);
+
+                            fetch(`ad_scholar.php?${params.toString()}`)
+                                .then(response => response.text())
+                                .then(html => {
+                                    filter.innerHTML = html;
+                                    if (filterValue) {
+                                        filter.value = filterValue;
+                                    }
+                                    fetchData(1);
+                                });
+                        } else {
+                            fetchData(1);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error checking initial filters:', error);
+                        fetchData(1);
+                    });
+            };
+
+            // Call this instead of fetchData() on initial load
+            checkInitialFilters();
+
             let sortStates = {
                 'scholar_id': 'neutral',
                 'last_name': 'neutral',
@@ -427,11 +481,7 @@
             });
             filter.addEventListener('change', () => fetchData(1));
 
-            // searchInput.addEventListener('input', () => fetchData());
-            // categorySelect.addEventListener('change', () => fetchData());
-            // filter.addEventListener('change', () => fetchData());
-
-            fetchData(); // Initial fetch on page load
+            // fetchData(); // Initial fetch on page load
         });
 
         //ADD SCHOLAR

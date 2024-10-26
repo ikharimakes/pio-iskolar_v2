@@ -14,6 +14,16 @@
     } else {
         header("Location: front_page.php");
     }
+    
+    // Handle redirect if POST data exists
+    if (isset($_POST['scholar_redirect'])) {
+        $_SESSION['scholar_filter'] = [
+            'category' => $_POST['category'] ?? '',
+            'filter' => $_POST['filter'] ?? ''
+        ];
+        header('Location: ad_scholar.php');
+        exit;
+    }
 ?>
 
 <!DOCTYPE html>
@@ -243,40 +253,6 @@
         });
                 
         fetchChartData();
-        
-        function redirectScholar(category = '', filter = '') {
-            const form = document.createElement('form');
-            form.method = 'GET';  // Keep as GET since we want the parameters in URL
-            form.action = 'ad_scholar.php';
-
-            // Always create a 'page' input to reset to page 1
-            const pageInput = document.createElement('input');
-            pageInput.type = 'hidden';
-            pageInput.name = 'page';
-            pageInput.value = '1';
-            form.appendChild(pageInput);
-
-            // Add category if provided
-            if (category) {
-                const categoryInput = document.createElement('input');
-                categoryInput.type = 'hidden';
-                categoryInput.name = 'category';
-                categoryInput.value = category;
-                form.appendChild(categoryInput);
-
-                // Only add filter if category exists
-                if (filter) {
-                    const filterInput = document.createElement('input');
-                    filterInput.type = 'hidden';
-                    filterInput.name = 'filter';
-                    filterInput.value = filter;
-                    form.appendChild(filterInput);
-                }
-            }
-
-            document.body.appendChild(form);
-            form.submit();
-        }
     </script>
 </body>
 </html>
